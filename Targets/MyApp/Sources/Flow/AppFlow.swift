@@ -10,7 +10,7 @@ struct AppStepper: Stepper {
     init() {}
     
     var initialStep: Step {
-        return PaperStep.signInIsRequired
+        return PaperStep.introIsRequired
     }
 }
 
@@ -29,15 +29,15 @@ final class AppFlow: Flow {
         guard let step = step as? PaperStep else {return .none}
         
         switch step {
-        case .signInIsRequired:
-            return coordinateToSignIn()
+        case .introIsRequired:
+            return coordinateToIntro()
         default:
             return .none
         }
     }
     
-    private func coordinateToSignIn() -> FlowContributors {
-        let flow = SignInFlow()
+    private func coordinateToIntro() -> FlowContributors {
+        let flow = LogInFlow()
         Flows.use(flow, when: .created) { (root) in
             self.rootViewController = root as! UINavigationController
         }

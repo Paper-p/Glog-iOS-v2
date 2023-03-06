@@ -6,7 +6,7 @@ extension Project{
         platform: Platform,
         packages: [Package] = [],
         product: Product = .app,
-        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.5", devices: [.iphone,.ipad]),
+        deploymentTarget: DeploymentTarget = .iOS(targetVersion: "13.5", devices: [.iphone,.iphone]),
         dependencies: [TargetDependency]
     ) -> Project {
         return Project(
@@ -20,7 +20,7 @@ extension Project{
                     product: product,
                     bundleId: "\(publicOrganizationName).\(name)",
                     deploymentTarget: deploymentTarget,
-                    infoPlist: .default,
+                    infoPlist: .file(path: Path("Targets/MyApp/Support/Info.plist")),
                     sources: ["Targets/MyApp/Sources/**"],
                     resources: ["Targets/MyApp/Resources/**"],
                     entitlements: Path("Targets/MyApp/Support/\(name).entitlements"),

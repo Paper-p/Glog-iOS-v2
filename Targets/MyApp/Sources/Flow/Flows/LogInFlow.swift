@@ -3,7 +3,7 @@ import RxFlow
 import UIKit
 import Then
 
-class SignInFlow: Flow {
+class LogInFlow: Flow {
     
     var root: Presentable {
         return self.rootViewController
