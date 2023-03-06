@@ -16,31 +16,31 @@ class MainCoordinator:Coordinator {
     }
     
     func start() {
-        let vm = IntroVM(coordinator: self)
+        let vm = IntroVM()
         let vc = IntroVC(vm)
         navigationController.setViewControllers([vc], animated: true)
     }
     
     func pushToSignInVC(){
-        let vm = SignInVM(coordinator: self)
+        let vm = SignInVM()
         let vc = SignInVC(vm)
         navigationController.setViewControllers([vc], animated: true)
     }
     
     func pushToIdVC(){
-        let vm = InsertIdVM(coordinator: self)
+        let vm = InsertIdVM()
         let vc = InsertIdVC(vm)
         navigationController.setViewControllers([vc], animated: true)
     }
     
     func pushToPwdVC(){
-        let vm = InsertPwdVM(coordinator: self)
+        let vm = InsertPwdVM()
         let vc = InsertPwdVC(vm)
         navigationController.setViewControllers([vc], animated: true)
     }
     
     func pushToNicknameVC(){
-        let vm = InsertNicknameVM(coordinator: self)
+        let vm = InsertNicknameVM()
         let vc = InsertNickNameVC(vm)
         navigationController.setViewControllers([vc], animated: true)
     }

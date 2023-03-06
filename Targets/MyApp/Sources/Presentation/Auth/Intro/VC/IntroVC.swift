@@ -6,7 +6,9 @@ import SnapKit
 import Alamofire
 import UIKit
 
-final class IntroVC: BaseVC<IntroVM> {
+final class IntroVC: BaseVC<IntroVM>, Stepper{
+    
+    var steps = PublishRelay<Step>()
     
     private let backGroundImageView = UIImageView(image: UIImage(named: "Paper_Background")!)
     
@@ -53,14 +55,6 @@ final class IntroVC: BaseVC<IntroVM> {
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
         gradientLayer.locations = [0.0, 1.0]
         signInButton.layer.insertSublayer(gradientLayer, at: 0)*/
-    }
-    
-    private func bindViewModel() {
-        let input = IntroVM.Input(
-            signInButtonTap: signInButton.rx.tap.asObservable(),
-            signUpButtonTap: signUpButton.rx.tap.asObservable()
-        )
-        viewModel.transVC(input: input)
     }
     
     override func addView(){

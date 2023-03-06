@@ -71,9 +71,9 @@ class LoginFlow: Flow {
     }
     
     private func navigateToMain() -> FlowContributors {
-        /*let vm = ()
-        let vc = MainViewController(vm)
+        let vm = MainVM()
+        let vc = MainVC(vm)
         self.rootViewController.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(withNext: vc))*/
+        return .one(flowContributor: .contribute(withNext: vc))
     }
 }
