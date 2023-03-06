@@ -22,7 +22,7 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, Stepper{
         $0.attributedPlaceholder = NSAttributedString(string: "사용할 비밀번호 입력해주세요.", attributes: [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
         ])
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBlankColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
         $0.textColor = UIColor.white
         $0.font = UIFont(name: "Helvetica", size: 20)
     }
@@ -32,7 +32,7 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, Stepper{
         $0.attributedPlaceholder = NSAttributedString(string: "사용할 비밀번호 한번더 입력해주세요.", attributes: [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
         ])
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBlankColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
         $0.textColor = UIColor.white
         $0.font = UIFont(name: "Helvetica", size: 20)
     }
@@ -40,9 +40,9 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, Stepper{
     private let nextButton = UIButton().then{
         $0.layer.cornerRadius = 10
         $0.titleLabel?.text = "다음"
-        $0.titleLabel?.textColor = PaperPAsset.Colors.paperBackgroundColor.color
+        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 14)
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBlankColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
     }
     
     private let includeLabel = UILabel().then{
@@ -55,7 +55,7 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, Stepper{
         super.viewDidLoad()
         addView()
         setLayout()
-        view.layer.backgroundColor = PaperPAsset.Colors.paperBackgroundColor.color.cgColor
+        view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
     override func addView(){

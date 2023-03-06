@@ -24,7 +24,7 @@ class BaseVC<T>: UIViewController {
         super.viewDidLoad()
         addView()
         setLayout()
-        view.backgroundColor = PaperPAsset.Colors.paperBackgroundColor.color
+        view.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

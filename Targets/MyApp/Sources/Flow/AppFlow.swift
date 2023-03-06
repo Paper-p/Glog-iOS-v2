@@ -44,7 +44,7 @@ final class AppFlow: Flow {
         return .one(
             flowContributor: .contribute(
                 withNextPresentable: flow,
-                withNextStepper: OneStepper(withSingleStep: PaperStep.signInIsRequired)
+                withNextStepper: OneStepper(withSingleStep: PaperStep.introIsRequired)
         ))
     }
     

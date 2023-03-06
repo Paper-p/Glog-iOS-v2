@@ -17,7 +17,7 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         $0.text = "다시 온걸 환영해요!"
         $0.font = UIFont(name: "Helvetica-Bold", size: 14)
         $0.textColor = UIColor.white
-        $0.backgroundColor = PaperPAsset.Colors.paperBackgroundColor.color
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.isEditable = false
         $0.isSelectable = false
     }
@@ -32,7 +32,7 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         $0.attributedPlaceholder = NSAttributedString(string: "아이디를 입력해주세요.", attributes: [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
         ])
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBlankColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
         $0.textColor = UIColor.white
         $0.allowsEditingTextAttributes = true
         $0.font = UIFont(name: "Helvetica", size: 20)
@@ -43,7 +43,7 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         $0.attributedPlaceholder = NSAttributedString(string: "비밀번호를 입력해주세요.", attributes: [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
         ])
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBlankColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
         $0.textColor = UIColor.white
         $0.allowsEditingTextAttributes = true
         $0.font = UIFont(name: "Helvetica", size: 20)
@@ -52,22 +52,22 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
     private let signInButton = UIButton().then{
         $0.layer.cornerRadius = 10
         $0.titleLabel?.text = "로그인"
-        $0.titleLabel?.textColor = PaperPAsset.Colors.paperBackgroundColor.color
+        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 14)!
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperStartColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
     }
     
     private let forgotPwdButton = UIButton().then{
         $0.titleLabel?.text = "비밀번호를 잊어 버리셨나요"
-        $0.titleLabel?.textColor = PaperPAsset.Colors.paperBackgroundColor.color
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBackgroundColor.color.cgColor
+        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addView()
         setLayout()
-        view.layer.backgroundColor = PaperPAsset.Colors.paperBackgroundColor.color.cgColor
+        view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
     override func addView(){

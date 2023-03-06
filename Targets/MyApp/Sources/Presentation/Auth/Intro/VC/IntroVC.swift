@@ -32,24 +32,22 @@ final class IntroVC: BaseVC<IntroVM>,Stepper {
     
     private let signInButton = UIButton().then{
         $0.titleLabel?.text = "로그인"
-        $0.titleLabel?.textColor = PaperPAsset.Colors.paperBackgroundColor.color
+        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 14)!
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperStartColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
     }
     
     private let signUpButton = UIButton().then{
         $0.titleLabel?.text = "회원가입"
-        $0.titleLabel?.textColor = PaperPAsset.Colors.paperStartColor.color
+        $0.titleLabel?.textColor = GlogAsset.Colors.paperStartColor.color
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 14)!
-        $0.layer.backgroundColor = PaperPAsset.Colors.paperBackgroundColor.color.cgColor
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addView()
-        setLayout()
     }
     
     override func addView(){
