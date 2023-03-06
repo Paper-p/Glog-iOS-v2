@@ -1,7 +1,41 @@
+import UIKit
+import RxSwift
+import RxCocoa
 
-import Alamofire
-import Foundation
+final class IntroVM: BaseViewModel {
+    var coordinator: IntroCoordinator
+    
+    init(coordinator: IntroCoordinator){
+        self.coordinator = coordinator
+    }
 
-final class IntroVM{
+    func transVC(input: Input) {
+        input.signInButtonTap.subscribe(
+        onNext: pushSignInVC
+        ) .disposed(by: disposeBag)
+        
+        input.signUpButtonTap.subscribe(
+        onNext: pushSignUpVC
+        ) .disposed(by: disposeBag)
+    }
+    
+    private func pushSignInVC() {
+        coordinator.pushSignInVC()
+    }
+    private func pushSignUpVC() {
+        coordinator.pushSignUpVC()
+    }
+    
+}
+extension IntroVM: ViewModelType{
+    
+    struct Input {
+        let signInButtonTap: Observable<Void>
+        let signUpButtonTap: Observable<Void>
+    }
+    
+    struct Output {
+        
+    }
     
 }

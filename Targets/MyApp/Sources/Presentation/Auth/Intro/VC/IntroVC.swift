@@ -34,6 +34,7 @@ final class IntroVC: BaseVC<IntroVM>,Stepper {
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 18)!
         $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
+        $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
     
     private let signUpButton = UIButton().then{
@@ -55,7 +56,6 @@ final class IntroVC: BaseVC<IntroVM>,Stepper {
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
         gradientLayer.locations = [0.0, 1.0]
         signInButton.layer.insertSublayer(gradientLayer, at: 0)*/
-        view.backgroundColor = .orange
     }
     
     override func addView(){
@@ -106,6 +106,10 @@ final class IntroVC: BaseVC<IntroVM>,Stepper {
             make.width.equalTo(signInButton)
             make.height.equalTo(signInButton)
         }
+    }
+    
+    @objc func signInButtonDidTap(){
+        coordinator.
     }
 }
 
