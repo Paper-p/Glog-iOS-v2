@@ -4,9 +4,9 @@ import RxSwift
 import RxCocoa
 
 final class InsertIdVM: BaseViewModel{
-    var coordinator: IdCoordinator
+    var coordinator: MainCoordinator
     
-    init(coordinator: IdCoordinator){
+    init(coordinator: MainCoordinator){
         self.coordinator = coordinator
     }
 
@@ -17,7 +17,7 @@ final class InsertIdVM: BaseViewModel{
     }
                 
     private func pushInsertPwdVC(){
-        coordinator.pushToPwd()
+        coordinator
     }
 }
 

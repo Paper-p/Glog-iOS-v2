@@ -3,9 +3,9 @@ import RxSwift
 import RxCocoa
 
 final class IntroVM: BaseViewModel {
-    var coordinator: IntroCoordinator
+    var coordinator: MainCoordinator
     
-    init(coordinator: IntroCoordinator){
+    init(coordinator: MainCoordinator){
         self.coordinator = coordinator
     }
 

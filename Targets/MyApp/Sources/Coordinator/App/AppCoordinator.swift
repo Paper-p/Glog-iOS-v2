@@ -1,8 +1,9 @@
 
 import UIKit
+import RxCocoa
+import RxSwift
 
-
-class IntroCoordinator : Coordinator {
+class MainCoordinator:Coordinator {
     var childCoordinators = [Coordinator]()
     var navigationController: UINavigationController
     let window: UIWindow
@@ -19,16 +20,32 @@ class IntroCoordinator : Coordinator {
         let vc = IntroVC(vm)
         navigationController.setViewControllers([vc], animated: true)
     }
-        
-    func pushSignInVC() {
+    
+    func pushToSignInVC(){
         let vm = SignInVM(coordinator: self)
         let vc = SignInVC(vm)
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.setViewControllers([vc], animated: true)
     }
     
-    func pushSignUpVC() {
+    func pushToIdVC(){
         let vm = InsertIdVM(coordinator: self)
         let vc = InsertIdVC(vm)
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.setViewControllers([vc], animated: true)
+    }
+    
+    func pushToPwdVC(){
+        let vm = InsertPwdVM(coordinator: self)
+        let vc = InsertPwdVC(vm)
+        navigationController.setViewControllers([vc], animated: true)
+    }
+    
+    func pushToNicknameVC(){
+        let vm = InsertNicknameVM(coordinator: self)
+        let vc = InsertNickNameVC(vm)
+        navigationController.setViewControllers([vc], animated: true)
+    }
+    
+    func pushToMain(){
+        
     }
 }

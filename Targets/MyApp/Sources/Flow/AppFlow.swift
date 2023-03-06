@@ -1,3 +1,4 @@
+
 import RxFlow
 import UIKit
 import RxSwift
@@ -10,7 +11,7 @@ struct AppStepper: Stepper {
     init() {}
     
     var initialStep: Step {
-        return PaperStep.introIsRequired
+        return GlogStep.introIsRequired
     }
 }
 
@@ -26,7 +27,7 @@ final class AppFlow: Flow {
     }
     
     func navigate(to step: Step) -> FlowContributors {
-        guard let step = step as? PaperStep else {return .none}
+        guard let step = step as? GlogStep else {return .none}
         
         switch step {
         case .introIsRequired:
@@ -37,14 +38,14 @@ final class AppFlow: Flow {
     }
     
     private func coordinateToIntro() -> FlowContributors {
-        let flow = LogInFlow()
+        let flow = LoginFlow()
         Flows.use(flow, when: .created) { (root) in
             self.rootViewController = root as! UINavigationController
         }
         return .one(
             flowContributor: .contribute(
                 withNextPresentable: flow,
-                withNextStepper: OneStepper(withSingleStep: PaperStep.introIsRequired)
+                withNextStepper: OneStepper(withSingleStep: GlogStep.introIsRequired)
         ))
     }
     

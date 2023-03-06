@@ -4,20 +4,20 @@ import RxSwift
 import RxCocoa
 
 final class SignInVM: BaseViewModel {
-    var coordinator: IntroCoordinator
+    var coordinator: MainCoordinator
     
-    init(coordinator: IntroCoordinator){
+    init(coordinator: MainCoordinator){
         self.coordinator = coordinator
     }
 
     func transVC(input: Input) {
         input.signInButtonTap.subscribe(
-        onNext: pushSignInVC
+        onNext: pushMainVC
         ) .disposed(by: disposeBag)
     }
     
-    private func pushSignInVC() {
-        coordinator.pushSignInVC()
+    private func pushMainVC() {
+        coordinator.pushMainVC()
     }
 }
 extension SignInVM: ViewModelType{

@@ -22,8 +22,11 @@ class BaseVC<T>: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+        bindVM()
         addView()
         setLayout()
+        configureVC()
         view.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
@@ -31,11 +34,9 @@ class BaseVC<T>: UIViewController {
         self.view.endEditing(true)
     }
 
-    func addView() {
-        
-    }
-
-    func setLayout() {
-        
-    }
+    func setup(){}
+    func bindVM(){}
+    func addView(){}
+    func setLayout(){}
+    func configureVC(){}
 }
