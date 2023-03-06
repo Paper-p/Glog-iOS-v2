@@ -34,6 +34,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 18)!
         $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
+        $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
     
     private let signUpButton = UIButton().then{
@@ -44,6 +45,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 18)!
         $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
+        $0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
     }
     
     override func viewDidLoad() {
@@ -105,6 +107,14 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
             make.width.equalTo(signInButton)
             make.height.equalTo(signInButton)
         }
+    }
+    
+    @objc func signInButtonDidTap(){
+        self.steps.accept(GlogStep.signInIsRequired)
+    }
+    
+    @objc func signUpButtonDidTap(){
+        self.steps.accept(GlogStep.idIsRequired)
     }
 }
 
