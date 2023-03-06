@@ -25,14 +25,14 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.backgroundColor = .clear
         $0.textAlignment = .center
         $0.isSelectable = false
-        $0.font = UIFont(name: "Helvetica-Bold", size: 18)
+        $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
     private let signInButton = UIButton().then{
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
         $0.layer.cornerRadius = 10
-        $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 18)!
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
@@ -43,7 +43,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.layer.borderColor = GlogAsset.Colors.paperEndColor.color.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 10
-        $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 18)!
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
         $0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
     }
