@@ -28,12 +28,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
-    private let signInButton = UIButton().then{
-        $0.setTitle("로그인", for: .normal)
-        $0.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
-        $0.layer.cornerRadius = 10
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
+    private let signInButton = GradientButton(title: "로그인").then{
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
     
@@ -50,13 +45,6 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = signInButton.bounds
-        gradientLayer.colors = [GlogAsset.Colors.paperStartColor.color, GlogAsset.Colors.paperEndColor.color]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-        gradientLayer.locations = [0.0, 1.0]
-        signInButton.layer.insertSublayer(gradientLayer, at: 0)*/
     }
     
     override func addView(){
