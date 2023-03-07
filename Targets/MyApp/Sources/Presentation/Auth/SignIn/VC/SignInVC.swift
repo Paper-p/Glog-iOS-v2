@@ -48,15 +48,19 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
     }
     
     private let forgotPwdButton = UIButton().then{
-        $0.setTitle("비밀번호를 잊어 버리셨나요?", for: .normal)
-        $0.setTitleColor(UIColor.white, for: .normal)
+        $0.setTitle("비밀번호", for: .normal)
+        $0.setTitleColor(GlogAsset.Colors.paperEndColor.color, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+    }
+    
+    private let forgotPwdLabel = UILabel().then{
+        $0.text = "를 잊어 버리셨나요?"
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addView()
-        setLayout()
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
@@ -71,7 +75,8 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
          idTextField,
          pwdTextField,
          signInButton,
-         forgotPwdButton
+         forgotPwdButton,
+         forgotPwdLabel
         ]
             .forEach {
             view.addSubview($0)
@@ -109,9 +114,15 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
             make.height.equalTo(60)
         }
         forgotPwdButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+            make.left.equalTo(116)
             make.top.equalTo(signInButton.snp.bottom).offset(15)
-            make.width.equalTo(170)
+            make.width.equalTo(50)
+            make.height.equalTo(20)
+        }
+        forgotPwdLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(forgotPwdButton)
+            make.left.equalTo(forgotPwdButton.snp.right).offset(1)
+            make.width.equalTo(148)
             make.height.equalTo(20)
         }
     }
