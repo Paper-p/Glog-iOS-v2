@@ -12,24 +12,23 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     
     var steps = PublishRelay<Step>()
     
-    private let mainLogoImageView = UIImageView(image: UIImage(named: "Paper_Smile")!)
+    let gifImage = GIFImageView()
     
     private let idTextField = UITextField().then{
-        $0.placeholder = "사용할 아이디 입력"
-        $0.attributedPlaceholder = NSAttributedString(string: "사용할 닉네임 입력", attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
+        $0.attributedPlaceholder = NSAttributedString(string: "사용하실 아이디를 입력해주세요.", attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
         ])
         $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
         $0.textColor = UIColor.white
-        $0.font = UIFont(name: "Helvetica", size: 20)
+        $0.layer.cornerRadius = 10
+        $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
     }
     
     private let nextButton = UIButton().then{
+        $0.setTitle("다음", for: .normal)
+        $0.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
         $0.layer.cornerRadius = 10
-        $0.titleLabel?.text = "다음"
-        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
-        $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 14)
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
     override func viewDidLoad() {
@@ -37,8 +36,20 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
+    override func configureNavigation() {
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.topItem?.title = "취소"
+        self.navigationItem.titleView = UIImageView(image: UIImage(named: "Paper_MainLogo"))
+    }
+    
+    override func setup() {
+        DispatchQueue.main.async {
+            self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
+        }
+    }
+    
     override func addView(){
-        [mainLogoImageView,
+        [gifImage,
          idTextField,
          nextButton
         ]
@@ -48,17 +59,17 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     }
     
     override func setLayout(){
-        mainLogoImageView.snp.makeConstraints { make in
+        gifImage.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(30)
-            make.width.equalTo(170)
-            make.height.equalTo(100)
+            make.top.equalTo(140)
+            make.height.equalTo(135)
+            make.width.equalTo(160)
         }
         idTextField.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().inset(15)
             make.height.equalTo(35)
-            make.top.equalTo(mainLogoImageView.snp.bottom).offset(20)
+            make.top.equalTo(gifImage.snp.bottom).offset(20)
         }
         nextButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

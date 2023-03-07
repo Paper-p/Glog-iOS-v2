@@ -27,6 +27,7 @@ class BaseVC<T>: UIViewController {
         addView()
         setLayout()
         configureVC()
+        configureNavigation()
         view.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
@@ -39,4 +40,5 @@ class BaseVC<T>: UIViewController {
     func addView(){}
     func setLayout(){}
     func configureVC(){}
+    func configureNavigation() {}
 }

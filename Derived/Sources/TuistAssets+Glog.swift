@@ -27,11 +27,11 @@ public enum GlogAsset {
     public static let paperErrorColor = GlogColors(name: "Paper_ErrorColor")
     public static let paperShadowColor = GlogColors(name: "Paper_ShadowColor")
     public static let paperStartColor = GlogColors(name: "Paper_StartColor")
+    public static let paperGrayColor = GlogColors(name: "Paper_grayColor")
   }
   public enum Images {
     public static let paperBackground = GlogImages(name: "Paper_Background")
     public static let paperMainLogo = GlogImages(name: "Paper_MainLogo")
-    public static let paperSmile = GlogImages(name: "Paper_Smile")
     public static let paperStatusLogo = GlogImages(name: "Paper_StatusLogo")
   }
 }

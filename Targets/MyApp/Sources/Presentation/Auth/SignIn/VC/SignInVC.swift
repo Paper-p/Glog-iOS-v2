@@ -64,7 +64,7 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
-    override func setup() {
+    override func configureNavigation() {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.topItem?.title = "취소"
     }
