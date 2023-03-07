@@ -67,8 +67,8 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
         }
         idTextField.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(15)
-            make.height.equalTo(35)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(52)
             make.top.equalTo(gifImage.snp.bottom).offset(20)
         }
         nextButton.snp.makeConstraints { make in
