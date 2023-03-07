@@ -14,7 +14,8 @@ let project = Project.executable(
         .Moya,
         .RxSwift,
         .KeychainSwift,
-        .RxFlow
+        .RxFlow,
+        .Gifu
     ],
     product: .app,
     deploymentTarget: .iOS(targetVersion: "13.5", devices: [.iphone, .ipad]),
@@ -25,6 +26,7 @@ let project = Project.executable(
         .SPM.RxMoya,
         .SPM.RxSwift,
         .SPM.KeychainSwift,
-        .SPM.RxFlow
+        .SPM.RxFlow,
+        .SPM.Gifu
     ]
 )

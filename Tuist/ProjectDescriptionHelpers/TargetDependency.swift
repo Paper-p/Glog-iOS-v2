@@ -12,6 +12,7 @@ public extension TargetDependency.SPM{
     static let RxMoya = TargetDependency.package(product: "RxMoya")
     static let KeychainSwift = TargetDependency.package(product: "KeychainSwift")
     static let RxFlow = TargetDependency.package(product: "RxFlow")
+    static let Gifu = TargetDependency.package(product: "Gifu")
 }
 
 public extension Package {
@@ -42,5 +43,9 @@ public extension Package {
     static let RxFlow = Package.remote(
         url: "https://github.com/RxSwiftCommunity/RxFlow",
         requirement: .upToNextMajor(from: "2.13.0"))
+    
+    static let Gifu = Package.remote(
+        url: "https://github.com/kaishin/Gifu",
+        requirement: .upToNextMajor(from: "3.4"))
 }
 

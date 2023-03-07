@@ -6,17 +6,13 @@ import RxCocoa
 import SnapKit
 import Alamofire
 import UIKit
+import Gifu
 
 final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     
     var steps = PublishRelay<Step>()
     
     private let mainLogoImageView = UIImageView(image: UIImage(named: "Paper_Smile")!)
-    
-    private let backButton = UIButton().then{
-        //chevron.backward image
-        $0.layer.backgroundColor = UIColor.white.cgColor
-    }
     
     private let idTextField = UITextField().then{
         $0.placeholder = "사용할 아이디 입력"
@@ -38,14 +34,11 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addView()
-        setLayout()
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
     }
     
     override func addView(){
         [mainLogoImageView,
-         backButton,
          idTextField,
          nextButton
         ]
@@ -60,11 +53,6 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
             make.top.equalTo(30)
             make.width.equalTo(170)
             make.height.equalTo(100)
-        }
-        backButton.snp.makeConstraints { make in
-            make.top.equalTo(10)
-            make.left.equalTo(10)
-            make.size.equalTo(20)
         }
         idTextField.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
