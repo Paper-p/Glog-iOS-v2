@@ -48,9 +48,9 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
     }
     
     private let forgotPwdButton = UIButton().then{
-        $0.titleLabel?.text = "비밀번호를 잊어 버리셨나요"
-        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
+        $0.setTitle("비밀번호를 잊어 버리셨나요?", for: .normal)
+        $0.setTitleColor(UIColor.white, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
     }
     
     override func viewDidLoad() {
@@ -111,6 +111,8 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         forgotPwdButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(signInButton.snp.bottom).offset(15)
+            make.width.equalTo(170)
+            make.height.equalTo(20)
         }
     }
 }
