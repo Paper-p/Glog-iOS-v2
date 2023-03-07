@@ -76,7 +76,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
         }
     }
     @objc func textFieldDidChange(sender: UITextField) {
-        if sender.text?.isEmpty == true {
+        if sender.text?.isEmpty == true || sender.text?.count != 1 {
             self.nextButton.isEnabled = false
             nextButton.clearGradient()
         } else {
