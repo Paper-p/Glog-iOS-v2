@@ -45,6 +45,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        signInButton.createGradient()
     }
     
     override func addView(){

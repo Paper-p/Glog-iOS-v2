@@ -14,13 +14,22 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     
     let gifImage = GIFImageView()
     
-    private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.")
+    private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.").then{
+        $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+    }
     
-    private let nextButton = GlogButton(title: "다음")
+    private var nextButton = GlogButton(title: "다음")
+    
+    private let errorLabel = UILabel().then{
+        $0.text = "이미 존재하는 아이디에요."
+        $0.textColor = GlogAsset.Colors.paperErrorColor.color
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
+        nextButton.clearGradient()
     }
     
     override func configureNavigation() {
@@ -64,6 +73,16 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
             make.top.equalTo(idTextField.snp.bottom).offset(20)
             make.width.equalToSuperview().inset(12)
             make.height.equalTo(60)
+        }
+    }
+    @objc func textFieldDidChange(sender: UITextField) {
+        if sender.text?.isEmpty == true {
+            self.nextButton.isEnabled = false
+            nextButton.clearGradient()
+        } else {
+            self.nextButton.isEnabled = true
+            print("working")
+            nextButton.createGradient()
         }
     }
 }

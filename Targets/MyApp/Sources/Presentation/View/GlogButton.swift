@@ -4,7 +4,6 @@ import UIKit
 final class GlogButton: UIButton {
     init(title: String) {
         super.init(frame: CGRect(x: 0, y: 0, width: 366, height: 60))
-        createGradient()
         self.setTitle(title, for: .normal)
         self.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
         self.layer.cornerRadius = 10
@@ -25,5 +24,8 @@ final class GlogButton: UIButton {
         gradientLayer.frame = bounds
         gradientLayer.cornerRadius = 10
         layer.insertSublayer(gradientLayer, at: 0)
+    }
+    func clearGradient(){
+        self.backgroundColor = GlogAsset.Colors.paperGrayColor.color
     }
 }

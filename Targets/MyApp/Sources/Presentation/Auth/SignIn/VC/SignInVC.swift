@@ -42,6 +42,7 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
+        signInButton.createGradient()
     }
     
     override func configureNavigation() {
