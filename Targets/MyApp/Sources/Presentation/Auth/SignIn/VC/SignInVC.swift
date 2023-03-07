@@ -19,24 +19,10 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         $0.textColor = UIColor.white
     }
     
-    private let idTextField = UITextField().then{
-        $0.attributedPlaceholder = NSAttributedString(string: "아이디를 입력해주세요.", attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
-        ])
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textColor = UIColor.white
-        $0.layer.cornerRadius = 10
-        $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-    }
+    private let idTextField = AuthTextField(title: "아이디를 입력해주세요.")
     
-    private let pwdTextField = UITextField().then{
-        $0.attributedPlaceholder = NSAttributedString(string: "비밀번호를 입력해주세요.", attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
-        ])
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textColor = UIColor.white
-        $0.layer.cornerRadius = 10
-        $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+    private let pwdTextField = AuthTextField(title: "비밀번호를 입력해주세요.").then{
+        $0.isSecureTextEntry = true
     }
     
     private let signInButton = UIButton().then{
@@ -67,6 +53,11 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
     override func configureNavigation() {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.topItem?.title = "취소"
+    }
+    
+    override func setup() {
+        idTextField.addLeftImage(UIImage(systemName: "person.fill")!, x: 17, y: 5)
+        pwdTextField.addLeftImage(UIImage(systemName: "lock.fill")!, x: 17, y: 4)
     }
     
     override func addView(){

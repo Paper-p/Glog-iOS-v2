@@ -14,19 +14,12 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     
     let gifImage = GIFImageView()
     
-    private let idTextField = UITextField().then{
-        $0.attributedPlaceholder = NSAttributedString(string: "사용하실 아이디를 입력해주세요.", attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
-        ])
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textColor = UIColor.white
-        $0.layer.cornerRadius = 10
-        $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-    }
+    private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.")
     
     private let nextButton = UIButton().then{
         $0.setTitle("다음", for: .normal)
-        $0.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
+        $0.setTitleColor(UIColor.gray, for: .normal)
+        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
@@ -46,6 +39,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
+        idTextField.addLeftImage(UIImage(systemName: "person.fill")!, x: 17, y: 5)
     }
     
     override func addView(){
@@ -63,7 +57,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
             make.centerX.equalToSuperview()
             make.top.equalTo(140)
             make.height.equalTo(135)
-            make.width.equalTo(160)
+            make.width.equalTo(170)
         }
         idTextField.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -73,9 +67,9 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
         }
         nextButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(idTextField.snp.bottom).offset(30)
-            make.width.equalToSuperview().inset(15)
-            make.height.equalTo(45)
+            make.top.equalTo(idTextField.snp.bottom).offset(20)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(60)
         }
     }
 }
