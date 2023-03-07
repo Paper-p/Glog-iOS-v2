@@ -28,7 +28,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
-    private let signInButton = GradientButton(title: "로그인").then{
+    private let signInButton = GlogButton(title: "로그인").then{
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
     

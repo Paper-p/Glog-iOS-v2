@@ -16,13 +16,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     
     private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.")
     
-    private let nextButton = UIButton().then{
-        $0.setTitle("다음", for: .normal)
-        $0.setTitleColor(UIColor.gray, for: .normal)
-        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        $0.layer.cornerRadius = 10
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-    }
+    private let nextButton = GlogButton(title: "다음")
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -25,13 +25,7 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         $0.isSecureTextEntry = true
     }
     
-    private let signInButton = UIButton().then{
-        $0.setTitle("로그인", for: .normal)
-        $0.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
-        $0.layer.cornerRadius = 10
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        $0.layer.backgroundColor = GlogAsset.Colors.paperStartColor.color.cgColor
-    }
+    private let signInButton = GlogButton(title: "로그인")
     
     private let forgotPwdButton = UIButton().then{
         $0.setTitle("비밀번호", for: .normal)

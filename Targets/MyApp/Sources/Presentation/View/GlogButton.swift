@@ -1,7 +1,7 @@
 
 import UIKit
 
-final class GradientButton: UIButton {
+final class GlogButton: UIButton {
     init(title: String) {
         super.init(frame: CGRect(x: 0, y: 0, width: 366, height: 60))
         createGradient()
