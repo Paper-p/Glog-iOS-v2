@@ -15,7 +15,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     let gifImage = GIFImageView()
     
     private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.").then{
-        $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        $0.addTarget(self, action: #selector(textFieldDidChange), for: .allEditingEvents)
     }
     
     private var nextButton = GlogButton(title: "다음")
@@ -24,6 +24,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
         $0.text = "이미 존재하는 아이디에요."
         $0.textColor = GlogAsset.Colors.paperErrorColor.color
         $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        $0.isHidden = true
     }
     
     override func viewDidLoad() {
@@ -48,7 +49,8 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     override func addView(){
         [gifImage,
          idTextField,
-         nextButton
+         nextButton,
+         errorLabel
         ]
             .forEach {
             view.addSubview($0)
@@ -74,11 +76,18 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
             make.width.equalToSuperview().inset(12)
             make.height.equalTo(60)
         }
+        errorLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(nextButton.snp.bottom).offset(20)
+            make.width.equalTo(150)
+            make.height.equalTo(17)
+        }
     }
     @objc func textFieldDidChange(sender: UITextField) {
-        if sender.text?.isEmpty == true || sender.text?.count != 1 {
+        if !(sender.text?.isEmpty ?? true) {
             self.nextButton.isEnabled = false
             nextButton.clearGradient()
+            print("no")
         } else {
             self.nextButton.isEnabled = true
             print("working")

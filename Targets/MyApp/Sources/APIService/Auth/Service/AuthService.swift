@@ -2,13 +2,13 @@
 import Foundation
 import Moya
 
-enum SignInService{
+enum AuthService{
     case signIn(param: SignInRequest)
     case signUp(param: SignUpRequest)
     case refresh(param: RefreshRequest)
 }
 
-extension SignInService: TargetType{
+extension AuthService: TargetType{
     public var baseURL: URL{
         return URL(string: PaperAPI.baseURL)!
     }

@@ -13,7 +13,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
     private let backGroundImageView = UIImageView(image: UIImage(named: "Paper_Background")!)
     
     private let blurMainView = UIView().then{
-        $0.layer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.52).cgColor
+        $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.52)
         $0.layer.cornerRadius = 112
     }
     
@@ -81,7 +81,7 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         mainLabel.snp.makeConstraints { make in
             make.centerX.equalTo(blurMainView)
             make.bottom.equalTo(mainLogoImageView).offset(50)
-            make.width.equalTo(128)
+            make.width.equalTo(160)
             make.height.equalTo(50)
         }
         signInButton.snp.makeConstraints { make in

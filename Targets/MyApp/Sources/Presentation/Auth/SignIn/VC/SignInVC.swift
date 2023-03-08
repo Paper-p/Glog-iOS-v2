@@ -25,7 +25,9 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         $0.isSecureTextEntry = true
     }
     
-    private let signInButton = GlogButton(title: "로그인")
+    private let signInButton = GlogButton(title: "로그인").then{
+        $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
+    }
     
     private let forgotPwdButton = UIButton().then{
         $0.setTitle("비밀번호", for: .normal)
@@ -110,6 +112,19 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
             make.left.equalTo(forgotPwdButton.snp.right).offset(1)
             make.width.equalTo(148)
             make.height.equalTo(20)
+        }
+    }
+    
+    @objc func signInButtonDidTap(){
+        guard let id = idTextField.text else {return}
+        guard let pwd = pwdTextField.text else {return}
+        
+        viewModel.fetch(id: idTextField.text!, pwd: pwdTextField.text!)
+        if !id.isEmpty && !pwd.isEmpty == true{
+            print("good")
+            
+        } else {
+            print("bad")
         }
     }
 }

@@ -46,6 +46,8 @@ class MainCoordinator:Coordinator {
     }
     
     func pushToMain(){
-        
+        let vm = MainVM()
+        let vc = MainVC(vm)
+        navigationController.setViewControllers([vc], animated: true)
     }
 }
