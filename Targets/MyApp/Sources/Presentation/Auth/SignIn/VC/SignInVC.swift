@@ -119,10 +119,9 @@ final class SignInVC: BaseVC<SignInVM>, Stepper{
         guard let id = idTextField.text else {return}
         guard let pwd = pwdTextField.text else {return}
         
-        viewModel.fetch(id: idTextField.text!, pwd: pwdTextField.text!)
         if !id.isEmpty && !pwd.isEmpty == true{
             print("good")
-            
+            viewModel.fetch(id: idTextField.text!, pwd: pwdTextField.text!)
         } else {
             print("bad")
         }

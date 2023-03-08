@@ -33,7 +33,7 @@ final class AppFlow: Flow {
         case .introIsRequired:
             return coordinateToIntro()
         case .mainIsRequired:
-            return coordinateToMain()
+            return navigateToMain()
         default:
             return .none
         }
@@ -51,7 +51,7 @@ final class AppFlow: Flow {
         ))
     }
     
-    private func coordinateToMain() -> FlowContributors {
+    private func navigateToMain() -> FlowContributors {
         let flow = LoginFlow()
         Flows.use(flow, when: .created) { (root) in
             self.rootViewController = root as! UINavigationController

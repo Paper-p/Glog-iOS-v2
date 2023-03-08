@@ -11,12 +11,12 @@ final class SignInVM: BaseViewModel, Stepper{
     
     private let provider = MoyaProvider<AuthService>()
     
-    private func success(){
-        print("success")
+    func success(){
+        print("success1")
         self.steps.accept(GlogStep.mainIsRequired)
     }
     
-    private func failure(){
+    func failure(){
         print("fail")
     }
     
