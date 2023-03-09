@@ -6,6 +6,8 @@ enum AuthService{
     case signIn(param: SignInRequest)
     case signUp(param: SignUpRequest)
     case refresh(param: RefreshRequest)
+    case validId(keyword: ValidIdRequest)
+    case validNickname(keyword: ValidNameRequest)
 }
 
 extension AuthService: TargetType{
@@ -21,6 +23,10 @@ extension AuthService: TargetType{
             return "/auth/"
         case .signUp:
             return "/auth/signup"
+        case .validId:
+            return "/auth/valid-id"
+        case .validNickname:
+            return "auth/valid-name"
         }
     }
     
@@ -30,6 +36,10 @@ extension AuthService: TargetType{
             return .post
         case .refresh:
             return .patch
+        case .validId:
+            return .head
+        case .validNickname:
+            return .head
         }
     }
     
@@ -45,6 +55,10 @@ extension AuthService: TargetType{
             return .requestJSONEncodable(param)
         case .refresh:
             return .requestPlain
+        case let .validId(keyword):
+            return .requestParameters(parameters: ["userId": keyword], encoding: URLEncoding.queryString)
+        case let .validNickname(keyword):
+            return .requestParameters(parameters: ["nickname": keyword], encoding: URLEncoding.queryString)
         }
     }
     

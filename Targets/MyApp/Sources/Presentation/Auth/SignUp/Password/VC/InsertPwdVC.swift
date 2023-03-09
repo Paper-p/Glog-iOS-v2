@@ -5,66 +5,52 @@ import RxCocoa
 import SnapKit
 import Alamofire
 import UIKit
+import Gifu
 
-final class InsertPwdVC: BaseVC<InsertPwdVM>, Stepper{
+final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
     
-    var steps = PublishRelay<Step>()
+    let gifImage = GIFImageView()
     
-    private let mainLogoImageView = UIImageView(image: UIImage(named: "Paper_Smile")!)
+    private let pwdTextField = AuthTextField(title: "사용하실 비밀번호를 입력해주세요.")
     
-    private let backButton = UIButton().then{
-        //$0.image = UIImage(systemSymbolName: "chevron.backward", accessibilityDescription: "back")
-        $0.layer.backgroundColor = UIColor.white.cgColor
-    }
+    private let rePwdTextField = AuthTextField(title: "사용하실 비밀번호를 한번 더 입력해주세요.")
     
-    private let pwdTextField = UITextField().then{
-        $0.placeholder = "사용할 비밀번호 입력해주세요."
-        $0.attributedPlaceholder = NSAttributedString(string: "사용할 비밀번호 입력해주세요.", attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
-        ])
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textColor = UIColor.white
-        $0.font = UIFont(name: "Helvetica", size: 20)
-    }
+    private var nextButton = GlogButton(title: "다음")
     
-    private let rePwdTextField = UITextField().then{
-        $0.placeholder = "사용할 비밀번호 한번더 입력해주세요."
-        $0.attributedPlaceholder = NSAttributedString(string: "사용할 비밀번호 한번더 입력해주세요.", attributes: [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.gray.cgColor
-        ])
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textColor = UIColor.white
-        $0.font = UIFont(name: "Helvetica", size: 20)
-    }
-    
-    private let nextButton = UIButton().then{
-        $0.layer.cornerRadius = 10
-        $0.titleLabel?.text = "다음"
-        $0.titleLabel?.textColor = GlogAsset.Colors.paperBackgroundColor.color
-        $0.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 14)
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-    }
-    
-    private let includeLabel = UILabel().then{
-        $0.text = "비밀번호는 8자리 이상 및 기호를 포함해주세요."
-        $0.font = UIFont(name: "Helvetica", size: 14)
-        $0.textColor = UIColor.white
+    private let errorLabel = UILabel().then{
+        $0.text = "이미 존재하는 아이디에요."
+        $0.textColor = GlogAsset.Colors.paperErrorColor.color
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        $0.isHidden = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addView()
-        setLayout()
         view.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
+        nextButton.clearGradient()
+    }
+    
+    override func configureNavigation() {
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.topItem?.title = "취소"
+        self.navigationItem.titleView = UIImageView(image: UIImage(named: "Paper_MainLogo"))
+    }
+    
+    override func setup() {
+        pwdTextField.delegate = self
+        DispatchQueue.main.async {
+            self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
+        }
+        pwdTextField.addLeftImage(UIImage(systemName: "lock.fill")!, x: 17, y: 4)
+        rePwdTextField.addLeftImage(UIImage(systemName: "lock.fill")!, x: 17, y: 4)
     }
     
     override func addView(){
-        [mainLogoImageView,
-         backButton,
+        [gifImage,
          pwdTextField,
          rePwdTextField,
          nextButton,
-         includeLabel
+         errorLabel
         ]
             .forEach {
             view.addSubview($0)
@@ -72,39 +58,34 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, Stepper{
     }
     
     override func setLayout(){
-        mainLogoImageView.snp.makeConstraints { make in
+        gifImage.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(30)
+            make.top.equalTo(140)
+            make.height.equalTo(135)
             make.width.equalTo(170)
-            make.height.equalTo(100)
-        }
-        
-        backButton.snp.makeConstraints { make in
-            make.top.equalTo(10)
-            make.left.equalTo(10)
-            make.size.equalTo(20)
         }
         pwdTextField.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().inset(15)
-            make.height.equalTo(35)
-            make.top.equalTo(mainLogoImageView.snp.bottom).offset(20)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(52)
+            make.top.equalTo(gifImage.snp.bottom).offset(15)
         }
+        
         rePwdTextField.snp.makeConstraints { make in
             make.centerX.equalTo(pwdTextField)
             make.size.equalTo(pwdTextField)
-            make.top.equalTo(pwdTextField.snp.bottom).offset(15)
+            make.top.equalTo(pwdTextField.snp.bottom).offset(12)
         }
         nextButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(rePwdTextField.snp.bottom).offset(30)
-            make.width.equalToSuperview().inset(15)
-            make.height.equalTo(45)
+            make.top.equalTo(rePwdTextField.snp.bottom).offset(20)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(60)
         }
-        includeLabel.snp.makeConstraints { make in
+        errorLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(nextButton.snp.bottom).offset(17)
-            make.width.equalTo(280)
+            make.top.equalTo(nextButton.snp.bottom).offset(20)
+            make.width.equalTo(150)
             make.height.equalTo(17)
         }
     }

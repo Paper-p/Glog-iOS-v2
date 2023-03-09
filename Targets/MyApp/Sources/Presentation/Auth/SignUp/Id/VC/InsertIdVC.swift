@@ -8,17 +8,15 @@ import Alamofire
 import UIKit
 import Gifu
 
-final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
-    
-    var steps = PublishRelay<Step>()
+final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
     
     let gifImage = GIFImageView()
     
-    private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.").then{
-        $0.addTarget(self, action: #selector(textFieldDidChange), for: .allEditingEvents)
-    }
+    private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.")
     
-    private var nextButton = GlogButton(title: "다음")
+    private var nextButton = GlogButton(title: "다음").then{
+        $0.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)
+    }
     
     private let errorLabel = UILabel().then{
         $0.text = "이미 존재하는 아이디에요."
@@ -40,6 +38,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
     }
     
     override func setup() {
+        idTextField.delegate = self
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
@@ -83,15 +82,25 @@ final class InsertIdVC: BaseVC<InsertIdVM>, Stepper{
             make.height.equalTo(17)
         }
     }
-    @objc func textFieldDidChange(sender: UITextField) {
-        if !(sender.text?.isEmpty ?? true) {
-            self.nextButton.isEnabled = false
+    
+    @objc func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+        
+        if text.isEmpty || (text.count <= 3){
+            nextButton.isEnabled = false
             nextButton.clearGradient()
             print("no")
         } else {
-            self.nextButton.isEnabled = true
-            print("working")
+            nextButton.isEnabled = true
             nextButton.createGradient()
+            print("working")
+            //nextButtonDidTap()
         }
+        return true
+    }
+    
+    @objc func nextButtonDidTap(){
+        viewModel.fetch(id: idTextField.text!)
     }
 }

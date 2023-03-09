@@ -10,7 +10,7 @@ final class SignInVM: BaseViewModel{
     private let provider = MoyaProvider<AuthService>()
     
     func success(){
-        print("success1")
+        print("success")
         coordinator.navigate(to: .mainIsRequired)
     }
     

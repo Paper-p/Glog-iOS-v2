@@ -7,7 +7,7 @@ class PwdCoordinator: BaseCoordinator{
         let vm = InsertPwdVM(coordinator: self)
         let vc = InsertPwdVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     override func navigate(to step: GlogStep) {

@@ -24,4 +24,11 @@ extension AuthTextField{
         self.rightView = paddingView
         self.rightViewMode = ViewMode.always
     }
+    
+    func errorTextfield(){
+        self.layer.borderColor = GlogAsset.Colors.paperErrorColor.color.cgColor
+        self.layer.borderWidth = 1
+    }
 }
+
+

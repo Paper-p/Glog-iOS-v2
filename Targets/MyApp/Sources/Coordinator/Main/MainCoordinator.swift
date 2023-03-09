@@ -20,10 +20,5 @@ class MainCoordinator: BaseCoordinator{
 }
 
 private extension MainCoordinator{
-    private func signInIsRequired(){
-        let vc = SignInCoordinator(navigationController: navigationController)
-        vc.parentCoordinator = self
-        childCoordinators.append(vc)
-        vc.start()
-    }
+    
 }
