@@ -22,6 +22,7 @@ class SignInCoordinator: BaseCoordinator{
 
 private extension SignInCoordinator{
     private func mainIsRequired(){
-        let vc = MainVC()
+        let vc = MainCoordinator(navigationController: navigationController)
+        vc.start(coordinator: vc)
     }
 }

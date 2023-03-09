@@ -38,7 +38,7 @@ final class IntroVC: BaseVC<IntroVM>{
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
-        $0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
+        //$0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
     }
     
     override func viewDidLoad() {

@@ -16,7 +16,7 @@ class IntroCoordinator: BaseCoordinator{
             signInIsRequired()
             
         case .idIsRequired:
-            
+            idIsRequired()
             
         default:
             return
@@ -27,12 +27,13 @@ class IntroCoordinator: BaseCoordinator{
 private extension IntroCoordinator{
     private func signInIsRequired(){
         let vc = SignInCoordinator(navigationController: navigationController)
-        vc.parentCoordinator = self
-        childCoordinators.append(vc)
-        vc.start()
+        start(coordinator: vc)
     }
     
     private func idIsRequired(){
-        let vc = 
+        let vc = idCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
     }
 }

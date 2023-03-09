@@ -1,19 +1,19 @@
 
 import UIKit
 
-class idCoordinator: BaseCoordinator{
+class PwdCoordinator: BaseCoordinator{
     
     override func start() {
-        let vm = InsertIdVM(coordinator: self)
-        let vc = InsertIdVC(vm)
+        let vm = InsertPwdVM(coordinator: self)
+        let vc = InsertPwdVC(vm)
         
         navigationController.setViewControllers([vc], animated: true)
     }
     
     override func navigate(to step: GlogStep) {
         switch step{
-        case .pwdIsRequired:
-            pwdIsRequired()
+        case .nickNameIsRequired:
+            nickNameIsRequired()
             
         default:
             return
@@ -21,9 +21,9 @@ class idCoordinator: BaseCoordinator{
     }
 }
 
-private extension idCoordinator{
-    private func pwdIsRequired(){
-        let vc = PwdCoordinator(navigationController: navigationController)
+private extension PwdCoordinator{
+    private func nickNameIsRequired(){
+        let vc = NicknameCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.start()
