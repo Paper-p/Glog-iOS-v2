@@ -11,7 +11,7 @@ final class SignInVM: BaseViewModel{
     
     func success(){
         print("success1")
-        
+        coordinator.navigate(to: .mainIsRequired)
     }
     
     func failure(){
