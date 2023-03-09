@@ -7,7 +7,7 @@ class SignInCoordinator: BaseCoordinator{
         let vm = SignInVM(coordinator: self)
         let vc = SignInVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     override func navigate(to step: GlogStep) {

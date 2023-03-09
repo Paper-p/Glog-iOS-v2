@@ -26,9 +26,9 @@ final class IntroVC: BaseVC<IntroVM>{
         $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
-    private let signInButton = GlogButton(title: "로그인")/*.then{
+    private let signInButton = GlogButton(title: "로그인").then{
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
-    }*/
+    }
     
     private let signUpButton = UIButton().then{
         $0.setTitle("회원가입", for: .normal)
@@ -38,7 +38,7 @@ final class IntroVC: BaseVC<IntroVM>{
         $0.layer.cornerRadius = 10
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         $0.layer.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color.cgColor
-        //$0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(signUpButtonDidTap), for: .touchUpInside)
     }
     
     override func viewDidLoad() {
@@ -94,6 +94,14 @@ final class IntroVC: BaseVC<IntroVM>{
             make.width.equalTo(signInButton)
             make.height.equalTo(signInButton)
         }
+    }
+    
+    @objc func signInButtonDidTap(){
+        viewModel.pushToSignInVC()
+    }
+    
+    @objc func signUpButtonDidTap(){
+        viewModel.pushToSignUpVC()
     }
 }
 

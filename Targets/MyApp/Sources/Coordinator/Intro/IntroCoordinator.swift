@@ -27,7 +27,7 @@ class IntroCoordinator: BaseCoordinator{
 private extension IntroCoordinator{
     private func signInIsRequired(){
         let vc = SignInCoordinator(navigationController: navigationController)
-        start(coordinator: vc)
+        vc.start(coordinator: vc)
     }
     
     private func idIsRequired(){

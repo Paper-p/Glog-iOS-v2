@@ -7,7 +7,7 @@ class idCoordinator: BaseCoordinator{
         let vm = InsertIdVM(coordinator: self)
         let vc = InsertIdVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     override func navigate(to step: GlogStep) {
