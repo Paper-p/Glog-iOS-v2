@@ -7,9 +7,7 @@ import SnapKit
 import Alamofire
 import UIKit
 
-final class SignInVC: BaseVC<SignInVM>, Stepper{
-    
-    var steps = PublishRelay<Step>()
+final class SignInVC: BaseVC<SignInVM>{
     
     private let mainLogoImageView = UIImageView(image: UIImage(named: "Paper_MainLogo")!)
     

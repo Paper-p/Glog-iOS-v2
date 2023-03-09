@@ -5,15 +5,13 @@ import RxCocoa
 import Moya
 import RxFlow
 
-final class SignInVM: BaseViewModel, Stepper{
-    
-    let steps = PublishRelay<Step>()
+final class SignInVM: BaseViewModel{
     
     private let provider = MoyaProvider<AuthService>()
     
     func success(){
         print("success1")
-        self.steps.accept(GlogStep.mainIsRequired)
+        
     }
     
     func failure(){

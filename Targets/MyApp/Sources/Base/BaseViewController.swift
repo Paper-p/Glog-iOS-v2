@@ -5,7 +5,7 @@ import RxSwift
 import Then
 import SnapKit
 
-class BaseVC<T>: UIViewController {
+class BaseVC<T: BaseViewModel>: UIViewController {
     
     let viewModel: T
     var disposeBag = DisposeBag()

@@ -6,9 +6,7 @@ import SnapKit
 import Alamofire
 import UIKit
 
-final class IntroVC: BaseVC<IntroVM>, Stepper{
-    
-    var steps = PublishRelay<Step>()
+final class IntroVC: BaseVC<IntroVM>{
     
     private let backGroundImageView = UIImageView(image: UIImage(named: "Paper_Background")!)
     
@@ -28,9 +26,9 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
         $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
-    private let signInButton = GlogButton(title: "로그인").then{
+    private let signInButton = GlogButton(title: "로그인")/*.then{
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
-    }
+    }*/
     
     private let signUpButton = UIButton().then{
         $0.setTitle("회원가입", for: .normal)
@@ -96,14 +94,6 @@ final class IntroVC: BaseVC<IntroVM>, Stepper{
             make.width.equalTo(signInButton)
             make.height.equalTo(signInButton)
         }
-    }
-    
-    @objc func signInButtonDidTap(){
-        self.steps.accept(GlogStep.signInIsRequired)
-    }
-    
-    @objc func signUpButtonDidTap(){
-        self.steps.accept(GlogStep.idIsRequired)
     }
 }
 

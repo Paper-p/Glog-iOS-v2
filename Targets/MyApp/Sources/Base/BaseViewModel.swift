@@ -4,5 +4,9 @@ import RxSwift
 import RxCocoa
 
 class BaseViewModel {
-    var disposeBag = DisposeBag()
+    let coordinator: BaseCoordinator
+        
+    init(coordinator: BaseCoordinator){
+        self.coordinator = coordinator
+    }
 }

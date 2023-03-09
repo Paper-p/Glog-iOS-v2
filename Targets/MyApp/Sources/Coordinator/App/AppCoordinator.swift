@@ -3,51 +3,40 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class MainCoordinator:Coordinator {
-    var childCoordinators = [Coordinator]()
+class AppCoordinator: Coordinator {
+    
     var navigationController: UINavigationController
-    let window: UIWindow
+    var childCoordinator: [Coordinator] = []
+    var parentCoordinator: Coordinator?
+    let window: UIWindow?
     
     
-    init(navigationController: UINavigationController, window: UIWindow) {
-        self.navigationController = navigationController
+    init(navigationCotroller: UINavigationController, window: UIWindow?) {
         self.window = window
-        window.rootViewController = navigationController
+        self.navigationController = navigationCotroller
+        window?.makeKeyAndVisible()
     }
     
     func start() {
-        let vm = IntroVM()
-        let vc = IntroVC(vm)
-        navigationController.setViewControllers([vc], animated: true)
+        let vc = IntroCoordinator(navigationController: navigationController)
+        window?.rootViewController = navigationController
+        start(coordinator: vc)
     }
     
-    func pushToSignInVC(){
-        let vm = SignInVM()
-        let vc = SignInVC(vm)
-        navigationController.setViewControllers([vc], animated: true)
+    func start(coordinator: Coordinator) {
+        coordinator.start()
     }
     
-    func pushToIdVC(){
-        let vm = InsertIdVM()
-        let vc = InsertIdVC(vm)
-        navigationController.setViewControllers([vc], animated: true)
+    func didFinish(coordinator: Coordinator) {
+        
     }
     
-    func pushToPwdVC(){
-        let vm = InsertPwdVM()
-        let vc = InsertPwdVC(vm)
-        navigationController.setViewControllers([vc], animated: true)
+    func navigate(to step: GlogStep) {
+        
     }
     
-    func pushToNicknameVC(){
-        let vm = InsertNicknameVM()
-        let vc = InsertNickNameVC(vm)
-        navigationController.setViewControllers([vc], animated: true)
+    func removeChildCoordinators() {
+        
     }
     
-    func pushToMain(){
-        let vm = MainVM()
-        let vc = MainVC(vm)
-        navigationController.setViewControllers([vc], animated: true)
-    }
 }
