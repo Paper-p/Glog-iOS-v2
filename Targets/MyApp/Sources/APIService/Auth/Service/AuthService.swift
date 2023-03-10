@@ -56,7 +56,7 @@ extension AuthService: TargetType{
         case .refresh:
             return .requestPlain
         case let .validId(keyword):
-            return .requestParameters(parameters: ["userId": keyword], encoding: URLEncoding.queryString)
+            return .requestJSONEncodable(keyword)
         case let .validNickname(keyword):
             return .requestParameters(parameters: ["nickname": keyword], encoding: URLEncoding.queryString)
         }

@@ -16,6 +16,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
     
     private var nextButton = GlogButton(title: "다음").then{
         $0.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)
+        $0.isEnabled = false
     }
     
     private let errorLabel = UILabel().then{
@@ -87,15 +88,14 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
 
         let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
         
-        if text.isEmpty || (text.count <= 3){
-            nextButton.isEnabled = false
-            nextButton.clearGradient()
-            print("no")
-        } else {
+        if !text.isEmpty && (text.count >= 4){
             nextButton.isEnabled = true
             nextButton.createGradient()
             print("working")
-            //nextButtonDidTap()
+        } else{
+            nextButton.clearGradient()
+            nextButton.isEnabled = false
+            print("nooo")
         }
         return true
     }

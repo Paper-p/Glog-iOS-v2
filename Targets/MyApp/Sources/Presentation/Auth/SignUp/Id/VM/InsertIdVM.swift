@@ -7,6 +7,7 @@ import Moya
 final class InsertIdVM: BaseViewModel{
     
     private let provider = MoyaProvider<AuthService>()
+    private var errorLabelVisible = Bool()
     
     func success(){
         print("success")
@@ -15,6 +16,10 @@ final class InsertIdVM: BaseViewModel{
     
     func failure(){
         print("fail")
+    }
+    
+    func alreadyExist(){
+        print("이미 존재")
     }
     
     func fetch(id: String){
@@ -29,6 +34,8 @@ final class InsertIdVM: BaseViewModel{
                 switch statusCode{
                 case 200..<300:
                     self.success()
+                case 409:
+                    self.alreadyExist()
                 default:
                     self.failure()
                 }
