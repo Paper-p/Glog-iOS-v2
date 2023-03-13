@@ -110,9 +110,7 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
             if passwordValidation(password: pwdTextField.text!) && rePasswordValidation(password: rePwdTextField.text!){
                 viewModel.pushToNicknameVC()
             }
-        }
-        
-        else{
+        } else{
             errorLabel.textColor = GlogAsset.Colors.paperErrorColor.color
             pwdTextField.layer.borderColor = GlogAsset.Colors.paperErrorColor.color.cgColor
             rePwdTextField.layer.borderColor = GlogAsset.Colors.paperErrorColor.color.cgColor
@@ -148,6 +146,8 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
         if !pwdTextField.text!.isEmpty && (pwdTextField.text!.count >= 8 && pwdTextField.text!.count <= 40) && !rePwdTextField.text!.isEmpty && (rePwdTextField.text!.count >= 8 && rePwdTextField.text!.count <= 40){
             print("asdf")
             checkPwdValidation()
+            print(pwdTextField.text!)
+            print(rePwdTextField.text!)
         }
     }
 }
