@@ -26,7 +26,7 @@ extension AuthService: TargetType{
         case .validId:
             return "/auth/valid-id"
         case .validNickname:
-            return "auth/valid-name"
+            return "/auth/valid-name"
         }
     }
     
@@ -56,16 +56,16 @@ extension AuthService: TargetType{
         case .refresh:
             return .requestPlain
         case let .validId(keyword):
-            return .requestJSONEncodable(keyword)
+            return .requestParameters(parameters: ["userId":keyword.userId], encoding: URLEncoding.queryString)
         case let .validNickname(keyword):
-            return .requestParameters(parameters: ["nickname": keyword], encoding: URLEncoding.queryString)
+            return .requestJSONEncodable(keyword)
         }
     }
     
     var headers: [String : String]?{
         switch self {
         default:
-            return["Content-Type" :"application/json"]
+            return["Content-Type" : "application/json"]
         }
     }
 }

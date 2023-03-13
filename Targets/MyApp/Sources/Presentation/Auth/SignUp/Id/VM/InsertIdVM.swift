@@ -6,7 +6,7 @@ import Moya
 
 final class InsertIdVM: BaseViewModel{
     
-    private let provider = MoyaProvider<AuthService>()
+    private let provider = MoyaProvider<AuthService>(plugins: [GlogLoggingPlugin()])
     private var errorLabelVisible = Bool()
     
     func success(){
