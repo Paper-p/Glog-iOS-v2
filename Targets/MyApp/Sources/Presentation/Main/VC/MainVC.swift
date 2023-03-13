@@ -6,9 +6,7 @@ import SnapKit
 import Alamofire
 import UIKit
 
-final class MainVC: BaseVC<MainVM>, Stepper{
-    
-    var steps = PublishRelay<Step>()
+final class MainVC: BaseVC<MainVM>{
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +18,14 @@ final class MainVC: BaseVC<MainVM>, Stepper{
     
     override func configureNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image, style: .plain, target: self, action: .none)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images, style: <#T##UIBarButtonItem.Style#>, target: <#T##Any?#>, action: <#T##Selector?#>)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperProfileLogo.image.downsam, style: .plain, target: self, action: .none)
     }
     
     override func setLayout() {
+        
+    }
+    
+    @objc func profileButtonDidTap(){
         
     }
 }
