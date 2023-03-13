@@ -104,6 +104,12 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
         }
     }
     
+    private func insertUserPwdData(){
+        guard let password = pwdTextField.text else { return }
+        let userInfo = SignUpModel.share
+        userInfo.password = password
+    }
+    
     func checkPwdValidation(){
         
         if pwdTextField.text!.elementsEqual(rePwdTextField.text!){
@@ -146,6 +152,7 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
         if !pwdTextField.text!.isEmpty && (pwdTextField.text!.count >= 8 && pwdTextField.text!.count <= 40) && !rePwdTextField.text!.isEmpty && (rePwdTextField.text!.count >= 8 && rePwdTextField.text!.count <= 40){
             print("asdf")
             checkPwdValidation()
+            insertUserPwdData()
             print(pwdTextField.text!)
             print(rePwdTextField.text!)
         }

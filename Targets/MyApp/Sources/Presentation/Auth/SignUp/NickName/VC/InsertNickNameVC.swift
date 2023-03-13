@@ -85,6 +85,13 @@ final class InsertNickNameVC: BaseVC<InsertNicknameVM>, UITextFieldDelegate{
             make.height.equalTo(17)
         }
     }
+    
+    private func insertUserNameData(){
+        guard let userName = nicknameTextField.text else { return }
+        let userInfo = SignUpModel.share
+        userInfo.nickname = userName
+    }
+    
     @objc private func textDidChange(_ notification: Notification) {
         if let textField = notification.object as? UITextField {
             if let text = textField.text {
@@ -104,6 +111,7 @@ final class InsertNickNameVC: BaseVC<InsertNicknameVM>, UITextFieldDelegate{
     
     @objc func doneButtonDidTap(){
         viewModel.fetch(nickname: nicknameTextField.text!)
+        insertUserNameData()
     }
     
     override func bindVM() {

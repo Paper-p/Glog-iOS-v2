@@ -89,6 +89,12 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
         }
     }
     
+    private func insertUserIdData(){
+        guard let userId = idTextField.text else { return }
+        let userInfo = SignUpModel.share
+        userInfo.userId = userId
+    }
+    
     @objc private func textDidChange(_ notification: Notification) {
         if let textField = notification.object as? UITextField {
             if let text = textField.text {
@@ -108,6 +114,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
     
     @objc func nextButtonDidTap(){
         viewModel.fetch(id: idTextField.text!)
+        insertUserIdData()
     }
     
     override func bindVM() {

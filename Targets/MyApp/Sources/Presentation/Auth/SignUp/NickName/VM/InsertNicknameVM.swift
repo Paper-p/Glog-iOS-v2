@@ -14,6 +14,29 @@ final class InsertNicknameVM: BaseViewModel{
         coordinator.navigate(to: .signInIsRequired)
     }
     
+    func signUp(){
+        let userInfo = SignUpModel.share
+        let param = SignUpRequest(nickname: userInfo.nickname!, userId: userInfo.userId!, password: userInfo.password!)
+        
+        provider.request(.signUp(param: param)) { response in
+            print(response)
+            switch response{
+            case let .success(result):
+                let statusCode = result.statusCode
+                switch statusCode{
+                case 200..<300:
+                    self.success()
+                case 409:
+                    self.alreadyExist()
+                default:
+                    self.failure()
+                }
+            case let .failure(err):
+                print(err.localizedDescription)
+            }
+        }
+    }
+    
     func failure(){
         print("fail")
     }
@@ -33,7 +56,7 @@ final class InsertNicknameVM: BaseViewModel{
                 let statusCode = result.statusCode
                 switch statusCode{
                 case 200..<300:
-                    self.success()
+                    self.signUp()
                     self.errorLabelIsVisible.value = true
                 case 409:
                     self.alreadyExist()
