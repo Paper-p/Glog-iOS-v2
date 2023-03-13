@@ -23,7 +23,9 @@ class NicknameCoordinator: BaseCoordinator{
 
 private extension NicknameCoordinator{
     private func signInIsRequired(){
-        //let vc = SignInCoordinator(navigationController: navigationController)
-        self.navigationController.popToRootViewController(animated: true)
+        let vc = SignInCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
     }
 }

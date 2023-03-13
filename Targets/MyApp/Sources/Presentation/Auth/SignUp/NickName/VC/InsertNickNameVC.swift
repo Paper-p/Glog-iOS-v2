@@ -102,8 +102,8 @@ final class InsertNickNameVC: BaseVC<InsertNicknameVM>, UITextFieldDelegate{
         }
     }
     
-    @objc func nextButtonDidTap(){
-        viewModel.fetch(id: idTextField.text!)
+    @objc func doneButtonDidTap(){
+        viewModel.fetch(nickname: nicknameTextField.text!)
     }
     
     override func bindVM() {
