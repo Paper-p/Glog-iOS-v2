@@ -7,7 +7,7 @@ import Moya
 final class InsertIdVM: BaseViewModel{
     
     private let provider = MoyaProvider<AuthService>(plugins: [GlogLoggingPlugin()])
-    private var errorLabelVisible = Bool()
+    var errorLabelIsVisible = Observable(true)
     
     func success(){
         print("success")
@@ -34,8 +34,10 @@ final class InsertIdVM: BaseViewModel{
                 switch statusCode{
                 case 200..<300:
                     self.success()
+                    self.errorLabelIsVisible.value = true
                 case 409:
                     self.alreadyExist()
+                    self.errorLabelIsVisible.value = false
                 default:
                     self.failure()
                 }

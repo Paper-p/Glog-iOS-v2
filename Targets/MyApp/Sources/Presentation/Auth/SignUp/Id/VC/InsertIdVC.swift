@@ -88,7 +88,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
 
         let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
         
-        if !text.isEmpty && (text.count >= 4){
+        if !text.isEmpty && (text.count >= 4 && text.count <= 20){
             nextButton.isEnabled = true
             nextButton.createGradient()
             print("working")
@@ -102,5 +102,13 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
     
     @objc func nextButtonDidTap(){
         viewModel.fetch(id: idTextField.text!)
+    }
+    
+    override func bindVM() {
+        viewModel.errorLabelIsVisible.bind { [weak self] visible in
+            DispatchQueue.main.async {
+                self?.errorLabel.isHidden = visible ? true : false
+            }
+        }
     }
 }
