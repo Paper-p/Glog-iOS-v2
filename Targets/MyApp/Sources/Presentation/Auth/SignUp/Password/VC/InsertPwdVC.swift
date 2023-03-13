@@ -11,17 +11,22 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
     
     let gifImage = GIFImageView()
     
-    private let pwdTextField = AuthTextField(title: "사용하실 비밀번호를 입력해주세요.")
+    private let pwdTextField = AuthTextField(title: "사용하실 비밀번호를 입력해주세요.").then{
+        $0.isSecureTextEntry = true
+    }
+    private let rePwdTextField = AuthTextField(title: "사용하실 비밀번호를 한번 더 입력해주세요.").then{
+        $0.isSecureTextEntry = true
+    }
     
-    private let rePwdTextField = AuthTextField(title: "사용하실 비밀번호를 한번 더 입력해주세요.")
-    
-    private var nextButton = GlogButton(title: "다음")
+    private var nextButton = GlogButton(title: "다음").then{
+        $0.isEnabled = false
+        $0.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)
+    }
     
     private let errorLabel = UILabel().then{
-        $0.text = "이미 존재하는 아이디에요."
-        $0.textColor = GlogAsset.Colors.paperErrorColor.color
+        $0.text = "비밀번호는 8자리 이상 및 기호를 포함해주세요."
+        $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        $0.isHidden = true
     }
     
     override func viewDidLoad() {
@@ -38,11 +43,20 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
     
     override func setup() {
         pwdTextField.delegate = self
+        rePwdTextField.delegate = self
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
         pwdTextField.addLeftImage(UIImage(systemName: "lock.fill")!, x: 17, y: 4)
         rePwdTextField.addLeftImage(UIImage(systemName: "lock.fill")!, x: 17, y: 4)
+        NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(textDidChange(_:)),
+                                                       name: UITextField.textDidChangeNotification,
+                                                       object: pwdTextField)
+        NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(textDidChange(_:)),
+                                                       name: UITextField.textDidChangeNotification,
+                                                       object: rePwdTextField)
     }
     
     override func addView(){
@@ -85,8 +99,55 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
         errorLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(nextButton.snp.bottom).offset(20)
-            make.width.equalTo(150)
+            make.width.equalTo(280)
             make.height.equalTo(17)
+        }
+    }
+    
+    func checkPwdValidation(){
+        
+        if pwdTextField.text!.elementsEqual(rePwdTextField.text!){
+            if passwordValidation(password: pwdTextField.text!) && rePasswordValidation(password: rePwdTextField.text!){
+                viewModel.pushToNicknameVC()
+            }
+        }
+        
+        else{
+            errorLabel.textColor = GlogAsset.Colors.paperErrorColor.color
+            pwdTextField.layer.borderColor = GlogAsset.Colors.paperErrorColor.color.cgColor
+            rePwdTextField.layer.borderColor = GlogAsset.Colors.paperErrorColor.color.cgColor
+            pwdTextField.layer.borderWidth = 1
+            rePwdTextField.layer.borderWidth = 1
+        }
+    }
+    
+    func passwordValidation(password: String) -> Bool {
+        return viewModel.isValidPassword(password: password)
+    }
+    
+    func rePasswordValidation(password: String) -> Bool{
+        return viewModel.isValidPassword(password: password)
+    }
+    
+    @objc private func textDidChange(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            if let text = textField.text {
+                if !text.isEmpty && (text.count >= 8 && text.count <= 40){
+                    nextButton.isEnabled = true
+                    print("working")
+                }
+            }
+        }
+        if !pwdTextField.text!.isEmpty && (pwdTextField.text!.count >= 8 && pwdTextField.text!.count <= 40) && !rePwdTextField.text!.isEmpty && (rePwdTextField.text!.count >= 8 && rePwdTextField.text!.count <= 40){
+            nextButton.createGradient()
+        }
+    }
+    
+    @objc func nextButtonDidTap(){
+        
+        if !pwdTextField.text!.isEmpty && (pwdTextField.text!.count >= 8 && pwdTextField.text!.count <= 40) && !rePwdTextField.text!.isEmpty && (rePwdTextField.text!.count >= 8 && rePwdTextField.text!.count <= 40){
+            print("asdf")
+            checkPwdValidation()
         }
     }
 }
