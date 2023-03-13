@@ -44,6 +44,11 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
         idTextField.addLeftImage(UIImage(systemName: "person.fill")!, x: 17, y: 5)
+        NotificationCenter.default.addObserver(self,
+                                                       selector: #selector(textDidChange(_:)),
+                                                       name: UITextField.textDidChangeNotification,
+                                                       object: idTextField)
+
     }
     
     override func addView(){
@@ -84,20 +89,21 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
         }
     }
     
-    @objc func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
-        let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        
-        if !text.isEmpty && (text.count >= 4 && text.count <= 20){
-            nextButton.isEnabled = true
-            nextButton.createGradient()
-            print("working")
-        } else{
-            nextButton.clearGradient()
-            nextButton.isEnabled = false
-            print("nooo")
+    @objc private func textDidChange(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            if let text = textField.text {
+                if !text.isEmpty && (text.count >= 4 && text.count <= 20){
+                    nextButton.isEnabled = true
+                    nextButton.createGradient()
+                    print("working")
+                }
+                else{
+                    nextButton.clearGradient()
+                    nextButton.isEnabled = false
+                    print("nooo")
+                }
+            }
         }
-        return true
     }
     
     @objc func nextButtonDidTap(){
