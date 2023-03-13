@@ -33,6 +33,7 @@ public enum GlogAsset {
     public static let paperBackground = GlogImages(name: "Paper_Background")
     public static let paperMainLogo = GlogImages(name: "Paper_MainLogo")
     public static let paperStatusLogo = GlogImages(name: "Paper_StatusLogo")
+    public static let paperProfileLogo = GlogImages(name: "Paper_profileLogo")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name

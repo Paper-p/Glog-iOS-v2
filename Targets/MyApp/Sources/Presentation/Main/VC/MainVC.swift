@@ -18,6 +18,11 @@ final class MainVC: BaseVC<MainVM>, Stepper{
         
     }
     
+    override func configureNavigation() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image, style: .plain, target: self, action: .none)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images, style: <#T##UIBarButtonItem.Style#>, target: <#T##Any?#>, action: <#T##Selector?#>)
+    }
+    
     override func setLayout() {
         
     }
