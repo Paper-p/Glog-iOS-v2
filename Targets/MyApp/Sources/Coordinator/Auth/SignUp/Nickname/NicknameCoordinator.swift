@@ -7,7 +7,7 @@ class NicknameCoordinator: BaseCoordinator{
         let vm = InsertNicknameVM(coordinator: self)
         let vc = InsertNickNameVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     override func navigate(to step: GlogStep) {
@@ -23,9 +23,7 @@ class NicknameCoordinator: BaseCoordinator{
 
 private extension NicknameCoordinator{
     private func signInIsRequired(){
-        let vc = SignInCoordinator(navigationController: navigationController)
-        vc.parentCoordinator = self
-        childCoordinators.append(vc)
-        vc.start()
+        let vc = MainCoordinator(navigationController: navigationController)
+        vc.start(coordinator: vc)
     }
 }
