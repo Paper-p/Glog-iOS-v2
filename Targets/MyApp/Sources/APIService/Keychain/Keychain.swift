@@ -1,6 +1,7 @@
 
 import Security
 import UIKit
+import Alamofire
 
 class Keychain{
     func create(_ key: String, token: String){
@@ -35,4 +36,12 @@ class Keychain{
         }
     }
     
+    func delete(key: String){
+        let keyChainQuery: NSDictionary = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrService: key
+        ]
+        let status = SecItemDelete(keyChainQuery)
+        assert(status == noErr, "failed to delete the value, status code = \(status)")
+    }
 }
