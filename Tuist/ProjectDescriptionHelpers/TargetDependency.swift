@@ -13,6 +13,7 @@ public extension TargetDependency.SPM{
     static let KeychainSwift = TargetDependency.package(product: "KeychainSwift")
     static let RxFlow = TargetDependency.package(product: "RxFlow")
     static let Gifu = TargetDependency.package(product: "Gifu")
+    static let Kingfisher = TargetDependency.package(product: "Kingfisher")
 }
 
 public extension Package {
@@ -47,5 +48,9 @@ public extension Package {
     static let Gifu = Package.remote(
         url: "https://github.com/kaishin/Gifu",
         requirement: .upToNextMajor(from: "3.4"))
+    
+    static let Kingfisher = Package.remote(
+        url: "https://github.com/onevcat/Kingfisher",
+        requirement: .upToNextMajor(from: "7.6.2"))
 }
 

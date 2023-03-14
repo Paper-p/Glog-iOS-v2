@@ -2,5 +2,9 @@
 import Foundation
 
 struct HotRequest: Codable{
-    let Authorization: String?
+    let authorization: String?
+    
+    enum codingKeys: String, CodingKey{
+        case authorization = "Authorization"
+    }
 }
