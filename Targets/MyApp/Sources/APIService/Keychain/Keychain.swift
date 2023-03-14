@@ -19,7 +19,7 @@ class Keychain{
         let keyChainQuery: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: key,
-            kSecReturnData: kCFBooleanTrue,
+            kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
         ]
         

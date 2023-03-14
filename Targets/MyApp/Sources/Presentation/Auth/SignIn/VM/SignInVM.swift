@@ -8,6 +8,7 @@ import RxFlow
 final class SignInVM: BaseViewModel{
     
     private let provider = MoyaProvider<AuthService>()
+    private let tk = Keychain()
     
     func success(){
         print("success")
@@ -26,13 +27,10 @@ final class SignInVM: BaseViewModel{
             print(response)
             switch response{
             case let .success(result):
-                let statusCode = result.statusCode
-                switch statusCode{
-                case 200..<300:
-                    self.success()
-                default:
-                    self.failure()
-                }
+                let decodeResult = try? JSONDecoder().decode(SignInResponse.self, from: result.data)
+                self.tk.create("accessToken", token: decodeResult?.accessToken ?? "")
+                self.tk.create("refreshToken", token: decodeResult?.refreshToken ?? "")
+                self.success()
             case let .failure(err):
                 print(err.localizedDescription)
             }
