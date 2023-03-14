@@ -44,4 +44,17 @@ class Keychain{
         let status = SecItemDelete(keyChainQuery)
         assert(status == noErr, "failed to delete the value, status code = \(status)")
     }
+    func deleteAll()  {
+        let secItemClasses =  [
+            kSecClassGenericPassword,
+            kSecClassInternetPassword,
+            kSecClassCertificate,
+            kSecClassKey,
+            kSecClassIdentity,
+        ]
+            for itemClass in secItemClasses {
+            let spec: NSDictionary = [kSecClass: itemClass]
+            SecItemDelete(spec)
+        }
+    }
 }

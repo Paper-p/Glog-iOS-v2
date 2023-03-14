@@ -2,5 +2,5 @@
 import Foundation
 
 struct RefreshRequest: Codable {
-    let RefreshToken: String
+    let refreshToken: String
 }

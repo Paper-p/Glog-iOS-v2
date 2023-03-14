@@ -63,7 +63,10 @@ extension AuthService: TargetType{
     }
     
     var headers: [String : String]?{
+        let tk = Keychain()
         switch self {
+        case .refresh:
+            return ["RefreshToken" : tk.read(key: "refreshToken")!]
         default:
             return["Content-Type" : "application/json"]
         }
