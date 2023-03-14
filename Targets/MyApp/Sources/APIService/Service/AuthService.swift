@@ -12,7 +12,7 @@ enum AuthService{
 
 extension AuthService: TargetType{
     public var baseURL: URL{
-        return URL(string: PaperAPI.baseURL)!
+        return URL(string: GlogAPI.baseURL)!
     }
     
     var path: String{

@@ -1,5 +1,5 @@
 import Foundation
 
-struct PaperAPI{
+struct GlogAPI{
     static let baseURL = "https://api.glog.kro.kr"
 }
