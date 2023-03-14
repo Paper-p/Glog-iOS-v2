@@ -17,7 +17,20 @@ final class MainVC: BaseVC<MainVM>{
         $0.lineBreakMode = .byWordWrapping
     }
     
-    let gifImage = GIFImageView()
+    private let gifImage = GIFImageView()
+    
+    private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기")
+    
+    private let hotTextView = UITextView().then{
+        $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+        $0.layer.cornerRadius = 10
+        $0.text = "🔥HOT’"
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.textAlignment = .center
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        $0.isSelectable = false
+        $0.isEditable = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +40,14 @@ final class MainVC: BaseVC<MainVM>{
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
+        makeFeedButton.createGradient()
     }
     
     override func addView() {
         [mainLabel,
-        gifImage
+         gifImage,
+         makeFeedButton,
+         hotTextView
         ].forEach{
             view.addSubview($0)
         }
@@ -54,7 +70,21 @@ final class MainVC: BaseVC<MainVM>{
             make.centerY.equalTo(mainLabel)
             make.right.equalTo(12)
             make.height.equalTo(135)
-            make.width.equalTo(170)
+            make.width.equalTo(165)
+        }
+        
+        makeFeedButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(mainLabel.snp.bottom).offset(28)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(60)
+        }
+        
+        hotTextView.snp.makeConstraints { make in
+            make.top.equalTo(makeFeedButton.snp.bottom).offset(72)
+            make.left.equalTo(makeFeedButton)
+            make.width.equalTo(80)
+            make.height.equalTo(32)
         }
     }
     
