@@ -50,7 +50,7 @@ public extension Package {
         requirement: .upToNextMajor(from: "3.4"))
     
     static let Kingfisher = Package.remote(
-        url: "https://github.com/onevcat/Kingfisher",
+        url: "https://github.com/onevcat/Kingfisher.git",
         requirement: .upToNextMajor(from: "7.6.2"))
 }
 
