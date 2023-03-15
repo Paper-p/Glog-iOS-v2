@@ -11,7 +11,7 @@ final class IntroVC: BaseVC<IntroVM>{
     private let backGroundImageView = UIImageView(image: UIImage(named: "Paper_Background")!)
     
     private let blurMainView = UIView().then{
-        $0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.52)
+        //$0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.52)
         $0.layer.cornerRadius = 112
     }
     
@@ -44,6 +44,16 @@ final class IntroVC: BaseVC<IntroVM>{
     override func viewDidLoad() {
         super.viewDidLoad()
         signInButton.createGradient()
+        setBlur()
+    }
+    
+    private func setBlur(){
+        let blurEffect = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.frame = CGRect(x: 0, y: 0, width: 272, height: 272)
+        visualEffectView.layer.cornerRadius = 112
+        visualEffectView.clipsToBounds = true
+        blurMainView.addSubview(visualEffectView)
     }
     
     override func addView(){
@@ -71,9 +81,9 @@ final class IntroVC: BaseVC<IntroVM>{
             make.size.equalTo(272)
         }
         mainLogoImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(80)
+            make.left.equalToSuperview().inset(80)
             make.centerY.equalTo(blurMainView)
-            make.width.equalTo(187)
+            make.width.equalTo(194)
             make.height.equalTo(69)
         }
         mainLabel.snp.makeConstraints { make in
