@@ -15,4 +15,5 @@ enum GlogStep: Step {
     
     //Main
     case mainIsRequired
+    case detailIsRequired
 }

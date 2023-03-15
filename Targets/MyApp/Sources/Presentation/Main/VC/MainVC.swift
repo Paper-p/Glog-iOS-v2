@@ -47,6 +47,7 @@ final class MainVC: BaseVC<MainVM>{
         }
         setCollectionView()
         makeFeedButton.createGradient()
+        viewModel.fetch()
     }
     
     override func addView() {
@@ -65,6 +66,7 @@ final class MainVC: BaseVC<MainVM>{
         collectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         collectionView?.delegate = self
         collectionView?.dataSource = self
+        collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
         self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -115,7 +117,7 @@ final class MainVC: BaseVC<MainVM>{
     }
 }
 
-extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 325, height: 430)
@@ -127,7 +129,8 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout 
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
          
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as? HotCollectionViewCell else {return UICollectionViewCell() }
+        
         return cell
     }
 }
