@@ -2,18 +2,18 @@
 import Foundation
 
 struct HotModel: Codable{
-    let list: [HotResponse]
+    var list: [HotResponse]
 }
 
 struct HotResponse: Codable{
-    let id: Int
-    let title: String
-    let createdAt: Date
-    let thumbnail: String?
-    let previewContent: String
-    let hit: Int
-    let likeCount: Int
-    let commentCount: Int
-    let isLiked: Bool
-    let tagList: [String]
+    var id: Int
+    var title: String
+    var createdAt: Date
+    var thumbnail: String
+    var previewContent: String
+    var hit: Int
+    var likeCount: Int
+    var commentCount: Int
+    var isLiked: Bool
+    var tagList: [String]
 }
