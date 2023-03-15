@@ -32,6 +32,11 @@ final class MainVC: BaseVC<MainVM>{
         $0.isEditable = false
     }
     
+    private var collectionView: UICollectionView!
+    private var layout = UICollectionViewFlowLayout().then{
+        $0.scrollDirection = .horizontal
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -40,6 +45,7 @@ final class MainVC: BaseVC<MainVM>{
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
+        setCollectionView()
         makeFeedButton.createGradient()
     }
     
@@ -47,10 +53,20 @@ final class MainVC: BaseVC<MainVM>{
         [mainLabel,
          gifImage,
          makeFeedButton,
-         hotTextView
+         hotTextView,
+         collectionView
         ].forEach{
             view.addSubview($0)
         }
+    }
+    
+    private func setCollectionView(){
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
+        self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override func configureNavigation() {
@@ -86,9 +102,32 @@ final class MainVC: BaseVC<MainVM>{
             make.width.equalTo(80)
             make.height.equalTo(32)
         }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(hotTextView.snp.bottom).offset(16)
+            make.left.equalTo(12)
+            make.right.equalTo(12)
+            make.bottom.equalTo(-30)
+        }
     }
     
     @objc func profileButtonDidTap(){
         
+    }
+}
+
+extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 325, height: 430)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 3
+    }
+     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+         
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath)
+        return cell
     }
 }

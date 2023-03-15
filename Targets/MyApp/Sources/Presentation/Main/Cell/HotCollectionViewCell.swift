@@ -1,6 +1,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 import Then
 import Kingfisher
 
@@ -54,9 +56,7 @@ final class HotCollectionViewCell: UICollectionViewCell{
     
     private func setLayout(){
         thumbnailImageView.snp.makeConstraints { make in
-            make.width.equalTo(324)
-            make.height.equalTo(429)
-            make.leftMargin.equalTo(12)
+            make.edges.equalToSuperview()
         }
     }
     
