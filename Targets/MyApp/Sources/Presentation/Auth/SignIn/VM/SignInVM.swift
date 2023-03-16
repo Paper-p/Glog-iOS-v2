@@ -23,13 +23,18 @@ final class SignInVM: BaseViewModel{
         let param = SignInRequest.init(userId: id, password: pwd)
         print(param)
         
-        provider.request(.signIn(param: param)) { response in
-            print(response)
-            switch response{
-            case let .success(result):
-                let decodeResult = try? JSONDecoder().decode(SignInResponse.self, from: result.data)
-                self.tk.create("accessToken", token: decodeResult?.accessToken ?? "")
-                self.tk.create("refreshToken", token: decodeResult?.refreshToken ?? "")
+        provider.request(.signIn(param: param)) { result in
+            print(result)
+            switch result{
+            case let .success(response):
+                let decodeResult = try? JSONDecoder().decode(SignInResponse.self, from: response.data)
+                
+                if let refreshToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["refreshToken"] as? String{
+                    self.tk.create("refreshToken", token: refreshToken)
+                }
+                if let accessToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["accessToken"] as? String{
+                    self.tk.create("accessToken", token: accessToken)
+                }
                 self.success()
             case let .failure(err):
                 print(err.localizedDescription)
