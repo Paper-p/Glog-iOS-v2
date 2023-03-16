@@ -32,7 +32,7 @@ final class MainVC: BaseVC<MainVM>{
         $0.isEditable = false
     }
     
-    private var collectionView: UICollectionView!
+    private var hotCollectionView: UICollectionView!
     private var layout = UICollectionViewFlowLayout().then{
         $0.scrollDirection = .horizontal
     }
@@ -45,9 +45,12 @@ final class MainVC: BaseVC<MainVM>{
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
+        
         setCollectionView()
+        viewModel.fetch { _ in 
+            self.hotCollectionView.reloadData()
+        }
         makeFeedButton.createGradient()
-        viewModel.fetch()
     }
     
     override func addView() {
@@ -55,20 +58,20 @@ final class MainVC: BaseVC<MainVM>{
          gifImage,
          makeFeedButton,
          hotTextView,
-         collectionView
+         hotCollectionView
         ].forEach{
             view.addSubview($0)
         }
     }
     
     private func setCollectionView(){
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView?.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
-        collectionView?.showsHorizontalScrollIndicator = false
-        collectionView?.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
-        self.collectionView?.translatesAutoresizingMaskIntoConstraints = false
+        hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        hotCollectionView?.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        hotCollectionView?.delegate = self
+        hotCollectionView?.dataSource = self
+        hotCollectionView?.showsHorizontalScrollIndicator = false
+        hotCollectionView?.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
+        self.hotCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override func configureNavigation() {
@@ -104,10 +107,10 @@ final class MainVC: BaseVC<MainVM>{
             make.width.equalTo(80)
             make.height.equalTo(32)
         }
-        collectionView.snp.makeConstraints { make in
+        hotCollectionView.snp.makeConstraints { make in
             make.top.equalTo(hotTextView.snp.bottom).offset(16)
             make.left.equalTo(12)
-            make.right.equalTo(12)
+            make.right.equalTo(-12)
             make.bottom.equalTo(-30)
         }
     }
@@ -117,10 +120,10 @@ final class MainVC: BaseVC<MainVM>{
     }
 }
 
-extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 325, height: 430)
+        return CGSize(width: 120, height: 120)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -128,12 +131,8 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.collectionView.dequeueReusableCell(
-            withReuseIdentifier: HotCollectionViewCell.identifier,
-            for: indexPath) as? HotCollectionViewCell else { return UICollectionViewCell() }
-        
-        cell.bind(model: viewModel.hotFeed[indexPath.row])
-        
+        let cell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
+        cell.bind(with: viewModel.hotFeed[indexPath.row])
         return cell
     }
 }

@@ -9,13 +9,14 @@ import Kingfisher
 final class HotCollectionViewCell: BaseCollectionViewCell{
     static let identifier = "HotCollectionViewCell"
     
-    private let thumbnailImageView = UIImageView().then{
+    private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
         $0.layer.cornerRadius = 10
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
     }
     
     private let itemView = UIView().then{
         $0.layer.cornerRadius = 10
+        $0.backgroundColor = .red
     }
     
     private let titleLabel = UILabel().then{
@@ -58,7 +59,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         }
     }
     
-    func bind(model: HotResponse){
+    func bind(with model: HotResponse){
         DispatchQueue.main.async { [self] in
             self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail))
             print("\(model.thumbnail)sdlfkgjsl;dkfjgsl;dfjgs;lkdjfg;skdlf")

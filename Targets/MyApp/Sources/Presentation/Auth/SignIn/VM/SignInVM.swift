@@ -7,7 +7,7 @@ import RxFlow
 
 final class SignInVM: BaseViewModel{
     
-    private let provider = MoyaProvider<AuthService>()
+    private let provider = MoyaProvider<AuthService>(plugins: [GlogLoggingPlugin()])
     private let tk = Keychain()
     
     func success(){
@@ -27,7 +27,6 @@ final class SignInVM: BaseViewModel{
             print(result)
             switch result{
             case let .success(response):
-                let decodeResult = try? JSONDecoder().decode(SignInResponse.self, from: response.data)
                 
                 if let refreshToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["refreshToken"] as? String{
                     self.tk.create("refreshToken", token: refreshToken)
