@@ -35,6 +35,7 @@ final class MainVC: BaseVC<MainVM>{
     private var hotCollectionView: UICollectionView!
     private var layout = UICollectionViewFlowLayout().then{
         $0.scrollDirection = .horizontal
+        $0.minimumLineSpacing = 12
     }
     
     override func viewDidLoad() {
@@ -47,7 +48,7 @@ final class MainVC: BaseVC<MainVM>{
         }
         
         setCollectionView()
-        viewModel.fetch { _ in 
+        viewModel.fetch { _ in
             self.hotCollectionView.reloadData()
         }
         makeFeedButton.createGradient()
@@ -66,7 +67,7 @@ final class MainVC: BaseVC<MainVM>{
     
     private func setCollectionView(){
         hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        hotCollectionView?.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        hotCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         hotCollectionView?.delegate = self
         hotCollectionView?.dataSource = self
         hotCollectionView?.showsHorizontalScrollIndicator = false
@@ -123,7 +124,7 @@ final class MainVC: BaseVC<MainVM>{
 extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 120, height: 120)
+        return CGSize(width: 325, height: 330)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -133,6 +134,7 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
         cell.bind(with: viewModel.hotFeed[indexPath.row])
+        cell.layer.masksToBounds = true
         return cell
     }
 }

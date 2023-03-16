@@ -45,6 +45,11 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         super.init(frame: frame)
     }
     
+    override func layoutSubviews() {
+        self.layer.cornerRadius = 10
+        self.layer.masksToBounds = true
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,6 +62,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         thumbnailImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
     }
     
     func bind(with model: HotResponse){
