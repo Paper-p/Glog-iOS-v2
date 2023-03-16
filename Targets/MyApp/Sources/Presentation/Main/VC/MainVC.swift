@@ -63,7 +63,7 @@ final class MainVC: BaseVC<MainVM>{
     
     private func setCollectionView(){
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        collectionView?.backgroundColor = GlogAsset.Colors.paperGrayColor.color
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.showsHorizontalScrollIndicator = false
@@ -128,9 +128,12 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-         
-        let cell = collectionView.dequeueReusableCell( withReuseIdentifier: HotCollectionViewCell.identifier,for: indexPath) as! HotCollectionViewCell
-        cell.thumbnailImageView.kf.setImage(with: URL(string: viewModel.hotFeed[indexPath.row].thumbnail))
+        guard let cell = self.collectionView.dequeueReusableCell(
+            withReuseIdentifier: HotCollectionViewCell.identifier,
+            for: indexPath) as? HotCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.bind(model: viewModel.hotFeed[indexPath.row])
+        
         return cell
     }
 }
