@@ -24,7 +24,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     }
     
     private let contentTextView = UITextView().then{
-        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.textColor = UIColor(red: 0.483, green: 0.483, blue: 0.483, alpha: 1)
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         $0.backgroundColor = .clear
         $0.isSelectable = false
@@ -32,17 +32,21 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     }
     
     private let likeButton = UIButton().then{
-        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(UIColor(red: 0.483, green: 0.483, blue: 0.483, alpha: 1), for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         $0.setImage(UIImage(named: "Paper_LikeLogo"), for: .normal)
-        $0.backgroundColor = .red
         $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -25, bottom: 0, right: 0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
+        //$0.backgroundColor = .red
     }
     
     private let hitButton = UIButton().then{
-        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(UIColor(red: 0.483, green: 0.483, blue: 0.483, alpha: 1), for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        $0.setImage(UIImage(named: "Paper_HitLogo")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
+        //$0.backgroundColor = .yellow
     }
     
     override init(frame: CGRect) {
@@ -77,7 +81,11 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
             make.height.equalTo(20)
         }
         
-        
+        hitButton.snp.makeConstraints { make in
+            make.centerY.equalTo(likeButton)
+            make.left.equalTo(likeButton.snp.right)
+            make.size.equalTo(likeButton)
+        }
     }
     
     override func layoutSubviews() {
