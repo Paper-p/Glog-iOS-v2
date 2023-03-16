@@ -6,7 +6,7 @@ import RxCocoa
 import Then
 import Kingfisher
 
-class HotCollectionViewCell: UICollectionViewCell{
+final class HotCollectionViewCell: UICollectionViewCell{
     static let identifier = "HotCollectionViewCell"
     
     let thumbnailImageView = UIImageView().then{
@@ -60,7 +60,7 @@ class HotCollectionViewCell: UICollectionViewCell{
         }
     }
     
-    /*func bindingData(with data: HotModel){
+    func bindingData(with data: HotModel){
         DispatchQueue.main.async { [self] in
             if let imgUrl = URL(string: data.list.first?.thumbnail ?? ""){
                 self.thumbnailImageView.kf.setImage(with: imgUrl)
@@ -75,5 +75,5 @@ class HotCollectionViewCell: UICollectionViewCell{
                 self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.tintColor(GlogAsset.Colors.paperGrayColor.color), for: .normal)
             }
         }
-    }*/
+    }
 }

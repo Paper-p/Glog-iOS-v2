@@ -124,14 +124,13 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return viewModel.hotFeed.count
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
          
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as? HotCollectionViewCell else {return UICollectionViewCell() }
-        //cell.titleLabel.text = viewModel.hotFeed[indexPath.row].title
-        //cell.thumbnailImageView.kf.setImage(with: URL(string: viewModel.hotFeed[indexPath.row].thumbnail))
+        let cell = collectionView.dequeueReusableCell( withReuseIdentifier: HotCollectionViewCell.identifier,for: indexPath) as! HotCollectionViewCell
+        cell.thumbnailImageView.kf.setImage(with: URL(string: viewModel.hotFeed[indexPath.row].thumbnail))
         return cell
     }
 }
