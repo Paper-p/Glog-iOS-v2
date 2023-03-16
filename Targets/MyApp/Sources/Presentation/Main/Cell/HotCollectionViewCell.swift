@@ -23,16 +23,21 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
     }
     
-    private let contentLabel = UILabel().then{
+    private let contentTextView = UITextView().then{
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        $0.numberOfLines = 0
-        $0.lineBreakMode = .byWordWrapping
+        $0.backgroundColor = .clear
+        $0.isSelectable = false
+        $0.isEditable = false
     }
     
     private let likeButton = UIButton().then{
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        $0.setImage(UIImage(named: "Paper_LikeLogo"), for: .normal)
+        $0.backgroundColor = .red
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -25, bottom: 0, right: 0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
     }
     
     private let hitButton = UIButton().then{
@@ -51,7 +56,28 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         visualEffectView.frame = CGRect(x: 0, y: 0, width: 325, height: 145)
         visualEffectView.layer.cornerRadius = 10
         visualEffectView.clipsToBounds = true
-        itemView.addSubview(visualEffectView)
+        itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
+        titleLabel.snp.makeConstraints { make in
+            make.left.top.equalToSuperview().inset(10)
+            make.width.equalToSuperview().inset(10)
+            make.height.equalTo(24)
+        }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.left.equalTo(titleLabel)
+            make.top.equalTo(titleLabel.snp.bottom).offset(5)
+            make.width.equalTo(titleLabel)
+            make.height.equalTo(37)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.left.equalTo(contentTextView)
+            make.bottom.equalToSuperview().inset(9)
+            make.width.equalTo(50)
+            make.height.equalTo(20)
+        }
+        
+        
     }
     
     override func layoutSubviews() {
@@ -64,7 +90,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     }
     
     override func addView(){
-        contentView.addSubViews(thumbnailImageView,itemView,titleLabel,contentLabel,likeButton,hitButton)
+        contentView.addSubViews(thumbnailImageView,itemView)
     }
     
     override func setLayout(){
@@ -83,13 +109,13 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
             self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail))
             print("\(model.thumbnail)sdlfkgjsl;dkfjgsl;dfjgs;lkdjfg;skdlf")
             self.titleLabel.text = model.title
-            self.contentLabel.text = model.previewContent
+            self.contentTextView.text = model.previewContent
             self.likeButton.setTitle("\(model.likeCount)", for: .normal)
             self.hitButton.setTitle("\(model.hit)", for: .normal)
             if model.isLiked {
-                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.tintColor(GlogAsset.Colors.paperStartColor.color), for: .normal)
+                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
             } else {
-                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.tintColor(GlogAsset.Colors.paperGrayColor.color), for: .normal)
+                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
             }
         }
     }

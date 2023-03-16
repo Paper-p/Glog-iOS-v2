@@ -7,7 +7,7 @@ import Alamofire
 import UIKit
 import Gifu
 
-final class MainVC: BaseVC<MainVM>{
+final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     
     private let mainLabel = UILabel().then{
         $0.text = "너의 생각을 글로 표현해봐!"
