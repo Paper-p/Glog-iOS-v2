@@ -16,7 +16,6 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     
     private let itemView = UIView().then{
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = .red
     }
     
     private let titleLabel = UILabel().then{
@@ -43,6 +42,16 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setBlur()
+    }
+    
+    private func setBlur(){
+        let blurEffect = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.frame = CGRect(x: 0, y: 0, width: 325, height: 145)
+        visualEffectView.layer.cornerRadius = 10
+        visualEffectView.clipsToBounds = true
+        itemView.addSubview(visualEffectView)
     }
     
     override func layoutSubviews() {
@@ -63,6 +72,10 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
             make.edges.equalToSuperview()
         }
         
+        itemView.snp.makeConstraints { make in
+            make.bottom.right.left.equalToSuperview()
+            make.height.equalTo(145)
+        }
     }
     
     func bind(with model: HotResponse){
