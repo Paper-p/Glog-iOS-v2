@@ -38,6 +38,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         $0.minimumLineSpacing = 12
     }
     
+    private let searchBar = UISearchBar()
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -51,6 +52,9 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         viewModel.fetch { _ in
             self.hotCollectionView.reloadData()
         }
+        viewModel.fetchPostList(completion: { _ in
+            
+        }, search: searchBar.text!)
         makeFeedButton.createGradient()
     }
     

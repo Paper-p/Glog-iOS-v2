@@ -17,7 +17,7 @@ extension FeedService: TargetType{
         case .hot:
             return "feed/hot"
         case .postList:
-            return "feed/List"
+            return "feed/list"
         }
     }
     
