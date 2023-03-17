@@ -37,7 +37,6 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         $0.setImage(UIImage(named: "Paper_LikeLogo"), for: .normal)
         $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -25, bottom: 0, right: 0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
-        //$0.backgroundColor = .red
     }
     
     private let hitButton = UIButton().then{
@@ -46,7 +45,6 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         $0.setImage(UIImage(named: "Paper_HitLogo")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
         $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
-        //$0.backgroundColor = .yellow
     }
     
     override init(frame: CGRect) {
@@ -71,7 +69,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
             make.left.equalTo(titleLabel)
             make.top.equalTo(titleLabel.snp.bottom).offset(5)
             make.width.equalTo(titleLabel)
-            make.height.equalTo(37)
+            make.height.equalTo(67)
         }
         
         likeButton.snp.makeConstraints { make in
@@ -117,7 +115,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
             self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail))
             print("\(model.thumbnail)sdlfkgjsl;dkfjgsl;dfjgs;lkdjfg;skdlf")
             self.titleLabel.text = model.title
-            self.contentTextView.text = model.previewContent
+            self.contentTextView.text = model.previewContent.filter { !"# \n".contains($0) }
             self.likeButton.setTitle("\(model.likeCount)", for: .normal)
             self.hitButton.setTitle("\(model.hit)", for: .normal)
             if model.isLiked {
