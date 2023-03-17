@@ -21,7 +21,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     
     private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기")
     
-    private let hotTextView = UITextView().then{
+    private let hotCategory = UITextView().then{
         $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
         $0.layer.cornerRadius = 10
         $0.text = "🔥HOT’"
@@ -58,7 +58,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         [mainLabel,
          gifImage,
          makeFeedButton,
-         hotTextView,
+         hotCategory,
          hotCollectionView
         ].forEach{
             view.addSubview($0)
@@ -102,14 +102,14 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             make.height.equalTo(60)
         }
         
-        hotTextView.snp.makeConstraints { make in
+        hotCategory.snp.makeConstraints { make in
             make.top.equalTo(makeFeedButton.snp.bottom).offset(72)
             make.left.equalTo(makeFeedButton)
             make.width.equalTo(80)
             make.height.equalTo(32)
         }
         hotCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(hotTextView.snp.bottom).offset(16)
+            make.top.equalTo(hotCategory.snp.bottom).offset(16)
             make.left.equalTo(12)
             make.right.equalTo(-12)
             make.bottom.equalTo(-30)
