@@ -49,12 +49,14 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         }
         
         setCollectionView()
-        viewModel.fetch { _ in
+        viewModel.fetchHotPostList { _ in
             self.hotCollectionView.reloadData()
         }
+        
         viewModel.fetchPostList(completion: { _ in
-            
+            //리로딩.
         }, search: searchBar.text!)
+        
         makeFeedButton.createGradient()
     }
     

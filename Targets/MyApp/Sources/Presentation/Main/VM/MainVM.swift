@@ -18,7 +18,7 @@ final class MainVM: BaseViewModel {
         $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
     }
     
-    func fetch(completion : @escaping (Result<Bool, Error>) -> ()){
+    func fetchHotPostList(completion : @escaping (Result<Bool, Error>) -> ()){
         provider.request(.hot) { result in
             print(result)
             switch result{
