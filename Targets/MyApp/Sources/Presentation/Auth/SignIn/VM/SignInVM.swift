@@ -27,14 +27,21 @@ final class SignInVM: BaseViewModel{
             print(result)
             switch result{
             case let .success(response):
-                
-                if let refreshToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["refreshToken"] as? String{
-                    self.tk.create("refreshToken", token: refreshToken)
+                let statusCode = response.statusCode
+                switch statusCode{
+                case 200..<300:
+                    if let refreshToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["refreshToken"] as? String{
+                        self.tk.create("refreshToken", token: refreshToken)
+                    }
+                    if let accessToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["accessToken"] as? String{
+                        self.tk.create("accessToken", token: accessToken)
+                        self.success()
+                    }
+                case 400..<404:
+                    return self.failure()
+                default:
+                    return self.failure()
                 }
-                if let accessToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["accessToken"] as? String{
-                    self.tk.create("accessToken", token: accessToken)
-                }
-                self.success()
             case let .failure(err):
                 print(err.localizedDescription)
             }
