@@ -4,6 +4,7 @@ import Moya
 
 enum FeedService{
     case hot
+    case postList(keyword: PostListRequest)
 }
 
 extension FeedService: TargetType{
@@ -15,12 +16,16 @@ extension FeedService: TargetType{
         switch self {
         case .hot:
             return "feed/hot"
+        case .postList:
+            return "feed/List"
         }
     }
     
     var method: Moya.Method{
         switch self {
         case .hot:
+            return .get
+        case .postList:
             return .get
         }
     }
@@ -33,6 +38,8 @@ extension FeedService: TargetType{
         switch self {
         case .hot:
             return .requestPlain
+        case .postList:
+            return .
         }
     }
     
