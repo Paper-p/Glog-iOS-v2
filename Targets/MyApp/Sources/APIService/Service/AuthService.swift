@@ -5,7 +5,7 @@ import Moya
 enum AuthService{
     case signIn(param: SignInRequest)
     case signUp(param: SignUpRequest)
-    case refresh(param: RefreshRequest)
+    case refresh
     case validId(keyword: ValidIdRequest)
     case validNickname(keyword: ValidNameRequest)
 }
