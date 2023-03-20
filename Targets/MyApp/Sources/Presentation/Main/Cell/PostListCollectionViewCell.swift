@@ -110,19 +110,8 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         }
     }
     
-    func bind(with model: HotResponse){
+    func bind(with model: PostList){
         DispatchQueue.main.async { [self] in
-            self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail))
-            print("\(model.thumbnail)sdlfkgjsl;dkfjgsl;dfjgs;lkdjfg;skdlf")
-            self.titleLabel.text = model.title
-            self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
-            self.likeButton.setTitle("\(model.likeCount)", for: .normal)
-            self.hitButton.setTitle("\(model.hit)", for: .normal)
-            if model.isLiked {
-                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-            } else {
-                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-            }
         }
     }
 }

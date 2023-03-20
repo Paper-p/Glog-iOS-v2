@@ -46,7 +46,9 @@ final class MainVM: BaseViewModel {
             switch result{
             case let .success(response):
                 do{
-                    let decoder = JSONDecoder()
+                    let decoder = JSONDecoder().then{
+                        $0.dateDecodingStrategy = .formatted(self.dateFormatter)
+                    }
                     let json = try decoder.decode(PostListResponse.self, from: response.data)
                     self.postList = json.list
                     completion(.success(true))

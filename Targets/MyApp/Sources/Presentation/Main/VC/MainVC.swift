@@ -62,12 +62,13 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         }
         
         setCollectionView()
+        //setPostCollectionView()
         viewModel.fetchHotPostList { _ in
             self.hotCollectionView.reloadData()
         }
         
         viewModel.fetchPostList(completion: { _ in
-            //리로딩.
+            //self.postCollectionView.reloadData()
         }, search: searchBar.text!)
         
         makeFeedButton.createGradient()
@@ -79,7 +80,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
          makeFeedButton,
          hotCategory,
          hotCollectionView,
-         postCategory
+         postCategory,
+         //postCollectionView
         ].forEach{
             view.addSubview($0)
         }
@@ -96,7 +98,13 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     }
     
     private func setPostCollectionView(){
-        
+        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        postCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        postCollectionView?.delegate = self
+        postCollectionView?.dataSource = self
+        postCollectionView?.showsHorizontalScrollIndicator = false
+        postCollectionView?.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
+        self.postCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override func configureNavigation() {
@@ -144,6 +152,13 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             make.left.equalTo(hotCategory)
             make.size.equalTo(hotCategory)
         }
+        
+        /*postCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(postCategory.snp.bottom).offset(80)
+            make.left.equalTo(12)
+            make.right.equalTo(-12)
+            make.bottom.equalTo(-30)
+        }*/
     }
     
     @objc func profileButtonDidTap(){
@@ -154,17 +169,37 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
 extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 325, height: 330)
+        if collectionView == self.hotCollectionView{
+            return CGSize(width: 325, height: 330)
+        } else {
+            return CGSize(width: 0, height: 0)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.hotFeed.count
+        if collectionView == self.hotCollectionView{
+            return viewModel.hotFeed.count
+        } else {
+            return viewModel.postList.count
+        }
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
+        /*let cell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
         cell.bind(with: viewModel.hotFeed[indexPath.row])
         cell.selectedBackgroundView = .none
-        return cell
+        return cell*/
+        
+        
+        if collectionView == self.hotCollectionView{
+            let hotCell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
+            hotCell.bind(with: viewModel.hotFeed[indexPath.row])
+            return hotCell
+        }
+        else {
+            let postCell = postCollectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
+            postCell.bind(with: viewModel.postList[indexPath.row])
+            return postCell
+        }
     }
 }
