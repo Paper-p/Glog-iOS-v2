@@ -9,6 +9,11 @@ import Gifu
 
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView().then{
+        $0.backgroundColor = .clear
+    }
+    
     private let mainLabel = UILabel().then{
         $0.text = "너의 생각을 글로 표현해봐!"
         $0.textColor = .white
@@ -74,19 +79,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         makeFeedButton.createGradient()
     }
     
-    override func addView() {
-        [mainLabel,
-         gifImage,
-         makeFeedButton,
-         hotCategory,
-         hotCollectionView,
-         postCategory,
-         //postCollectionView
-        ].forEach{
-            view.addSubview($0)
-        }
-    }
-    
     private func setCollectionView(){
         hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         hotCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -110,9 +102,40 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     override func configureNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperProfileLogo.image.downSample(size: .init(width: 36, height: 36)).withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithOpaqueBackground()
+        standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+       self.navigationController?.navigationBar.standardAppearance = standardAppearance
+       self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+    }
+    
+    override func addView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        [mainLabel,
+         gifImage,
+         makeFeedButton,
+         hotCategory,
+         hotCollectionView,
+         postCategory,
+         //postCollectionView
+        ].forEach{
+            contentView.addSubview($0)
+        }
     }
     
     override func setLayout() {
+        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.height.greaterThanOrEqualTo(view.snp.height).priority(.high)
+            make.width.equalTo(scrollView.snp.width)
+        }
+        
         mainLabel.snp.makeConstraints { make in
             make.top.equalTo(123)
             make.left.equalTo(12)
