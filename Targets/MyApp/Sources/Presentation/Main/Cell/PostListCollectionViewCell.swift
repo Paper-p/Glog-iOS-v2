@@ -6,8 +6,8 @@ import RxCocoa
 import Then
 import Kingfisher
 
-final class HotCollectionViewCell: BaseCollectionViewCell{
-    static let identifier = "HotCollectionViewCell"
+final class PostListCollectionViewCell: BaseCollectionViewCell{
+    static let identifier = "PostListCollectionViewCell"
     
     private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
         $0.layer.cornerRadius = 10

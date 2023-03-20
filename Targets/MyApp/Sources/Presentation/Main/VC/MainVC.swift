@@ -32,6 +32,17 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         $0.isEditable = false
     }
     
+    private let postCategory = UITextView().then{
+        $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+        $0.layer.cornerRadius = 10
+        $0.text = "💻 게시물’s"
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.textAlignment = .center
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        $0.isSelectable = false
+        $0.isEditable = false
+    }
+    
     private var hotCollectionView: UICollectionView!
     private var layout = UICollectionViewFlowLayout().then{
         $0.scrollDirection = .horizontal
@@ -39,6 +50,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     }
     
     private let searchBar = UISearchBar()
+    private var postCollectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -65,7 +78,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
          gifImage,
          makeFeedButton,
          hotCategory,
-         hotCollectionView
+         hotCollectionView,
+         postCategory
         ].forEach{
             view.addSubview($0)
         }
@@ -79,6 +93,10 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         hotCollectionView?.showsHorizontalScrollIndicator = false
         hotCollectionView?.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
         self.hotCollectionView?.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func setPostCollectionView(){
+        
     }
     
     override func configureNavigation() {
@@ -119,6 +137,12 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             make.left.equalTo(12)
             make.right.equalTo(-12)
             make.bottom.equalTo(-30)
+        }
+        
+        postCategory.snp.makeConstraints { make in
+            make.top.equalTo(hotCollectionView.snp.bottom).offset(90)
+            make.left.equalTo(hotCategory)
+            make.size.equalTo(hotCategory)
         }
     }
     
