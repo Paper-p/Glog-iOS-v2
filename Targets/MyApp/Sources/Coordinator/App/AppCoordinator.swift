@@ -33,8 +33,9 @@ class AppCoordinator: Coordinator {
                 let decodeResult = try? JSONDecoder().decode(UserManager.self, from: data.data)
                 tk.create("refreshToken", token: decodeResult?.refreshToken ?? "")
                 self.start(coordinator: mainVC)
-            case .failure:
+            case let .failure(err):
                 self.start(coordinator: introVC)
+                print(err.localizedDescription)
             }
         }
         

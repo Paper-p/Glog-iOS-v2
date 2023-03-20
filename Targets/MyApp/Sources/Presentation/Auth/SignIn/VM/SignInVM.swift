@@ -35,8 +35,8 @@ final class SignInVM: BaseViewModel{
                     }
                     if let accessToken = (try? JSONSerialization.jsonObject(with: response.data, options: []) as? [String: Any])? ["accessToken"] as? String{
                         self.tk.create("accessToken", token: accessToken)
-                        self.success()
                     }
+                    self.success()
                 case 400..<404:
                     return self.failure()
                 default:

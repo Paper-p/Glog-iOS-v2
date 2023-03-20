@@ -20,7 +20,7 @@ extension AuthService: TargetType{
         case .signIn:
             return "/auth/signin"
         case .refresh:
-            return "/auth/"
+            return "/auth"
         case .signUp:
             return "/auth/signup"
         case .validId:
