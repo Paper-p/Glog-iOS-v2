@@ -53,7 +53,13 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     
     private var hotCollectionView: UICollectionView!
     
-    private let searchBar = UISearchBar()
+    private let searchBar = UISearchBar().then{
+        $0.searchTextField.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+        $0.barTintColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.searchTextField.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.searchTextField.leftView?.tintColor = GlogAsset.Colors.paperGrayColor.color
+        $0.searchBarStyle = .minimal
+    }
     private var postCollectionView: UICollectionView!
     
     override func viewDidLoad() {
@@ -135,6 +141,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         postCollectionView?.dataSource = self
         postCollectionView?.showsHorizontalScrollIndicator = false
         postCollectionView?.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
+        postCollectionView.isScrollEnabled = false
         self.postCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
@@ -157,6 +164,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
          hotCategory,
          hotCollectionView,
          postCategory,
+         searchBar,
          postCollectionView
         ].forEach{
             contentView.addSubview($0)
@@ -171,7 +179,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.height.equalTo(view.frame.height * 3)
+            make.height.equalTo(view.frame.height * 3.05)
             make.width.equalTo(scrollView.snp.width)
         }
         
@@ -215,8 +223,14 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             make.size.equalTo(hotCategory)
         }
         
-        postCollectionView.snp.makeConstraints { make in
+        searchBar.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.left.right.equalToSuperview().inset(5)
             make.top.equalTo(postCategory.snp.bottom).offset(16)
+        }
+        
+        postCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(view.frame.size.height * 2)
         }
