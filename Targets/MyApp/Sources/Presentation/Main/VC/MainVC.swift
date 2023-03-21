@@ -51,15 +51,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     }
     
     private var hotCollectionView: UICollectionView!
-    private var layout = UICollectionViewFlowLayout().then{
-        $0.scrollDirection = .horizontal
-        $0.minimumLineSpacing = 12
-    }
-    
-    private var postLayout = UICollectionViewFlowLayout().then{
-        $0.scrollDirection = .vertical
-        $0.minimumLineSpacing = 16
-    }
     
     private let searchBar = UISearchBar()
     private var postCollectionView: UICollectionView!
@@ -86,30 +77,48 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         makeFeedButton.createGradient()
     }
     
-    private func generateLayout() -> UICollectionViewLayout {
-    
-      let itemSize = NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(5.0),
-        heightDimension: .fractionalHeight(1.0))
+    private func hotLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(5.0),
+            heightDimension: .fractionalHeight(1.0))
         let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
             $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
         }
-      
-      let groupSize = NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(3.5),
-        heightDimension: .fractionalWidth(2.9/3))
-      let group = NSCollectionLayoutGroup.horizontal(
-        layoutSize: groupSize,
-        subitem: fullPhotoItem,
-        count: 4)
-      
-      let section = NSCollectionLayoutSection(group: group)
-      let layout = UICollectionViewCompositionalLayout(section: section)
-      return layout
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(3.5),
+            heightDimension: .fractionalWidth(2.9/3))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitem: fullPhotoItem,
+            count: 4)
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
     
+    private func postLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(5.0),
+            heightDimension: .fractionalHeight(1.0))
+        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
+        }
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(3.5),
+            heightDimension: .fractionalWidth(3/3))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitem: fullPhotoItem,
+            count: 4)
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
+    }
+     
     private func setCollectionView(){
-        hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
+        hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: hotLayout())
         hotCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         hotCollectionView?.delegate = self
         hotCollectionView?.dataSource = self
@@ -119,7 +128,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     }
     
     private func setPostCollectionView(){
-        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
+        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postLayout())
         postCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         postCollectionView?.delegate = self
         postCollectionView?.dataSource = self
