@@ -56,7 +56,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     private func setBlur(){
         let blurEffect = UIBlurEffect(style: .dark)
         let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.frame = CGRect(x: 0, y: 0, width: 325, height: 145)
+        visualEffectView.frame = CGRect(x: 0, y: 0, width: 311, height: 145)
         visualEffectView.layer.cornerRadius = 10
         visualEffectView.clipsToBounds = true
         itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
