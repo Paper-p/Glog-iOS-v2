@@ -171,7 +171,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.height.equalTo(10000)
+            make.height.equalTo(view.frame.height * 3)
             make.width.equalTo(scrollView.snp.width)
         }
         
@@ -206,7 +206,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         hotCollectionView.snp.makeConstraints { make in
             make.top.equalTo(hotCategory.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-           //make.bottom.equalToSuperview()
             make.height.equalTo(360)
         }
         
@@ -219,7 +218,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview()
+            make.height.equalTo(view.frame.size.height * 2)
         }
     }
     
@@ -252,3 +251,4 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
         }
     }
 }
+
