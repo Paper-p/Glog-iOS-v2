@@ -9,9 +9,11 @@ import Gifu
 
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then{
+        $0.backgroundColor = .yellow
+    }
     private let contentView = UIView().then{
-        $0.backgroundColor = .clear
+        $0.backgroundColor = .red
     }
     
     private let mainLabel = UILabel().then{
@@ -54,6 +56,11 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         $0.minimumLineSpacing = 12
     }
     
+    private var postLayout = UICollectionViewFlowLayout().then{
+        $0.scrollDirection = .vertical
+        $0.minimumLineSpacing = 16
+    }
+    
     private let searchBar = UISearchBar()
     private var postCollectionView: UICollectionView!
     
@@ -67,20 +74,42 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         }
         
         setCollectionView()
-        //setPostCollectionView()
+        setPostCollectionView()
         viewModel.fetchHotPostList { _ in
             self.hotCollectionView.reloadData()
         }
         
         viewModel.fetchPostList(completion: { _ in
-            //self.postCollectionView.reloadData()
+            self.postCollectionView.reloadData()
         }, search: searchBar.text!)
         
         makeFeedButton.createGradient()
     }
     
+    private func generateLayout() -> UICollectionViewLayout {
+    
+      let itemSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(5.0),
+        heightDimension: .fractionalHeight(1.0))
+        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
+        }
+      
+      let groupSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(3.5),
+        heightDimension: .fractionalWidth(2.9/3))
+      let group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: groupSize,
+        subitem: fullPhotoItem,
+        count: 4)
+      
+      let section = NSCollectionLayoutSection(group: group)
+      let layout = UICollectionViewCompositionalLayout(section: section)
+      return layout
+    }
+    
     private func setCollectionView(){
-        hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
         hotCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         hotCollectionView?.delegate = self
         hotCollectionView?.dataSource = self
@@ -90,7 +119,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     }
     
     private func setPostCollectionView(){
-        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
         postCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         postCollectionView?.delegate = self
         postCollectionView?.dataSource = self
@@ -105,8 +134,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
-       self.navigationController?.navigationBar.standardAppearance = standardAppearance
-       self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+        self.navigationController?.navigationBar.standardAppearance = standardAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
     }
     
     override func addView() {
@@ -118,7 +147,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
          hotCategory,
          hotCollectionView,
          postCategory,
-         //postCollectionView
+         postCollectionView
         ].forEach{
             contentView.addSubview($0)
         }
@@ -137,7 +166,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         }
         
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(123)
+            make.top.equalTo(20)
             make.left.equalTo(12)
             make.width.equalTo(230)
             make.height.equalTo(98)
@@ -163,11 +192,12 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             make.width.equalTo(80)
             make.height.equalTo(32)
         }
+        
         hotCollectionView.snp.makeConstraints { make in
             make.top.equalTo(hotCategory.snp.bottom).offset(16)
-            make.left.equalTo(12)
-            make.right.equalTo(-12)
-            make.bottom.equalTo(-30)
+            make.leading.trailing.equalToSuperview().inset(12)
+           //make.bottom.equalToSuperview()
+            make.height.equalTo(360)
         }
         
         postCategory.snp.makeConstraints { make in
@@ -176,12 +206,11 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             make.size.equalTo(hotCategory)
         }
         
-        /*postCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(postCategory.snp.bottom).offset(80)
-            make.left.equalTo(12)
-            make.right.equalTo(-12)
-            make.bottom.equalTo(-30)
-        }*/
+        postCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(postCategory.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.bottom.equalToSuperview()
+        }
     }
     
     @objc func profileButtonDidTap(){
@@ -193,9 +222,9 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.hotCollectionView{
-            return CGSize(width: 325, height: 330)
-        } else {
             return CGSize(width: 0, height: 0)
+        } else {
+            return CGSize(width: 325, height: 330)
         }
     }
     

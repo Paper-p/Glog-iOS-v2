@@ -112,6 +112,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
     
     func bind(with model: PostList){
         DispatchQueue.main.async { [self] in
+            self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
         }
     }
 }
