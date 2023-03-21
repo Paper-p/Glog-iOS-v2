@@ -10,10 +10,10 @@ import Gifu
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
     
     private let scrollView = UIScrollView().then{
-        $0.backgroundColor = .yellow
+        $0.backgroundColor = .clear
     }
     private let contentView = UIView().then{
-        $0.backgroundColor = .red
+        $0.backgroundColor = .clear
     }
     
     private let mainLabel = UILabel().then{
@@ -102,16 +102,16 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             widthDimension: .fractionalWidth(5.0),
             heightDimension: .fractionalHeight(1.0))
         let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
-            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
+            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 0)
         }
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(3.5),
-            heightDimension: .fractionalWidth(3/3))
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(2.9/3))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitem: fullPhotoItem,
-            count: 4)
+            count: 1)
         let section = NSCollectionLayoutSection(group: group)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
@@ -170,7 +170,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.height.equalTo(1000)
+            make.height.equalTo(10000)
             make.width.equalTo(scrollView.snp.width)
         }
         
