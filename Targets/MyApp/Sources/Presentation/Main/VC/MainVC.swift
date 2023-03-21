@@ -239,11 +239,6 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
     }
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        /*let cell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
-        cell.bind(with: viewModel.hotFeed[indexPath.row])
-        cell.selectedBackgroundView = .none
-        return cell*/
-        
         
         if collectionView == self.hotCollectionView{
             let hotCell = hotCollectionView.dequeueReusableCell(withReuseIdentifier: HotCollectionViewCell.identifier, for: indexPath) as! HotCollectionViewCell
