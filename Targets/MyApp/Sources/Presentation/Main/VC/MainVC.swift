@@ -161,7 +161,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.height.greaterThanOrEqualTo(view.snp.height).priority(.high)
+            make.height.equalTo(1000)
             make.width.equalTo(scrollView.snp.width)
         }
         
@@ -219,14 +219,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
 }
 
 extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == self.hotCollectionView{
-            return CGSize(width: 0, height: 0)
-        } else {
-            return CGSize(width: 325, height: 330)
-        }
-    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.hotCollectionView{
