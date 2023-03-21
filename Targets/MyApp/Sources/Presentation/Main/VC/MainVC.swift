@@ -179,7 +179,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.height.equalTo(view.frame.height * 3.05)
+            make.height.equalTo(view.frame.height * 3.1)
             make.width.equalTo(scrollView.snp.width)
         }
         
@@ -232,7 +232,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(view.frame.size.height * 2)
+            make.height.equalTo(view.frame.size.height * 2.1)
         }
     }
     
