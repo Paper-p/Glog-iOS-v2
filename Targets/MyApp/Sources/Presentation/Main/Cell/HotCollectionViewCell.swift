@@ -114,7 +114,6 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     func bind(with model: HotResponse){
         DispatchQueue.main.async { [self] in
             self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail))
-            print("\(model.thumbnail)sdlfkgjsl;dkfjgsl;dfjgs;lkdjfg;skdlf")
             self.titleLabel.text = model.title
             self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
             self.likeButton.setTitle("\(model.likeCount)", for: .normal)
