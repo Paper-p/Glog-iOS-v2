@@ -29,6 +29,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         $0.backgroundColor = .clear
         $0.isSelectable = false
         $0.isEditable = false
+        $0.isScrollEnabled = false
     }
     
     private let likeButton = UIButton().then{

@@ -37,6 +37,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         $0.isSelectable = false
         $0.isEditable = false
+        $0.isScrollEnabled = false
     }
     
     private let postCategory = UITextView().then{
@@ -45,7 +46,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         $0.text = "💻 게시물’s"
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
         $0.textAlignment = .center
-        $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        $0.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         $0.isSelectable = false
         $0.isEditable = false
     }
