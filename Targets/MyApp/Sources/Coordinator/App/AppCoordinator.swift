@@ -19,7 +19,7 @@ class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let tk = Keychain()
+        /*let tk = Keychain()
         let provider = MoyaProvider<AuthService>(plugins: [GlogLoggingPlugin()])
         
         let introVC = IntroCoordinator(navigationController: navigationController)
@@ -37,11 +37,11 @@ class AppCoordinator: Coordinator {
                 self.start(coordinator: introVC)
                 print(err.localizedDescription)
             }
-        }
+        }*/
         
         let vc = IntroCoordinator(navigationController: navigationController)
         window?.rootViewController = navigationController
-        //start(coordinator: vc)
+        start(coordinator: vc)
     }
     
     func start(coordinator: Coordinator) {

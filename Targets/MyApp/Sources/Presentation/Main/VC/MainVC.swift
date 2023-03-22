@@ -106,8 +106,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     private func postLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(5.0),
-            heightDimension: .fractionalHeight(1.0))
+            widthDimension: .fractionalWidth(3.5),
+            heightDimension: .fractionalHeight(2.9/3))
         let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
             $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 0)
         }
@@ -171,6 +171,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         }
     }
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.postCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
     
@@ -250,7 +251,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
             make.bottom.equalToSuperview().inset(3)
-            make.height.equalTo(self.bounds.size.height)
+            make.height.equalTo(view.frame.height * 2)
         }
     }
     
