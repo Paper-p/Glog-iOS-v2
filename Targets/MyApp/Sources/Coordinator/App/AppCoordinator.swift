@@ -39,9 +39,9 @@ class AppCoordinator: Coordinator {
             }
         }
         
-        /*let vc = IntroCoordinator(navigationController: navigationController)
+        let vc = IntroCoordinator(navigationController: navigationController)
         window?.rootViewController = navigationController
-        start(coordinator: vc)*/
+        //start(coordinator: vc)
     }
     
     func start(coordinator: Coordinator) {

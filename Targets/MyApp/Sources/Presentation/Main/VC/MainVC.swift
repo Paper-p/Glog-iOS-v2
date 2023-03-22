@@ -7,7 +7,7 @@ import Alamofire
 import UIKit
 import Gifu
 
-final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
+final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     private let scrollView = UIScrollView().then{
         $0.backgroundColor = .clear
@@ -170,17 +170,34 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
             contentView.addSubview($0)
         }
     }
+    override func viewDidAppear(_ animated: Bool) {
+        self.postCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.postCollectionView.removeObserver(self, forKeyPath: "contentSize")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentSize" {
+            if object is UICollectionView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    postCollectionView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 10)
+                    }
+                }
+            }
+        }
+    }
     
     override func setLayout() {
         
         scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.height.equalTo(view.frame.height * 3.1)
-            make.width.equalTo(scrollView.snp.width)
+            make.centerX.width.top.bottom.equalToSuperview()
         }
         
         mainLabel.snp.makeConstraints { make in
@@ -232,13 +249,15 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(view.frame.size.height * 2.1)
+            make.bottom.equalToSuperview().inset(3)
+            make.height.equalTo(self.bounds.size.height)
         }
     }
     
     @objc func profileButtonDidTap(){
         
     }
+    
 }
 
 extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
@@ -265,4 +284,3 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
         }
     }
 }
-
