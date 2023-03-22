@@ -64,12 +64,14 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
     
     override func setup() {
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
+        
         
         setCollectionView()
         setPostCollectionView()
@@ -142,6 +144,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView?.showsHorizontalScrollIndicator = false
         postCollectionView?.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
         postCollectionView.isScrollEnabled = false
+        postCollectionView.backgroundColor = .yellow
         self.postCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
@@ -170,26 +173,61 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             contentView.addSubview($0)
         }
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.postCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.postCollectionView.removeObserver(self, forKeyPath: "contentSize")
     }
-    
+    deinit {
+        
+    }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if object is UICollectionView {
+            if let cv = object as? UICollectionView, cv == postCollectionView {
                 if let newValue = change?[.newKey] as? CGSize {
                     postCollectionView.snp.updateConstraints {
-                        $0.height.equalTo(newValue.height + 10)
+                        $0.height.equalTo(newValue.height)
                     }
+                    let oldValue = change?[.oldKey] as? CGSize ?? .init(width: 0, height: 0)
+                    print(newValue, oldValue, scrollView.contentSize, scrollView.contentSize.height - oldValue.height + newValue.height)
+                    scrollView.contentSize = .init(width: scrollView.contentSize.width, height: scrollView.contentSize.height - oldValue.height + newValue.height)
                 }
             }
         }
     }
+    
+    /*private func postListLayout(type: SortButtonType, with model: PostList){
+        switch type {
+        case .grid:
+            
+        case .table:
+            
+        case .post:
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(3.5),
+                heightDimension: .fractionalHeight(2.9/3))
+            let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+                $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 0)
+            }
+            
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(2.9/3))
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitem: fullPhotoItem,
+                count: 1)
+            let section = NSCollectionLayoutSection(group: group)
+            let layout = UICollectionViewCompositionalLayout(section: section)
+        }
+    }*/
     
     override func setLayout() {
         
@@ -250,8 +288,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
+            make.height.equalTo(100)
             make.bottom.equalToSuperview().inset(3)
-            make.height.equalTo(view.frame.height * 2)
         }
     }
     
