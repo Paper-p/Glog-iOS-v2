@@ -47,7 +47,7 @@ extension FeedService: TargetType{
         let tk = Keychain()
         switch self {
         case .hot, .postList:
-            return ["Authorization" : tk.read(key: "accessToken")!]
+            return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]
         }
