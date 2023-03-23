@@ -141,7 +141,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     
     private func setPostCollectionView(){
-        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout(type: .grid).self)
+        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout(type: .post).self)
         postCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         postCollectionView?.delegate = self
         postCollectionView?.dataSource = self
@@ -205,7 +205,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
                     }
                     let oldValue = change?[.oldKey] as? CGSize ?? .init(width: 0, height: 0)
                     print(newValue, oldValue, scrollView.contentSize, scrollView.contentSize.height - oldValue.height + newValue.height)
-                    scrollView.contentSize = .init(width: scrollView.contentSize.width, height: scrollView.contentSize.height - oldValue.height + newValue.height)
+                    scrollView.contentSize = .init(width: scrollView.contentSize.width, height: scrollView.contentSize.height - oldValue.height * newValue.height)
                 }
             }
         }
@@ -214,7 +214,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     private func postListLayout(type: SortButtonType) -> UICollectionViewLayout{
         switch type {
         case .grid:
-            
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(3.5),
                 heightDimension: .fractionalHeight(2.9/3))
@@ -232,8 +231,26 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             let section = NSCollectionLayoutSection(group: group)
             let layout = UICollectionViewCompositionalLayout(section: section)
             return layout
+            
         case .table:
-            print("A")
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(2.9/3))
+            let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+                $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+            }
+            
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(3/3),
+                heightDimension: .fractionalWidth(0.3))
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitem: fullPhotoItem,
+                count: 1)
+            let section = NSCollectionLayoutSection(group: group)
+            let layout = UICollectionViewCompositionalLayout(section: section)
+            return layout
+            
         case .post:
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(3.5),
@@ -320,7 +337,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(view.frame.size.height * 2)
+            make.height.equalTo(view.frame.size.height)
             make.bottom.equalToSuperview().inset(3)
         }
     }
@@ -350,7 +367,7 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
         }
         else {
             let postCell = postCollectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
-            postCell.bind(with: viewModel.postList[indexPath.row], type: .grid)
+            postCell.bind(with: viewModel.postList[indexPath.row], type: .post)
             return postCell
         }
     }

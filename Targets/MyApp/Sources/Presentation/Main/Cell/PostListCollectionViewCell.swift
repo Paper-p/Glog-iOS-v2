@@ -12,6 +12,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
     private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
         $0.layer.cornerRadius = 10
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.contentMode = .scaleAspectFill
     }
     
     private let itemView = UIView().then{
@@ -146,7 +147,6 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
             switch type {
             case .grid:
                 self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
-                
             case .table:
                 self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
                 self.titleLabel.text = model.title
