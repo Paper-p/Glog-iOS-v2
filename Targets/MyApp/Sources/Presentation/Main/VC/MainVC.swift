@@ -62,6 +62,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     private var postCollectionView: UICollectionView!
     
+    private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill"), UIImage(systemName: "line.3.horizontal"), UIImage(systemName: "square.fill")])
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -168,6 +170,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
          hotCollectionView,
          postCategory,
          searchBar,
+         segmentedControl,
          postCollectionView
         ].forEach{
             contentView.addSubview($0)
@@ -280,6 +283,11 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             make.top.equalTo(hotCollectionView.snp.bottom).offset(90)
             make.left.equalTo(hotCategory)
             make.size.equalTo(hotCategory)
+        }
+        
+        segmentedControl.snp.makeConstraints { make in
+            make.centerY.equalTo(postCategory)
+            make.right.equalTo(makeFeedButton)
         }
         
         searchBar.snp.makeConstraints { make in

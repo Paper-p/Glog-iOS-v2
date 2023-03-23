@@ -29,6 +29,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         $0.backgroundColor = .clear
         $0.isSelectable = false
         $0.isEditable = false
+        $0.isScrollEnabled = false
     }
     
     private let likeButton = UIButton().then{
@@ -92,17 +93,19 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
     }
 
     private func setTableType(){
+        contentView.addSubViews(titleLabel,contentTextView,likeButton,hitButton)
+        titleLabel.font = UIFont.systemFont(ofSize: 18)
         titleLabel.snp.makeConstraints { make in
             make.left.top.equalToSuperview().inset(11)
             make.width.equalToSuperview().inset(11)
-            make.height.equalTo(24)
+            make.height.equalTo(21)
         }
-        
+        contentTextView.font = UIFont.systemFont(ofSize: 14)
         contentTextView.snp.makeConstraints { make in
             make.left.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(7)
+            make.top.equalTo(titleLabel.snp.bottom).offset(3)
             make.width.equalTo(titleLabel)
-            make.height.equalTo(17)
+            make.height.equalTo(22)
         }
         
         likeButton.snp.makeConstraints { make in
