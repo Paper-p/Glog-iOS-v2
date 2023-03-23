@@ -62,7 +62,9 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     private var postCollectionView: UICollectionView!
     
-    private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill"), UIImage(systemName: "line.3.horizontal"), UIImage(systemName: "square.fill")])
+    private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill") ?? "", UIImage(systemName: "line.3.horizontal") ?? "", UIImage(systemName: "square.fill") ?? ""]).then{
+        $0.selectedSegmentTintColor = GlogAsset.Colors.paperStartColor.color
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -139,7 +141,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     
     private func setPostCollectionView(){
-        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postLayout())
+        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout(type: .grid).self)
         postCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         postCollectionView?.delegate = self
         postCollectionView?.dataSource = self
@@ -209,12 +211,29 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         }
     }
     
-    /*private func postListLayout(type: SortButtonType, with model: PostList){
+    private func postListLayout(type: SortButtonType) -> UICollectionViewLayout{
         switch type {
         case .grid:
             
-        case .table:
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(3.5),
+                heightDimension: .fractionalHeight(2.9/3))
+            let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+                $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 6, bottom: 6, trailing: 6)
+            }
             
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(1.5/3))
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitem: fullPhotoItem,
+                count: 2)
+            let section = NSCollectionLayoutSection(group: group)
+            let layout = UICollectionViewCompositionalLayout(section: section)
+            return layout
+        case .table:
+            print("A")
         case .post:
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(3.5),
@@ -232,8 +251,10 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
                 count: 1)
             let section = NSCollectionLayoutSection(group: group)
             let layout = UICollectionViewCompositionalLayout(section: section)
+            return layout
         }
-    }*/
+        return UICollectionViewLayout()
+    }
     
     override func setLayout() {
         
@@ -329,7 +350,7 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
         }
         else {
             let postCell = postCollectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
-            postCell.bind(with: viewModel.postList[indexPath.row], type: .post)
+            postCell.bind(with: viewModel.postList[indexPath.row], type: .grid)
             return postCell
         }
     }
