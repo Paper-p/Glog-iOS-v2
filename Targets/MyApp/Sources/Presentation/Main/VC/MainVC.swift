@@ -64,6 +64,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill") ?? "", UIImage(systemName: "line.3.horizontal") ?? "", UIImage(systemName: "square.fill") ?? ""]).then{
         $0.selectedSegmentTintColor = GlogAsset.Colors.paperStartColor.color
+        $0.selectedSegmentIndex = 2
+        $0.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
     }
     
     override func viewDidLoad() {
@@ -337,7 +339,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(view.frame.size.height)
+            make.height.equalTo(view.frame.size.height * 1.7)
             make.bottom.equalToSuperview().inset(3)
         }
     }
@@ -346,6 +348,18 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         
     }
     
+    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            print("0")
+        } else if sender.selectedSegmentIndex == 1{
+            print("1")
+        } else if sender.selectedSegmentIndex == 2{
+            print("2")
+        }
+        else{
+            return
+        }
+    }
 }
 
 extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
