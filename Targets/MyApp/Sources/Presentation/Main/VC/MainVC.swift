@@ -144,7 +144,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView?.showsHorizontalScrollIndicator = false
         postCollectionView?.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
         postCollectionView.isScrollEnabled = false
-        postCollectionView.backgroundColor = .yellow
+        postCollectionView.backgroundColor = .clear
         self.postCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     

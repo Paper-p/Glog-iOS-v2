@@ -51,13 +51,19 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         super.init(frame: frame)
     }
     
-    private func setBlur(){
+    private func setPostType(){
         let blurEffect = UIBlurEffect(style: .dark)
         let visualEffectView = UIVisualEffectView(effect: blurEffect)
         visualEffectView.frame = CGRect(x: 0, y: 0, width: 369, height: 145)
         visualEffectView.layer.cornerRadius = 10
         visualEffectView.clipsToBounds = true
         itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
+        
+        itemView.snp.makeConstraints { make in
+            make.bottom.right.left.equalToSuperview()
+            make.height.equalTo(145)
+        }
+        
         titleLabel.snp.makeConstraints { make in
             make.left.top.equalToSuperview().inset(10)
             make.width.equalToSuperview().inset(10)
@@ -74,6 +80,34 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         likeButton.snp.makeConstraints { make in
             make.left.equalTo(contentTextView)
             make.bottom.equalToSuperview().inset(9)
+            make.width.equalTo(50)
+            make.height.equalTo(20)
+        }
+        
+        hitButton.snp.makeConstraints { make in
+            make.centerY.equalTo(likeButton)
+            make.left.equalTo(likeButton.snp.right)
+            make.size.equalTo(likeButton)
+        }
+    }
+
+    private func setTableType(){
+        titleLabel.snp.makeConstraints { make in
+            make.left.top.equalToSuperview().inset(11)
+            make.width.equalToSuperview().inset(11)
+            make.height.equalTo(24)
+        }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.left.equalTo(titleLabel)
+            make.top.equalTo(titleLabel.snp.bottom).offset(7)
+            make.width.equalTo(titleLabel)
+            make.height.equalTo(17)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.left.equalTo(contentTextView)
+            make.bottom.equalToSuperview().inset(14)
             make.width.equalTo(50)
             make.height.equalTo(20)
         }
@@ -102,11 +136,6 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         thumbnailImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        itemView.snp.makeConstraints { make in
-            make.bottom.right.left.equalToSuperview()
-            make.height.equalTo(145)
-        }
     }
     
     func bind(with model: PostList, type: SortButtonType){
@@ -126,6 +155,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
                 } else {
                     self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
                 }
+                setTableType()
                 
             case .post:
                 self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
@@ -138,7 +168,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
                 } else {
                     self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
                 }
-                setBlur()
+                setPostType()
             }
         }
     }
