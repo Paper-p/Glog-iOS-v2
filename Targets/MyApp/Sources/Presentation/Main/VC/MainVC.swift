@@ -177,14 +177,17 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         super.viewWillAppear(animated)
         
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.postCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.postCollectionView.removeObserver(self, forKeyPath: "contentSize")
     }
+    
     deinit {
         
     }
@@ -288,7 +291,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(100)
+            make.height.equalTo(view.frame.size.height * 2)
             make.bottom.equalToSuperview().inset(3)
         }
     }
@@ -318,7 +321,7 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
         }
         else {
             let postCell = postCollectionView.dequeueReusableCell(withReuseIdentifier: PostListCollectionViewCell.identifier, for: indexPath) as! PostListCollectionViewCell
-            postCell.bind(with: viewModel.postList[indexPath.row])
+            postCell.bind(with: viewModel.postList[indexPath.row], type: .post)
             return postCell
         }
     }
