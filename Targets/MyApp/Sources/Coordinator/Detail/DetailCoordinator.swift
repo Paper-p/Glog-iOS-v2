@@ -2,23 +2,10 @@
 import UIKit
 
 class DetailCoordinator: BaseCoordinator{
-    
-    override func start() {
+    func startDetailPost(model: DetailResponse) {
         let vm = DetailVM(coordinator: self)
         let vc = DetailVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
-    
-    override func navigate(to step: GlogStep) {
-        switch step{
-            
-        default:
-            return
-        }
-    }
-}
-
-private extension DetailCoordinator{
-    
 }

@@ -15,5 +15,5 @@ enum GlogStep: Step {
     
     //Main
     case mainIsRequired
-    case detailIsRequired(model: PostList)
+    case detailIsRequired(model: DetailResponse)
 }
