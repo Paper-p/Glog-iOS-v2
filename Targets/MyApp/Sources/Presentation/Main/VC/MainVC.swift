@@ -112,26 +112,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         return layout
     }
     
-    private func postLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(3.5),
-            heightDimension: .fractionalHeight(2.9/3))
-        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
-            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 0)
-        }
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(2.9/3))
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitem: fullPhotoItem,
-            count: 1)
-        let section = NSCollectionLayoutSection(group: group)
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        return layout
-    }
-     
     private func setCollectionView(){
         hotCollectionView = UICollectionView(frame: .zero, collectionViewLayout: hotLayout())
         hotCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -143,7 +123,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     
     private func setPostCollectionView(){
-        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout(type: .post).self)
+        postCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout(type: .post))
         postCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         postCollectionView?.delegate = self
         postCollectionView?.dataSource = self
@@ -272,7 +252,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             let layout = UICollectionViewCompositionalLayout(section: section)
             return layout
         }
-        return UICollectionViewLayout()
+        return .init()
     }
     
     override func setLayout() {
@@ -348,17 +328,19 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         
     }
     
-    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) -> UICollectionViewLayout{
         if sender.selectedSegmentIndex == 0 {
-            print("0")
+            print("grid")
+            return postListLayout(type: .grid)
         } else if sender.selectedSegmentIndex == 1{
-            print("1")
+            print("table")
         } else if sender.selectedSegmentIndex == 2{
-            print("2")
+            print("post")
         }
         else{
-            return
+            return postListLayout(type: .grid)
         }
+        return .init()
     }
 }
 
