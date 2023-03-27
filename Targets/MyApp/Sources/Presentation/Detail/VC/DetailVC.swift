@@ -1,9 +1,12 @@
-//
-//  DetailVC.swift
-//  Glog
-//
-//  Created by 임준화 on 2023/03/27.
-//  Copyright © 2023 Glog. All rights reserved.
-//
+import Then
+import RxFlow
+import RxSwift
+import RxCocoa
+import SnapKit
+import Alamofire
+import UIKit
+import Gifu
 
-import Foundation
+final class DetailVC: BaseVC<DetailVM>{
+    
+}

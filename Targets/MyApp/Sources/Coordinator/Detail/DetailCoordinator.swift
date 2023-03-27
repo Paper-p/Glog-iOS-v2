@@ -4,7 +4,7 @@ import UIKit
 class DetailCoordinator: BaseCoordinator{
     
     override func start() {
-        let vm = DetailVC(coordinator: self)
+        let vm = DetailVM(coordinator: self)
         let vc = DetailVC(vm)
         
         navigationController.setViewControllers([vc], animated: true)

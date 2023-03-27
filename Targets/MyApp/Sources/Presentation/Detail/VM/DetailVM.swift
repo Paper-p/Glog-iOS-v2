@@ -1,9 +1,8 @@
-//
-//  DetailVM.swift
-//  Glog
-//
-//  Created by 임준화 on 2023/03/27.
-//  Copyright © 2023 Glog. All rights reserved.
-//
 
-import Foundation
+import UIKit
+import RxSwift
+import RxCocoa
+import Moya
+
+final class DetailVM: BaseViewModel {
+}
