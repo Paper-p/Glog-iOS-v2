@@ -70,7 +70,10 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        postCollectionView.rx.modelSelected(PostList.self)
+            .subscribe(onNext: { [weak self] post in
+                self?.viewModel.pushToDetailVC(model: post)
+            }).disposed(by: disposeBag)
     }
     
     override func setup() {
