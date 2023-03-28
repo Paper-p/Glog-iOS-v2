@@ -70,20 +70,15 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        postCollectionView.rx.modelSelected(DetailResponse.self)
-            .subscribe(onNext: { [weak self] post in
-                self?.viewModel.pushToDetailVC(model: post)
-            }).disposed(by: disposeBag)
     }
     
     override func setup() {
         DispatchQueue.main.async {
             self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
         }
-        
-        
         setCollectionView()
         setPostCollectionView()
+        
         viewModel.fetchHotPostList { _ in
             self.hotCollectionView.reloadData()
         }
@@ -165,7 +160,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -369,5 +363,12 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
             postCell.bind(with: viewModel.postList[indexPath.row], type: .post)
             return postCell
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.navigationController?.pushViewController(DetailVC(.init(coordinator: DetailCoordinator(navigationController: navigationController ?? .init()))), animated: true)
+        viewModel.detailPost(completion: { _ in
+            self.viewModel.pushToDetailVC()
+        }, id: 2)
     }
 }

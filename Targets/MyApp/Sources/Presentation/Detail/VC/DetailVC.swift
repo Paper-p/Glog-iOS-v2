@@ -8,5 +8,7 @@ import UIKit
 import Gifu
 
 final class DetailVC: BaseVC<DetailVM>{
+    var model: DetailResponse?
+    
     
 }

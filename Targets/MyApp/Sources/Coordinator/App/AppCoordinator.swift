@@ -39,7 +39,7 @@ class AppCoordinator: Coordinator {
             }
         }*/
         
-        let vc = SignInCoordinator(navigationController: navigationController)
+        let vc = IntroCoordinator(navigationController: navigationController)
         window?.rootViewController = navigationController
         start(coordinator: vc)
     }

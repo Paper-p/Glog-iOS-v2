@@ -5,6 +5,7 @@ import Moya
 enum FeedService{
     case hot
     case postList(keyword: PostListRequest)
+    case detail(param: DetailRequest)
 }
 
 extension FeedService: TargetType{
@@ -18,6 +19,8 @@ extension FeedService: TargetType{
             return "feed/hot"
         case .postList:
             return "feed/list"
+        case let .detail(id):
+            return "feed/\(id)"
         }
     }
     
@@ -26,6 +29,8 @@ extension FeedService: TargetType{
         case .hot:
             return .get
         case .postList:
+            return .get
+        case .detail:
             return .get
         }
     }
@@ -40,15 +45,17 @@ extension FeedService: TargetType{
             return .requestPlain
         case let .postList(keyword):
             return .requestParameters(parameters: ["size": keyword.size, "page": keyword.page, "keyword": keyword.keyword], encoding: URLEncoding.queryString)
+        case let .detail(param):
+            return .requestParameters(parameters: ["id": param.id], encoding: URLEncoding.default)
         }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .hot, .postList:
+        case .hot, .postList, .detail:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
-        default:
+        default: 
             return["Content-Type" : "application/json"]
         }
     }

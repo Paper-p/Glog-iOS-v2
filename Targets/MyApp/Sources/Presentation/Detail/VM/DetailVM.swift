@@ -5,4 +5,5 @@ import RxCocoa
 import Moya
 
 final class DetailVM: BaseViewModel {
+    
 }

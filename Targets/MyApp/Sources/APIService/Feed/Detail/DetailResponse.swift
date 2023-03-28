@@ -2,29 +2,29 @@
 import UIKit
 
 struct DetailResponse: Codable{
-    var id: Int
-    var title: String
-    var c: String
-    var thumbnail: String?
-    var createdAt: Date
-    var hit: Int
-    var likeCount: Int
-    var isLiked: Bool
-    var tagList: [String]
-    var comments: [DetailComment]
-    var isMine: Bool
+    let id: Int
+    let title: String
+    let content: String
+    let thumbnail: String?
+    let createdAt: Date
+    let hit: Int
+    let likeCount: Int
+    let isLiked: Bool
+    let tagList: [String]
+    let comments: [DetailComment]
+    let isMine: Bool
 }
 
 struct DetailComment: Codable{
-    var id: CLong
-    var author: Author
-    var content: String
-    var createdAt: Date
-    var isMine: Bool
+    let id: CLong
+    let author: Author
+    let content: String
+    let createdAt: Date
+    let isMine: Bool
 }
 
 struct Author: Codable{
-    var userId: String
-    var nickname: String
-    var profileImageUrl: String
+    let userId: String
+    let nickname: String
+    let profileImageUrl: String
 }
