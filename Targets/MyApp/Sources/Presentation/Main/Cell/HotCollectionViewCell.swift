@@ -12,6 +12,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
         $0.layer.cornerRadius = 10
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.contentMode = .scaleAspectFill
     }
     
     private let itemView = UIView().then{
