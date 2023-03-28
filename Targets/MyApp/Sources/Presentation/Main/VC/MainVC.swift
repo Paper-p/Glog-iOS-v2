@@ -366,7 +366,7 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.navigationController?.pushViewController(DetailVC(.init(coordinator: DetailCoordinator(navigationController: navigationController ?? .init()))), animated: true)
+        
         viewModel.detailPost(completion: { _ in
             self.viewModel.pushToDetailVC()
         }, id: 2)

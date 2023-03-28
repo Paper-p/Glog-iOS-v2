@@ -20,7 +20,7 @@ extension FeedService: TargetType{
         case .postList:
             return "feed/list"
         case let .detail(id):
-            return "feed/\(id)"
+            return "feed/\(id.id)"
         }
     }
     
@@ -45,8 +45,8 @@ extension FeedService: TargetType{
             return .requestPlain
         case let .postList(keyword):
             return .requestParameters(parameters: ["size": keyword.size, "page": keyword.page, "keyword": keyword.keyword], encoding: URLEncoding.queryString)
-        case let .detail(param):
-            return .requestParameters(parameters: ["id": param.id], encoding: URLEncoding.default)
+        case .detail:
+            return .requestPlain
         }
     }
     

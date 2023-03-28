@@ -12,7 +12,7 @@ class MainCoordinator: BaseCoordinator{
     
     override func navigate(to step: GlogStep) {
         switch step{
-        case let .detailIsRequired:
+        case .detailIsRequired:
             detailIsRequired()
         default:
             return
