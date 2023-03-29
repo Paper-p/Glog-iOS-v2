@@ -7,7 +7,7 @@ class MainCoordinator: BaseCoordinator{
         let vm = MainVM(coordinator: self)
         let vc = MainVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
     
     override func navigate(to step: GlogStep) {
