@@ -23,7 +23,9 @@ final class DetailVC: BaseVC<DetailVM>{
     private let likeButton = UIButton()
     private let hitButton = UIButton()
     
-    private let
+    private let thumbnailImageView = UIImageView()
+    
+    private let contentTextView = UITextView()
     
     override func configureNavigation() {
         self.navigationItem.titleView = UIImageView(image: GlogAsset.Images.paperMainLogo.image.downSample(size: .init(width: 26, height: 26)).withRenderingMode(.alwaysOriginal))
