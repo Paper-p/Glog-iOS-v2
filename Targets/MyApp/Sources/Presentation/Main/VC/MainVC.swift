@@ -370,6 +370,6 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
         
         viewModel.detailPost(completion: { _ in
             self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
-        }, id: indexPath.row)
+        }, id: viewModel.postList[indexPath.item].id)
     }
 }

@@ -13,8 +13,7 @@ final class DetailVC: BaseVC<DetailVM>{
     private let titleLabel = UILabel().then{
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 26, weight: .bold)
-        $0.numberOfLines = 0
-        $0.lineBreakMode = .byWordWrapping
+        
     }
     
     //private let tagCollectionView = UICollectionView()
@@ -58,17 +57,14 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     override func addView() {
-        //view.addSubViews(titleLabel)
+        view.addSubViews(titleLabel)
     }
     
     override func setLayout() {
-        /*titleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.left.right.equalToSuperview().inset(12)
-            make.top.equalTo(8)
-            make.height.equalTo(100)
-            make.width.equalTo(100)
-        }*/
+        titleLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(100)
+        }
     }
     
     private func bindData(with model: DetailResponse){
