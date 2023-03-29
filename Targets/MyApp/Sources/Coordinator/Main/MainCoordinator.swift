@@ -12,8 +12,8 @@ class MainCoordinator: BaseCoordinator{
     
     override func navigate(to step: GlogStep) {
         switch step{
-        case .detailIsRequired:
-            detailIsRequired()
+        case .detailIsRequired(let model):
+            detailIsRequired(model: model)
         default:
             return
         }
@@ -21,10 +21,10 @@ class MainCoordinator: BaseCoordinator{
 }
 
 private extension MainCoordinator{
-    private func detailIsRequired(){
+    private func detailIsRequired(model: DetailResponse){
         let vc = DetailCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
-        vc.start()
+        vc.startDetailPostVC(model: model)
     }
 }

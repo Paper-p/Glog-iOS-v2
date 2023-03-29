@@ -6,8 +6,8 @@ import Moya
 
 final class MainVM: BaseViewModel {
     
-    func pushToDetailVC(){
-        coordinator.navigate(to: .detailIsRequired)
+    func pushToDetailVC(model: DetailResponse){
+        coordinator.navigate(to: .detailIsRequired(model: model))
     }
     
     var hotFeed: [HotResponse] = []

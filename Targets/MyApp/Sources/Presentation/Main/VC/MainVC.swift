@@ -9,6 +9,7 @@ import Gifu
 
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
+    var model: DetailResponse!
     private let scrollView = UIScrollView().then{
         $0.backgroundColor = .clear
     }
@@ -368,7 +369,7 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         viewModel.detailPost(completion: { _ in
-            self.viewModel.pushToDetailVC()
+            self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
         }, id: indexPath.row)
     }
 }
