@@ -368,8 +368,15 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        viewModel.detailPost(completion: { _ in
-            self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
-        }, id: viewModel.postList[indexPath.item].id)
+        if collectionView == self.hotCollectionView{
+            viewModel.detailPost(completion: { _ in
+                self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
+            }, id: viewModel.hotFeed[indexPath.item].id)
+        }
+        else {
+            viewModel.detailPost(completion: { _ in
+                self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
+            }, id: viewModel.postList[indexPath.item].id)
+        }
     }
 }
