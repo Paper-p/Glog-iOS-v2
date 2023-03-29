@@ -12,6 +12,7 @@ struct DetailResponse: Codable{
     let isLiked: Bool
     let tagList: [String]
     let comments: [DetailComment]
+    let author: Author
     let isMine: Bool
 }
 
