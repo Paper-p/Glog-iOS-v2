@@ -10,10 +10,16 @@ import Gifu
 final class DetailVC: BaseVC<DetailVM>{
     var model: DetailResponse?
     
+    private let scrollView = UIScrollView().then{
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
+    
     private let titleLabel = UILabel().then{
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 26, weight: .bold)
-        
+        $0.textAlignment = .left
     }
     
     //private let tagCollectionView = UICollectionView()
@@ -54,7 +60,11 @@ final class DetailVC: BaseVC<DetailVM>{
     override func viewDidLoad() {
         super.viewDidLoad()
         bindData(with: model!)
+        
+        scrollView.addGestureRecognizer(tapGestureRecognizer)
     }
+    
+    private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
     
     override func addView() {
         view.addSubViews(titleLabel)
@@ -62,12 +72,19 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func setLayout() {
         titleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(100)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(120)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(33)
         }
     }
     
     private func bindData(with model: DetailResponse){
         titleLabel.text = model.title
     }
+    
+    @objc func tapMethod(_ sender: UITapGestureRecognizer) {
+       self.view.endEditing(true)
+   }
+       
 }
