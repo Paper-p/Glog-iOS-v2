@@ -22,7 +22,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.textAlignment = .left
     }
     
-    //private let tagCollectionView = UICollectionView()
+    private var tagCollectionView: UICollectionView!
     
     private let profileImageView = UIImageView()
     private let authorLabel = UILabel()
@@ -64,18 +64,69 @@ final class DetailVC: BaseVC<DetailVM>{
         scrollView.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    override func setup() {
+        setCollectionView()
+    }
+    
+    private func tagLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(5.0),
+            heightDimension: .fractionalHeight(1.0))
+        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
+        }
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(3.5),
+            heightDimension: .fractionalWidth(2.9/3))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitem: fullPhotoItem,
+            count: 4)
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
+    }
+    
+    private func setCollectionView(){
+        tagCollectionView = UICollectionView(frame: .zero, collectionViewLayout: tagLayout())
+        tagCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        tagCollectionView?.delegate = self
+        tagCollectionView?.dataSource = self
+        tagCollectionView?.showsHorizontalScrollIndicator = false
+        tagCollectionView?.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
+        self.tagCollectionView?.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
     
     override func addView() {
-        view.addSubViews(titleLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubViews(contentView)
+        contentView.addSubViews(titleLabel,tagCollectionView)
     }
     
     override func setLayout() {
+        
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.centerX.width.top.bottom.equalToSuperview()
+        }
+        
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(120)
+            make.top.equalTo(10)
             make.width.equalToSuperview().inset(12)
             make.height.equalTo(33)
+        }
+        
+        tagCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.height.equalTo(100)
         }
     }
     
@@ -87,4 +138,19 @@ final class DetailVC: BaseVC<DetailVM>{
        self.view.endEditing(true)
    }
        
+}
+
+extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return (model?.tagList.count)!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let tagCell = tagCollectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.identifier, for: indexPath) as! TagCollectionViewCell
+        tagCell.tagLabel.text = model?.tagList[indexPath.item]
+        return tagCell
+    }
+
+    
 }
