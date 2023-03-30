@@ -11,13 +11,14 @@ final class TagCollectionViewCell: BaseCollectionViewCell{
     static let identifier = "TagCollectionViewCell"
     
     let tagLabel = UILabel().then{
-        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.textColor = GlogAsset.Colors.paperBlankColor.color
         $0.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        $0.textAlignment = .center
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+        contentView.backgroundColor = GlogAsset.Colors.paperStartColor.color
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +36,7 @@ final class TagCollectionViewCell: BaseCollectionViewCell{
     
     override func setLayout(){
         tagLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+            make.center.equalToSuperview()
             make.width.equalToSuperview()
             make.height.equalTo(15)
         }

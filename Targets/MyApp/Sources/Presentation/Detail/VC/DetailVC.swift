@@ -70,15 +70,15 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private func tagLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(5.0),
+            widthDimension: .fractionalWidth(10.0),
             heightDimension: .fractionalHeight(1.0))
         let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
             $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
         }
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(3.5),
-            heightDimension: .fractionalWidth(2.9/3))
+            widthDimension: .fractionalWidth(1.3),
+            heightDimension: .fractionalWidth(0.08))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitem: fullPhotoItem,
@@ -96,6 +96,7 @@ final class DetailVC: BaseVC<DetailVM>{
         tagCollectionView?.showsHorizontalScrollIndicator = false
         tagCollectionView?.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
         self.tagCollectionView?.translatesAutoresizingMaskIntoConstraints = false
+        tagCollectionView.backgroundColor = .red
     }
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
@@ -126,12 +127,13 @@ final class DetailVC: BaseVC<DetailVM>{
         tagCollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(100)
+            make.height.equalTo(56)
         }
     }
     
     private func bindData(with model: DetailResponse){
         titleLabel.text = model.title
+        profileImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
@@ -151,6 +153,4 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
         tagCell.tagLabel.text = model?.tagList[indexPath.item]
         return tagCell
     }
-
-    
 }
