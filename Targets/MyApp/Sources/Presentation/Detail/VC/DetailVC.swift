@@ -24,9 +24,21 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private var tagCollectionView: UICollectionView!
     
-    private let profileImageView = UIImageView()
-    private let authorLabel = UILabel()
-    private let createdAtLabel = UILabel()
+    private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
+        $0.layer.cornerRadius = 18
+        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.contentMode = .scaleAspectFill
+    }
+    private let authorLabel = UILabel().then{
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        $0.textAlignment = .left
+    }
+    private let createdAtLabel = UILabel().then{
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        $0.textAlignment = .left
+    }
     private let likeButton = UIButton()
     private let hitButton = UIButton()
     
@@ -96,7 +108,7 @@ final class DetailVC: BaseVC<DetailVM>{
         tagCollectionView?.showsHorizontalScrollIndicator = false
         tagCollectionView?.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
         self.tagCollectionView?.translatesAutoresizingMaskIntoConstraints = false
-        tagCollectionView.backgroundColor = .red
+        //tagCollectionView.backgroundColor = .red
     }
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
@@ -104,7 +116,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(titleLabel,tagCollectionView)
+        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel)
     }
     
     override func setLayout() {
@@ -129,11 +141,32 @@ final class DetailVC: BaseVC<DetailVM>{
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(56)
         }
+        
+        profileImageView.snp.makeConstraints { make in
+            make.top.equalTo(tagCollectionView.snp.bottom)
+            make.left.equalToSuperview().inset(12)
+            make.size.equalTo(36)
+        }
+        authorLabel.snp.makeConstraints { make in
+            make.left.equalTo(profileImageView.snp.right).offset(8)
+            make.top.equalTo(profileImageView.snp.top)
+            make.width.equalTo(80)
+            make.height.equalTo(19)
+        }
+        
+        createdAtLabel.snp.makeConstraints { make in
+            make.left.equalTo(authorLabel)
+            make.top.equalTo(authorLabel.snp.bottom).offset(1)
+            make.width.equalTo(100)
+            make.height.equalTo(16)
+        }
     }
     
     private func bindData(with model: DetailResponse){
         titleLabel.text = model.title
-        profileImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
+        profileImageView.kf.setImage(with: URL(string: model.author.profileImageUrl))
+        authorLabel.text = model.author.nickname
+        createdAtLabel.text = model.createdAt.description
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
