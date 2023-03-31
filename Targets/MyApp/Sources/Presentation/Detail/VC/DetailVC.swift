@@ -39,8 +39,21 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
         $0.textAlignment = .left
     }
-    private let likeButton = UIButton()
-    private let hitButton = UIButton()
+    private let likeButton = UIButton().then{
+        $0.setTitleColor(UIColor(red: 0.483, green: 0.483, blue: 0.483, alpha: 1), for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        $0.setImage(UIImage(named: "Paper_LikeLogo"), for: .normal)
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
+    }
+    
+    private let hitButton = UIButton().then{
+        $0.setTitleColor(UIColor(red: 0.483, green: 0.483, blue: 0.483, alpha: 1), for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        $0.setImage(UIImage(named: "Paper_HitLogo")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
+    }
     
     private let thumbnailImageView = UIImageView()
     
@@ -78,6 +91,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func setup() {
         setCollectionView()
+        
     }
     
     private func tagLayout() -> UICollectionViewLayout {
@@ -108,7 +122,6 @@ final class DetailVC: BaseVC<DetailVM>{
         tagCollectionView?.showsHorizontalScrollIndicator = false
         tagCollectionView?.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
         self.tagCollectionView?.translatesAutoresizingMaskIntoConstraints = false
-        //tagCollectionView.backgroundColor = .red
     }
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
@@ -116,7 +129,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel)
+        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton)
     }
     
     override func setLayout() {
@@ -157,8 +170,19 @@ final class DetailVC: BaseVC<DetailVM>{
         createdAtLabel.snp.makeConstraints { make in
             make.left.equalTo(authorLabel)
             make.top.equalTo(authorLabel.snp.bottom).offset(1)
-            make.width.equalTo(100)
+            make.width.equalTo(150)
             make.height.equalTo(16)
+        }
+        hitButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(12)
+            make.top.equalTo(tagCollectionView.snp.bottom)
+            make.width.equalTo(50)
+            make.height.equalTo(25)
+        }
+        likeButton.snp.makeConstraints { make in
+            make.size.equalTo(hitButton)
+            make.right.equalTo(hitButton.snp.left)
+            make.centerY.equalTo(hitButton)
         }
     }
     
@@ -167,6 +191,13 @@ final class DetailVC: BaseVC<DetailVM>{
         profileImageView.kf.setImage(with: URL(string: model.author.profileImageUrl))
         authorLabel.text = model.author.nickname
         createdAtLabel.text = model.createdAt.description
+        self.likeButton.setTitle("\(model.likeCount)", for: .normal)
+        self.hitButton.setTitle("\(model.hit)", for: .normal)
+        if model.isLiked {
+            self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+        } else {
+            self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+        }
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
@@ -187,3 +218,4 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
         return tagCell
     }
 }
+
