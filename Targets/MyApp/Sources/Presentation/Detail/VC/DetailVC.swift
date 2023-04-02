@@ -27,7 +27,7 @@ final class DetailVC: BaseVC<DetailVM>{
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
         $0.layer.cornerRadius = 18
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleAspectFit
     }
     private let authorLabel = UILabel().then{
         $0.textColor = .white
@@ -52,10 +52,14 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         $0.setImage(UIImage(named: "Paper_HitLogo")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
         $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -3)
     }
     
-    private let thumbnailImageView = UIImageView()
+    private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        //$0.contentMode = .scaleAspectFill
+    }
     
     private let contentTextView = UITextView()
     
@@ -129,7 +133,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton)
+        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView)
     }
     
     override func setLayout() {
@@ -173,16 +177,25 @@ final class DetailVC: BaseVC<DetailVM>{
             make.width.equalTo(150)
             make.height.equalTo(16)
         }
+        
         hitButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(12)
             make.top.equalTo(tagCollectionView.snp.bottom)
             make.width.equalTo(50)
             make.height.equalTo(25)
         }
+        
         likeButton.snp.makeConstraints { make in
             make.size.equalTo(hitButton)
             make.right.equalTo(hitButton.snp.left)
             make.centerY.equalTo(hitButton)
+        }
+        
+        thumbnailImageView.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(16)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(view.bounds.height * 0.2)
+            make.centerX.equalToSuperview()
         }
     }
     
@@ -191,13 +204,14 @@ final class DetailVC: BaseVC<DetailVM>{
         profileImageView.kf.setImage(with: URL(string: model.author.profileImageUrl))
         authorLabel.text = model.author.nickname
         createdAtLabel.text = model.createdAt.description
-        self.likeButton.setTitle("\(model.likeCount)", for: .normal)
-        self.hitButton.setTitle("\(model.hit)", for: .normal)
+        likeButton.setTitle("\(model.likeCount)", for: .normal)
+        hitButton.setTitle("\(model.hit)", for: .normal)
         if model.isLiked {
-            self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+            likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
         } else {
-            self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+            likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
         }
+        thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail!))
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
