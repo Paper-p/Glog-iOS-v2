@@ -1,4 +1,5 @@
 import Then
+import Markdown
 import RxFlow
 import RxSwift
 import RxCocoa
@@ -102,7 +103,6 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func setup() {
         setCollectionView()
-        
     }
     
     private func tagLayout() -> UICollectionViewLayout {
@@ -215,7 +215,11 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private func bindData(with model: DetailResponse){
         titleLabel.text = model.title
-        profileImageView.kf.setImage(with: URL(string: model.author.profileImageUrl))
+        DispatchQueue.main.async {
+            if let image = URL(string: model.author.profileImageUrl){
+                self.profileImageView.kf.setImage(with: image)
+            }
+        }
         authorLabel.text = model.author.nickname
         createdAtLabel.text = model.createdAt.description
         likeButton.setTitle("\(model.likeCount)", for: .normal)
@@ -227,6 +231,10 @@ final class DetailVC: BaseVC<DetailVM>{
         }
         thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail!))
         contentTextView.text = model.content
+        
+        let document = Document(parsing: contentTextView.text)
+        print(document.debugDescription())
+        contentTextView.text = document.debugDescription()
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
