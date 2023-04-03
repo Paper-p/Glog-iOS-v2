@@ -89,6 +89,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.layer.cornerRadius = 10
         $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
+        $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 60)
     }
     
     private let commentTextFieldButton = GlogButton(title: "등록",width: 63, height: 29).then{
