@@ -13,7 +13,7 @@ final class InsertNickNameVC: BaseVC<InsertNicknameVM>, UITextFieldDelegate{
     
     private let nicknameTextField = AuthTextField(title: "사용하실 닉네임을 입력해주세요.")
     
-    private var doneButton = GlogButton(title: "완료").then{
+    private var doneButton = GlogButton(title: "완료",width: 366, height: 60).then{
         $0.addTarget(self, action: #selector(doneButtonDidTap), for: .touchUpInside)
         $0.isEnabled = false
     }

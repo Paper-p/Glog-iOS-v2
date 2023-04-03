@@ -18,7 +18,7 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
         $0.isSecureTextEntry = true
     }
     
-    private var nextButton = GlogButton(title: "다음").then{
+    private var nextButton = GlogButton(title: "다음",width: 366, height: 60).then{
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)
     }

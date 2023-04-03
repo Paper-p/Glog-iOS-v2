@@ -93,6 +93,10 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
     }
     
+    private let commentTextFieldButton = GlogButton(title: "등록",width: 63, height: 29).then{
+        $0.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
+    }
+    
     private let commentTableView = UITableView()
     
     override func configureNavigation() {
@@ -124,6 +128,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func setup() {
         setCollectionView()
         commentTextField.commentPadding()
+        commentTextFieldButton.createGradient()
     }
     
     private func tagLayout() -> UICollectionViewLayout {
@@ -162,6 +167,7 @@ final class DetailVC: BaseVC<DetailVM>{
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
         contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView, commentCategory, commentTextField)
+        commentTextField.addSubview(commentTextFieldButton)
     }
     
     override func setLayout() {
@@ -246,6 +252,13 @@ final class DetailVC: BaseVC<DetailVM>{
             make.bottom.equalToSuperview()
             make.height.equalTo(97)
         }
+        
+        commentTextFieldButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(13)
+            make.bottom.equalToSuperview().inset(7)
+            make.width.equalTo(63)
+            make.height.equalTo(28)
+        }
     }
     
     private func bindData(with model: DetailResponse){
@@ -275,8 +288,11 @@ final class DetailVC: BaseVC<DetailVM>{
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
        self.view.endEditing(true)
-   }
-       
+    }
+    
+    @objc func registerButtonDidTap(){
+        print("button Tap")
+    }
 }
 
 extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate{

@@ -27,7 +27,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     private let gifImage = GIFImageView()
     
-    private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기")
+    private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기",width: 366, height: 60)
     
     private let hotCategory = UITextView().then{
         $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color

@@ -2,8 +2,8 @@
 import UIKit
 
 final class GlogButton: UIButton {
-    init(title: String) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 366, height: 60))
+    init(title: String, width: Int, height: Int) {
+        super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
         self.setTitle(title, for: .normal)
         self.setTitleColor(GlogAsset.Colors.paperBackgroundColor.color, for: .normal)
         self.layer.cornerRadius = 10
