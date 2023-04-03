@@ -14,7 +14,7 @@ public extension TargetDependency.SPM{
     static let RxFlow = TargetDependency.package(product: "RxFlow")
     static let Gifu = TargetDependency.package(product: "Gifu")
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
-    static let Markdown = TargetDependency.package(product: "Markdown")
+    static let Markdownosaur = TargetDependency.package(product: "Markdownosaur")
 }
 
 public extension Package {
@@ -54,8 +54,8 @@ public extension Package {
         url: "https://github.com/onevcat/Kingfisher.git",
         requirement: .upToNextMajor(from: "7.6.2"))
     
-    static let Markdown = Package.remote(
-        url: "https://github.com/apple/swift-markdown",
+    static let Markdownosaur = Package.remote(
+        url: "https://github.com/christianselig/Markdownosaur/",
         requirement: .branch("main"))
 }
 

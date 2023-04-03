@@ -17,7 +17,7 @@ let project = Project.executable(
         .RxFlow,
         .Gifu,
         .Kingfisher,
-        .Markdown
+        .Markdownosaur
     ],
     product: .app,
     deploymentTarget: .iOS(targetVersion: "13.5", devices: [.iphone, .ipad]),
@@ -31,6 +31,6 @@ let project = Project.executable(
         .SPM.RxFlow,
         .SPM.Gifu,
         .SPM.Kingfisher,
-        .SPM.Markdown
+        .SPM.Markdownosaur
     ]
 )
