@@ -61,7 +61,14 @@ final class DetailVC: BaseVC<DetailVM>{
         //$0.contentMode = .scaleAspectFill
     }
     
-    private let contentTextView = UITextView()
+    private let contentTextView = UITextView().then{
+        $0.textColor = .white
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.isSelectable = false
+        $0.isEditable = false
+        $0.isScrollEnabled = false
+        $0.translatesAutoresizingMaskIntoConstraints = true
+    }
     
     private let commentCategory = UIView()
     private let commentTextField = UITextField()
@@ -133,7 +140,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView)
+        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView)
     }
     
     override func setLayout() {
@@ -197,6 +204,13 @@ final class DetailVC: BaseVC<DetailVM>{
             make.height.equalTo(view.bounds.height * 0.2)
             make.centerX.equalToSuperview()
         }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(thumbnailImageView.snp.bottom).offset(25)
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.bottom.equalToSuperview()
+        }
     }
     
     private func bindData(with model: DetailResponse){
@@ -212,6 +226,7 @@ final class DetailVC: BaseVC<DetailVM>{
             likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
         }
         thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail!))
+        contentTextView.text = model.content
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
@@ -232,4 +247,3 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
         return tagCell
     }
 }
-

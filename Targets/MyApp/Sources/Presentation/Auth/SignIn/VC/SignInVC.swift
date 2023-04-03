@@ -17,10 +17,13 @@ final class SignInVC: BaseVC<SignInVM>{
         $0.textColor = UIColor.white
     }
     
-    private let idTextField = AuthTextField(title: "아이디를 입력해주세요.")
+    private let idTextField = AuthTextField(title: "아이디를 입력해주세요.").then{
+        $0.text = "pasin7793"
+    }
     
     private let pwdTextField = AuthTextField(title: "비밀번호를 입력해주세요.").then{
         $0.isSecureTextEntry = true
+        $0.text = "wnsghk78*"
     }
     
     private let signInButton = GlogButton(title: "로그인").then{
