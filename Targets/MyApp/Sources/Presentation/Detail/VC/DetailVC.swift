@@ -60,7 +60,6 @@ final class DetailVC: BaseVC<DetailVM>{
     private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
         $0.layer.cornerRadius = 10
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        //$0.contentMode = .scaleAspectFill
     }
     
     private let contentTextView = UITextView().then{
@@ -72,8 +71,28 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.translatesAutoresizingMaskIntoConstraints = true
     }
     
-    private let commentCategory = UIView()
-    private let commentTextField = UITextField()
+    private let commentCategory = UITextView().then{
+        $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+        $0.layer.cornerRadius = 10
+        $0.text = "📖 댓글"
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.textAlignment = .center
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        $0.isSelectable = false
+        $0.isEditable = false
+        $0.isScrollEnabled = false
+    }
+    
+    private let commentTextField = UITextField().then{
+        $0.attributedPlaceholder = NSAttributedString(string: "댓글 입력", attributes: [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedString.Key.foregroundColor : GlogAsset.Colors.paperGrayColor.color
+        ])
+        $0.layer.cornerRadius = 10
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+    }
+    
     private let commentTableView = UITableView()
     
     override func configureNavigation() {
@@ -104,6 +123,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func setup() {
         setCollectionView()
+        commentTextField.commentPadding()
     }
     
     private func tagLayout() -> UICollectionViewLayout {
@@ -141,7 +161,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView)
+        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView, commentCategory, commentTextField)
     }
     
     override func setLayout() {
@@ -210,7 +230,21 @@ final class DetailVC: BaseVC<DetailVM>{
             make.centerX.equalToSuperview()
             make.top.equalTo(thumbnailImageView.snp.bottom).offset(25)
             make.leading.trailing.equalToSuperview().inset(12)
+        }
+        
+        commentCategory.snp.makeConstraints { make in
+            make.top.equalTo(contentTextView.snp.bottom).offset(10)
+            make.left.equalTo(contentTextView)
+            make.width.equalTo(80)
+            make.height.equalTo(32)
+        }
+        
+        commentTextField.snp.makeConstraints { make in
+            make.top.equalTo(commentCategory.snp.bottom).offset(16)
+            make.left.equalTo(commentCategory)
+            make.width.equalToSuperview().inset(12)
             make.bottom.equalToSuperview()
+            make.height.equalTo(97)
         }
     }
     

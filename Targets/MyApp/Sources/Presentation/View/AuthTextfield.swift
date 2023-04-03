@@ -19,12 +19,6 @@ final class AuthTextField: UITextField{
 }
 
 extension AuthTextField{
-    func addRightPadding() {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: self.frame.height))
-        self.rightView = paddingView
-        self.rightViewMode = ViewMode.always
-    }
-    
     func errorTextfield(){
         self.layer.borderColor = GlogAsset.Colors.paperErrorColor.color.cgColor
         self.layer.borderWidth = 1
