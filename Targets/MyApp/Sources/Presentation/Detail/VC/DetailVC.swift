@@ -236,7 +236,7 @@ final class DetailVC: BaseVC<DetailVM>{
         let document = Document(parsing: contentTextView.text)
         var markdownsaur = Markdownosaur()
         let markdownString = markdownsaur.attributedString(from: document)
-        contentTextView.text = markdownString.string
+        contentTextView.attributedText = markdownString
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
