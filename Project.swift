@@ -20,7 +20,7 @@ let project = Project.executable(
         .Markdownosaur
     ],
     product: .app,
-    deploymentTarget: .iOS(targetVersion: "13.5", devices: [.iphone, .ipad]),
+    deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad]),
     dependencies: [
         .SPM.Then,
         .SPM.SnapKit,

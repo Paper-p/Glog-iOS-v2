@@ -1,4 +1,5 @@
 import Then
+import Markdownosaur
 import Markdown
 import RxFlow
 import RxSwift
@@ -233,8 +234,9 @@ final class DetailVC: BaseVC<DetailVM>{
         contentTextView.text = model.content
         
         let document = Document(parsing: contentTextView.text)
-        print(document.debugDescription())
-        contentTextView.text = document.debugDescription()
+        var markdownsaur = Markdownosaur()
+        let markdownString = markdownsaur.attributedString(from: document)
+        contentTextView.text = markdownString.string
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
