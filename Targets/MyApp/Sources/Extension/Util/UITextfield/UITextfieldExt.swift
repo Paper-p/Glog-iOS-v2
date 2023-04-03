@@ -25,6 +25,6 @@ extension UITextField {
         self.rightViewMode = ViewMode.always
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: self.frame.height))
         self.leftView = leftPaddingView
-        self.rightViewMode = ViewMode.always
+        self.leftViewMode = ViewMode.always
     }
 }

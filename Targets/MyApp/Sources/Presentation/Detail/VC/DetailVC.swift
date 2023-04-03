@@ -83,7 +83,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.isScrollEnabled = false
     }
     
-    private let commentTextField = UITextField().then{
+    private let commentTextField = CommentTextField().then{
         $0.attributedPlaceholder = NSAttributedString(string: "댓글 입력", attributes: [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedString.Key.foregroundColor : GlogAsset.Colors.paperGrayColor.color
         ])
