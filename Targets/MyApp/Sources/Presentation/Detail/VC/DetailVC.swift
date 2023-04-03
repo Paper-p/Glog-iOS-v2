@@ -89,11 +89,12 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.layer.cornerRadius = 10
         $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 60)
+        $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 75)
+        $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         $0.isScrollEnabled = false
     }
     
-    private let commentTextFieldButton = GlogButton(title: "등록",width: 63, height: 29).then{
+    private let registerButton = GlogButton(title: "등록",width: 63, height: 29).then{
         $0.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
     }
     
@@ -128,7 +129,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func setup() {
         setCollectionView()
-        commentTextFieldButton.createGradient()
+        registerButton.createGradient()
         commentTextView.delegate = self
     }
     
@@ -168,7 +169,7 @@ final class DetailVC: BaseVC<DetailVM>{
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
         contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView, commentCategory, commentTextView)
-        commentTextView.addSubview(commentTextFieldButton)
+        commentTextView.addSubview(registerButton)
     }
     
     override func setLayout() {
@@ -254,9 +255,9 @@ final class DetailVC: BaseVC<DetailVM>{
             make.height.equalTo(97)
         }
         
-        commentTextFieldButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(55)
-            make.right.equalToSuperview().offset(-12)
+        registerButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(35)
+            make.left.equalToSuperview().offset(295)
             make.width.equalTo(63)
             make.height.equalTo(28)
         }
@@ -331,7 +332,7 @@ extension DetailVC: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: view.frame.width, height: .greatestFiniteMagnitude)
+        let size = CGSize(width: view.frame.width * 0.8, height: .infinity)
         let estimatedSize = textView.sizeThatFits(size)
         textView.constraints.forEach { (constraint) in
             if constraint.firstAttribute == .height {
