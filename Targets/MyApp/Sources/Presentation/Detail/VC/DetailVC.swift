@@ -90,6 +90,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
         $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 60)
+        $0.isScrollEnabled = false
     }
     
     private let commentTextFieldButton = GlogButton(title: "등록",width: 63, height: 29).then{
@@ -122,6 +123,7 @@ final class DetailVC: BaseVC<DetailVM>{
         bindData(with: model!)
         
         scrollView.addGestureRecognizer(tapGestureRecognizer)
+        textViewDidChange(commentTextView)
     }
     
     override func setup() {
@@ -253,8 +255,8 @@ final class DetailVC: BaseVC<DetailVM>{
         }
         
         commentTextFieldButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(13)
-            make.bottom.equalToSuperview().inset(7)
+            make.top.equalToSuperview().inset(55)
+            make.right.equalToSuperview().offset(-12)
             make.width.equalTo(63)
             make.height.equalTo(28)
         }
@@ -325,6 +327,16 @@ extension DetailVC: UITextViewDelegate {
         if textView.text.isEmpty {
             textView.text = "댓글 입력"
             textView.textColor = GlogAsset.Colors.paperGrayColor.color
+        }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: view.frame.width, height: .greatestFiniteMagnitude)
+        let estimatedSize = textView.sizeThatFits(size)
+        textView.constraints.forEach { (constraint) in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+            }
         }
     }
 }
