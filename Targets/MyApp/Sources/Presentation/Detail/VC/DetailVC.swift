@@ -315,7 +315,7 @@ final class DetailVC: BaseVC<DetailVM>{
             }
         }
         authorLabel.text = model.author.nickname
-        createdAtLabel.text = model.createdAt.description
+        createdAtLabel.text = model.createdAt.toGlogDateString()
         likeButton.setTitle("\(model.likeCount)", for: .normal)
         hitButton.setTitle("\(model.hit)", for: .normal)
         if model.isLiked {

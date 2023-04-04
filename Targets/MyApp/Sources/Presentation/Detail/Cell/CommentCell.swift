@@ -24,7 +24,7 @@ final class CommentCell: UITableViewCell {
     }
     
     private let createdAtLabel = UILabel().then{
-        $0.textColor = .white
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
         $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
     }
     
@@ -76,7 +76,7 @@ final class CommentCell: UITableViewCell {
     func bindComment(model: DetailComment){
         nicknameLabel.text = model.author.nickname
         contentLabel.text = model.content
-        createdAtLabel.text = model.createdAt.description
+        createdAtLabel.text = model.createdAt.toGlogDateString()
         DispatchQueue.main.async {
             if let image = URL(string: model.author.profileImageUrl){
                 self.profileImageView.kf.setImage(with: image)
