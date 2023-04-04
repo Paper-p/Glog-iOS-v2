@@ -98,7 +98,11 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
     }
     
-    private let commentTableView = UITableView()
+    private let commentTableView = UITableView().then{
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 84
+        
+    }
     
     override func configureNavigation() {
         self.navigationItem.titleView = UIImageView(image: GlogAsset.Images.paperMainLogo.image.downSample(size: .init(width: 26, height: 26)).withRenderingMode(.alwaysOriginal))
@@ -200,6 +204,7 @@ final class DetailVC: BaseVC<DetailVM>{
             make.left.equalToSuperview().inset(12)
             make.size.equalTo(36)
         }
+        
         authorLabel.snp.makeConstraints { make in
             make.left.equalTo(profileImageView.snp.right).offset(8)
             make.top.equalTo(profileImageView.snp.top)
