@@ -6,9 +6,10 @@ import Then
 final class CommentCell: UITableViewCell {
     static let identifier = "CommentCell"
     
-    private let profileImageView = UIImageView().then {
-        $0.tintColor = .black
-        $0.image = UIImage(systemName: "person.crop.circle.fill")
+    private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
+        $0.layer.cornerRadius = 18
+        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.contentMode = .scaleAspectFit
     }
     
     private let nicknameLabel = UILabel().then {
@@ -17,12 +18,13 @@ final class CommentCell: UITableViewCell {
     }
     
     private let contentLabel = UILabel().then {
+        $0.textColor = .white
         $0.numberOfLines = 0
         $0.font = .systemFont(ofSize: 14, weight: .medium)
     }
     
     private let createdAtLabel = UILabel().then{
-        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
     }
     
@@ -46,8 +48,8 @@ final class CommentCell: UITableViewCell {
 
     private func setLayout() {
         profileImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12)
-            make.leading.equalToSuperview().inset(38)
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().inset(12)
             make.size.equalTo(36)
         }
         

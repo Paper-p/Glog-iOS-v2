@@ -54,7 +54,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         $0.setImage(UIImage(named: "Paper_HitLogo")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
         $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -3)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -1)
     }
     
     private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
@@ -92,6 +92,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 75)
         $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         $0.isScrollEnabled = false
+        
     }
     
     private let registerButton = GlogButton(title: "등록",width: 63, height: 29).then{
@@ -165,16 +166,37 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     private func setTableView(){
+        commentTableView = UITableView(frame: .zero)
         commentTableView?.rowHeight = UITableView.automaticDimension
         commentTableView?.estimatedRowHeight = 84
         commentTableView?.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identifier)
         commentTableView?.delegate = self
         commentTableView?.dataSource = self
+        commentTableView.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.commentTableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+    }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.commentTableView.removeObserver(self, forKeyPath: "contentSize")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentSize" {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    commentTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 50)
+                    }
+                }
+            }
+        }
+    }
     
     override func addView() {
         view.addSubview(scrollView)
@@ -229,7 +251,7 @@ final class DetailVC: BaseVC<DetailVM>{
         hitButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(12)
             make.top.equalTo(tagCollectionView.snp.bottom)
-            make.width.equalTo(50)
+            make.width.equalTo(55)
             make.height.equalTo(25)
         }
         
@@ -368,6 +390,11 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = commentTableView.dequeueReusableCell(withIdentifier: CommentCell.identifier, for: indexPath) as! CommentCell
         cell.bindComment(model: (model?.comments[indexPath.row])!)
+        cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 84
     }
 }
