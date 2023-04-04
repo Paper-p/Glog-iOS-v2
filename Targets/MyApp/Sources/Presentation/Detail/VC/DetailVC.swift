@@ -98,11 +98,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
     }
     
-    private let commentTableView = UITableView().then{
-        $0.rowHeight = UITableView.automaticDimension
-        $0.estimatedRowHeight = 84
-        
-    }
+    private var commentTableView: UITableView!
     
     override func configureNavigation() {
         self.navigationItem.titleView = UIImageView(image: GlogAsset.Images.paperMainLogo.image.downSample(size: .init(width: 26, height: 26)).withRenderingMode(.alwaysOriginal))
@@ -133,6 +129,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func setup() {
         setCollectionView()
+        setTableView()
         registerButton.createGradient()
         commentTextView.delegate = self
     }
@@ -167,12 +164,22 @@ final class DetailVC: BaseVC<DetailVM>{
         self.tagCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    private func setTableView(){
+        commentTableView?.rowHeight = UITableView.automaticDimension
+        commentTableView?.estimatedRowHeight = 84
+        commentTableView?.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identifier)
+        commentTableView?.delegate = self
+        commentTableView?.dataSource = self
+    }
+    
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
+    
+    
     
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView, commentCategory, commentTextView)
+        contentView.addSubViews(titleLabel,tagCollectionView,profileImageView,authorLabel,createdAtLabel,likeButton,hitButton,thumbnailImageView,contentTextView, commentCategory, commentTextView, commentTableView)
         commentTextView.addSubview(registerButton)
     }
     
@@ -256,7 +263,6 @@ final class DetailVC: BaseVC<DetailVM>{
             make.top.equalTo(commentCategory.snp.bottom).offset(16)
             make.left.equalTo(commentCategory)
             make.width.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview()
             make.height.equalTo(97)
         }
         
@@ -266,7 +272,15 @@ final class DetailVC: BaseVC<DetailVM>{
             make.width.equalTo(63)
             make.height.equalTo(28)
         }
+        
+        commentTableView.snp.makeConstraints { make in
+            make.top.equalTo(commentTextView.snp.bottom).offset(35)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
     }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.commentTextView.resignFirstResponder()
     }
@@ -321,7 +335,6 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
 extension DetailVC: UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-
         if !textView.text!.isEmpty && textView.text! == "댓글 입력" {
             textView.text = ""
             textView.textColor = GlogAsset.Colors.paperGrayColor.color
@@ -329,7 +342,6 @@ extension DetailVC: UITextViewDelegate {
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-    
         if textView.text.isEmpty {
             textView.text = "댓글 입력"
             textView.textColor = GlogAsset.Colors.paperGrayColor.color
@@ -344,5 +356,18 @@ extension DetailVC: UITextViewDelegate {
                 constraint.constant = estimatedSize.height
             }
         }
+    }
+}
+
+extension DetailVC: UITableViewDelegate, UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return (model?.comments.count)!
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = commentTableView.dequeueReusableCell(withIdentifier: CommentCell.identifier, for: indexPath) as! CommentCell
+        cell.bindComment(model: (model?.comments[indexPath.row])!)
+        return cell
     }
 }

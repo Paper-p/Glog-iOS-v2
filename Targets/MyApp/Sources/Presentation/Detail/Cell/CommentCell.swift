@@ -32,7 +32,8 @@ final class CommentCell: UITableViewCell {
         selectionStyle = .none
         separatorInset = .zero
         
-        
+        addView()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
