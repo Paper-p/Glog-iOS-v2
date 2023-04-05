@@ -14,6 +14,7 @@ final class TagCollectionViewCell: BaseCollectionViewCell{
         $0.textColor = GlogAsset.Colors.paperBlankColor.color
         $0.font = UIFont.systemFont(ofSize: 12, weight: .bold)
         $0.textAlignment = .center
+        $0.sizeToFit()
     }
     
     override init(frame: CGRect) {
@@ -36,9 +37,7 @@ final class TagCollectionViewCell: BaseCollectionViewCell{
     
     override func setLayout(){
         tagLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalTo(15)
+            make.edges.equalToSuperview().inset(6)
         }
     }
     

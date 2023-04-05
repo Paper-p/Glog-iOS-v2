@@ -137,22 +137,36 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private func tagLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(10.0),
-            heightDimension: .fractionalHeight(1.0))
-        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
-            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
-        }
-        
+            widthDimension: .estimated(60),
+            heightDimension: .absolute(30)
+       )
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.3),
-            heightDimension: .fractionalWidth(0.08))
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(55)
+        )
+
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            subitem: fullPhotoItem,
-            count: 4)
-        let section = NSCollectionLayoutSection(group: group)
-        let layout = UICollectionViewCompositionalLayout(section: section)
+            subitems: [item]
+        )
+        group.interItemSpacing = .fixed(8)
+
+        let section = NSCollectionLayoutSection(group: group).then{
+            $0.interGroupSpacing = 12
+            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 8)
+        }
+
+        let config = UICollectionViewCompositionalLayoutConfiguration().then{
+            $0.scrollDirection = .vertical
+        }
+        let layout = UICollectionViewCompositionalLayout(section: section).then{
+            $0.configuration = config
+        }
+        
         return layout
+        
     }
     
     private func setCollectionView(){
