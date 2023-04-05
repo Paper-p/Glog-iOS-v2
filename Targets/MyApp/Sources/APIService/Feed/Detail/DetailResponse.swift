@@ -9,7 +9,7 @@ struct DetailResponse: Codable{
     let createdAt: Date
     let hit: Int
     let likeCount: Int
-    let isLiked: Bool
+    var isLiked: Bool
     let tagList: [String]
     let comments: [DetailComment]
     let author: Author

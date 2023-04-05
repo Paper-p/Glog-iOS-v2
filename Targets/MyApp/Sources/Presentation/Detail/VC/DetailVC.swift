@@ -47,6 +47,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.setImage(UIImage(named: "Paper_LikeLogo"), for: .normal)
         $0.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
+        $0.addTarget(self, action: #selector(likeButtonDidTap), for: .touchUpInside)
     }
     
     private let hitButton = UIButton().then{
@@ -347,14 +348,6 @@ final class DetailVC: BaseVC<DetailVM>{
         contentTextView.textColor = .white
     }
     
-    func checkLikeState(){
-        if model?.isLiked {
-            viewModel.fetchLike(id: model!.id)
-        } else {
-            viewModel
-        }
-    }
-    
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
        self.view.endEditing(true)
     }
@@ -362,7 +355,17 @@ final class DetailVC: BaseVC<DetailVM>{
     @objc func likeButtonDidTap(){
         print("like button tap")
         
-        
+        if model!.isLiked == true {
+            viewModel.fetchCancelLike(id: model!.id) { _ in
+                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+                self.model!.isLiked = false
+            }
+        } else {
+            viewModel.fetchLike(id: model!.id) { _ in
+                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+                self.model!.isLiked = true
+            }
+        }
     }
     
     @objc func registerButtonDidTap(){

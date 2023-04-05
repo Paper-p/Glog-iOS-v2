@@ -7,20 +7,27 @@ import Moya
 final class DetailVM: BaseViewModel {
     
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
+    var detailPost: DetailResponse!
     
-    func fetchLike(id: Int){
+    func fetchLike(id: Int, completion : @escaping (Result<Bool, Error>) -> ()){
         let param = DetailRequest.init(id: id)
         provider.request(.like(param: param)) { result in
             print(result)
             switch result{
-            case let .success(response):
-                do{
-                    let decoder = JSONDecoder()
-                    let json = try decoder.decode(DetailResponse.self, from: response.data)
-                } catch{
-                    print(error)
-                }
+            case .success: completion(.success(true))
             case let .failure(err):
+                return print(err.localizedDescription)
+            }
+        }
+    }
+    
+    func fetchCancelLike(id: Int, completion : @escaping (Result<Bool, Error>) -> ()){
+        let param = DetailRequest.init(id: id)
+        provider.request(.cancelLike(param: param)) { result in
+            print(result)
+            switch result{
+            case .success: completion(.success(true))
+            case let.failure(err):
                 return print(err.localizedDescription)
             }
         }
