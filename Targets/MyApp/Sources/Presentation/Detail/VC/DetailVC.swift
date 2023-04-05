@@ -344,6 +344,7 @@ final class DetailVC: BaseVC<DetailVM>{
         var markdownsaur = Markdownosaur()
         let markdownString = markdownsaur.attributedString(from: document)
         contentTextView.attributedText = markdownString
+        contentTextView.textColor = .white
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
