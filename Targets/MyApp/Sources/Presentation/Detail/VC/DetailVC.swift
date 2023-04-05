@@ -347,8 +347,22 @@ final class DetailVC: BaseVC<DetailVM>{
         contentTextView.textColor = .white
     }
     
+    func checkLikeState(){
+        if model?.isLiked {
+            viewModel.fetchLike(id: model!.id)
+        } else {
+            viewModel
+        }
+    }
+    
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
        self.view.endEditing(true)
+    }
+    
+    @objc func likeButtonDidTap(){
+        print("like button tap")
+        
+        
     }
     
     @objc func registerButtonDidTap(){

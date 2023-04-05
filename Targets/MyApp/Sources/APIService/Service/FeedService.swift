@@ -6,6 +6,7 @@ enum FeedService{
     case hot
     case postList(keyword: PostListRequest)
     case detail(param: DetailRequest)
+    case like(param: DetailRequest)
 }
 
 extension FeedService: TargetType{
@@ -21,6 +22,8 @@ extension FeedService: TargetType{
             return "feed/list"
         case let .detail(id):
             return "feed/\(id.id)"
+        case let .like(id):
+            return "like\(id.id)"
         }
     }
     
@@ -32,6 +35,8 @@ extension FeedService: TargetType{
             return .get
         case .detail:
             return .get
+        case .like:
+            return .post
         }
     }
     
@@ -46,6 +51,8 @@ extension FeedService: TargetType{
         case let .postList(keyword):
             return .requestParameters(parameters: ["size": keyword.size, "page": keyword.page, "keyword": keyword.keyword], encoding: URLEncoding.queryString)
         case .detail:
+            return .requestPlain
+        case .like:
             return .requestPlain
         }
     }
