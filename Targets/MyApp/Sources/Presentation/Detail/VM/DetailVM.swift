@@ -38,7 +38,7 @@ final class DetailVM: BaseViewModel {
         }
     }
     
-    func detailPost(completion: @escaping (Result<Bool, Error>) -> (), id: Int) {
+    func detailPost(id: Int) {
         let param = DetailRequest.init(id: id)
         provider.request(.detail(param: param)) { result in
             print(result)
@@ -50,27 +50,24 @@ final class DetailVM: BaseViewModel {
                     }
                     let json = try decoder.decode(DetailResponse.self, from: response.data)
                     self.detailPost = json
-                    completion(.success(true))
                 } catch{
                     print(error)
                 }
             case let .failure(err):
-                completion(.success(false))
                 return print(err.localizedDescription)
             }
         }
     }
     
-    func addComment(id: Int, content: String,completion : @escaping (Result<Bool, Error>) -> ()){
+    func addComment(id: Int, content: String,completion : @escaping () -> ()){
         let param = CommentRequest.init(id: id, content: content)
         CommentProvider.request(.addComment(param: param)) { result in
             switch result{
             case .success:
                 self.success()
-                completion(.success(true))
+                completion()
             case let .failure(err):
                 print(err.localizedDescription)
-                completion(.success(false))
             }
         }
     }

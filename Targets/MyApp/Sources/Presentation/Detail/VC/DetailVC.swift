@@ -96,9 +96,7 @@ final class DetailVC: BaseVC<DetailVM>{
         
     }
     
-    private let registerButton = GlogButton(title: "등록",width: 63, height: 29).then{
-        $0.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
-    }
+    private let registerButton = GlogButton(title: "등록",width: 63, height: 29)
     
     private var commentTableView: UITableView!
     
@@ -134,6 +132,7 @@ final class DetailVC: BaseVC<DetailVM>{
         setTableView()
         registerButton.createGradient()
         commentTextView.delegate = self
+        registerButtonDidTap()
     }
     
     private func tagLayout() -> UICollectionViewLayout {
@@ -195,6 +194,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.commentTableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+        viewModel.detailPost(id: model!.id)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -366,21 +366,34 @@ final class DetailVC: BaseVC<DetailVM>{
                 self.model!.isLiked = true
             }
         }
-        viewModel.detailPost(completion: { [self] _ in
-            self.likeButton.setTitle("\(model!.likeCount)", for: .normal)
-            print(model!.likeCount)
-        }, id: model!.id)
-        
-        
     }
     
-    @objc func registerButtonDidTap(){
+    /*@objc func registerButtonDidTap(){
         print("button Tap")
         if commentTextView.text.isEmpty == false {
             viewModel.addComment(id: model?.id ?? .init(), content: commentTextView.text) { _ in
-                self.commentTableView.reloadData()
+                DispatchQueue.main.async {
+                    self.commentTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                }
             }
         }
+    }*/
+    
+    private func fetchComment(){
+        viewModel.addComment(id: model!.id, content: commentTextView.text){
+            DispatchQueue.main.async {
+                self.viewModel.detailPost(id: self.model!.id)
+                self.commentTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            }
+        }
+    }
+    
+    private func registerButtonDidTap(){
+        registerButton.rx.tap
+            .bind(with: self, onNext: { owner, _ in
+                owner.fetchComment()
+                owner.viewModel.detailPost(id: owner.model!.id)
+            }).disposed(by: disposeBag)
     }
 }
 

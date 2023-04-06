@@ -2,18 +2,18 @@
 import UIKit
 
 struct DetailResponse: Codable{
-    let id: Int
-    let title: String
-    let content: String
-    let thumbnail: String?
-    let createdAt: Date
-    let hit: Int
-    let likeCount: Int
+    var id: Int
+    var title: String
+    var content: String
+    var thumbnail: String?
+    var createdAt: Date
+    var hit: Int
+    var likeCount: Int
     var isLiked: Bool
-    let tagList: [String]
-    let comments: [DetailComment]
-    let author: Author
-    let isMine: Bool
+    var tagList: [String]
+    var comments: [DetailComment]
+    var author: Author
+    var isMine: Bool
 }
 
 struct DetailComment: Codable{
