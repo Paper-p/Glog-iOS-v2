@@ -32,7 +32,7 @@ extension CommentService: TargetType{
     var task: Task{
         switch self {
         case .addComment(let param):
-            return .requestJSONEncodable(param)
+            return .requestParameters(parameters: ["content": param.content], encoding: JSONEncoding.default)
         }
     }
     
