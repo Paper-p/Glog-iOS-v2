@@ -96,7 +96,9 @@ final class DetailVC: BaseVC<DetailVM>{
         
     }
     
-    private let registerButton = GlogButton(title: "등록",width: 63, height: 29)
+    private let registerButton = GlogButton(title: "등록",width: 63, height: 29).then{
+        $0.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
+    }
     
     private var commentTableView: UITableView!
     
@@ -124,7 +126,6 @@ final class DetailVC: BaseVC<DetailVM>{
         bindData(with: model!)
         
         scrollView.addGestureRecognizer(tapGestureRecognizer)
-        textViewDidChange(commentTextView)
     }
     
     override func setup() {
@@ -368,32 +369,15 @@ final class DetailVC: BaseVC<DetailVM>{
         }
     }
     
-    /*@objc func registerButtonDidTap(){
+    @objc func registerButtonDidTap(){
         print("button Tap")
         if commentTextView.text.isEmpty == false {
-            viewModel.addComment(id: model?.id ?? .init(), content: commentTextView.text) { _ in
+            viewModel.addComment(id: model?.id ?? .init(), content: commentTextView.text) {
                 DispatchQueue.main.async {
                     self.commentTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
                 }
             }
         }
-    }*/
-    
-    private func fetchComment(){
-        viewModel.addComment(id: model!.id, content: commentTextView.text){
-            DispatchQueue.main.async {
-                self.viewModel.detailPost(id: self.model!.id)
-                self.commentTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-            }
-        }
-    }
-    
-    private func registerButtonDidTap(){
-        registerButton.rx.tap
-            .bind(with: self, onNext: { owner, _ in
-                owner.fetchComment()
-                owner.viewModel.detailPost(id: owner.model!.id)
-            }).disposed(by: disposeBag)
     }
 }
 
@@ -412,27 +396,23 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
 
 extension DetailVC: UITextViewDelegate {
 
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if !textView.text!.isEmpty && textView.text! == "댓글 입력" {
-            textView.text = ""
-            textView.textColor = GlogAsset.Colors.paperGrayColor.color
-        }
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = "댓글 입력"
-            textView.textColor = GlogAsset.Colors.paperGrayColor.color
+    private func setTextViewPlaceholder() {
+        if commentTextView.text.isEmpty {
+            commentTextView.text = "댓글 입력"
+            commentTextView.textColor = GlogAsset.Colors.paperGrayColor.color
+        } else if commentTextView.text == "댓글 입력"{
+            commentTextView.text = ""
+            commentTextView.textColor = GlogAsset.Colors.paperGrayColor.color
         }
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: view.frame.width * 0.8, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        textView.constraints.forEach { (constraint) in
-            if constraint.firstAttribute == .height {
-                constraint.constant = estimatedSize.height
-            }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        setTextViewPlaceholder()
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "" {
+            setTextViewPlaceholder()
         }
     }
 }
