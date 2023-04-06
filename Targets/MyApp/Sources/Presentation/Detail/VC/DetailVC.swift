@@ -370,12 +370,16 @@ final class DetailVC: BaseVC<DetailVM>{
             self.likeButton.setTitle("\(model!.likeCount)", for: .normal)
             print(model!.likeCount)
         }, id: model!.id)
+        
+        
     }
     
     @objc func registerButtonDidTap(){
         print("button Tap")
-        if commentTextView.text.count != 0 {
-            
+        if commentTextView.text.isEmpty == false {
+            viewModel.addComment(id: model?.id ?? .init(), content: commentTextView.text) { _ in
+                self.commentTableView.reloadData()
+            }
         }
     }
 }

@@ -13,8 +13,8 @@ extension CommentService: TargetType{
     
     var path: String{
         switch self {
-        case let .addComment(param):
-            return "comment/\(param)"
+        case let .addComment(id):
+            return "comment/\(id.id)"
         }
     }
     
@@ -40,7 +40,7 @@ extension CommentService: TargetType{
         let tk = Keychain()
         switch self {
         case .addComment:
-            return ["RefreshToken" : tk.read(key: "refreshToken")!]
+            return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]
         }

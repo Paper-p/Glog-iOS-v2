@@ -7,6 +7,7 @@ import Moya
 final class DetailVM: BaseViewModel {
     
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
+    private let CommentProvider = MoyaProvider<CommentService>(plugins: [GlogLoggingPlugin()])
     var detailPost: DetailResponse!
     
     let dateFormatter = DateFormatter().then{
@@ -58,5 +59,29 @@ final class DetailVM: BaseViewModel {
                 return print(err.localizedDescription)
             }
         }
+    }
+    
+    func addComment(id: Int, content: String,completion : @escaping (Result<Bool, Error>) -> ()){
+        let param = CommentRequest.init(id: id, content: content)
+        CommentProvider.request(.addComment(param: param)) { result in
+            switch result{
+            case .success:
+                self.success()
+                completion(.success(true))
+            case let .failure(err):
+                print(err.localizedDescription)
+                completion(.success(false))
+            }
+        }
+    }
+    
+    func success(){
+        print("good")
+    }
+    func badRequest(){
+        print("bad")
+    }
+    func notFound(){
+        print("not Found")
     }
 }
