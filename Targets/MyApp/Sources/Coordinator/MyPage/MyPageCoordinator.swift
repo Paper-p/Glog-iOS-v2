@@ -2,22 +2,10 @@
 import UIKit
 
 class MyPageCoordinator: BaseCoordinator{
-    
-    override func start() {
+    func startMyPageVC(){
+        let vm = MyPageVM(coordinator: self)
+        let vc = MyPageVC(vm)
         
-    }
-    
-    override func navigate(to step: GlogStep) {
-        switch step{
-       
-        default:
-            return
-        }
-    }
-}
-
-private extension SignInCoordinator{
-    private func mainIsRequired(){
-       
+        navigationController.setViewControllers([vc], animated: true)
     }
 }
