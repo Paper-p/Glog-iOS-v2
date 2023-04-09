@@ -85,7 +85,6 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     private let commentTextView = UITextView().then{
-        $0.text = "댓글 입력"
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
         $0.layer.cornerRadius = 10
         $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
@@ -132,7 +131,7 @@ final class DetailVC: BaseVC<DetailVM>{
         setCollectionView()
         setTableView()
         registerButton.createGradient()
-        commentTextView.delegate = self
+        //commentTextView.delegate = self
         registerButtonDidTap()
     }
     
@@ -394,28 +393,6 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
     }
 }
 
-extension DetailVC: UITextViewDelegate {
-
-    private func setTextViewPlaceholder() {
-        if commentTextView.text.isEmpty {
-            commentTextView.text = "댓글 입력"
-            commentTextView.textColor = GlogAsset.Colors.paperGrayColor.color
-        } else if commentTextView.text == "댓글 입력"{
-            commentTextView.text = ""
-            commentTextView.textColor = GlogAsset.Colors.paperGrayColor.color
-        }
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        setTextViewPlaceholder()
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text == "" {
-            setTextViewPlaceholder()
-        }
-    }
-}
 
 extension DetailVC: UITableViewDelegate, UITableViewDataSource{
     

@@ -9,7 +9,6 @@ final class CommentCell: UITableViewCell {
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
         $0.layer.cornerRadius = 18
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        $0.contentMode = .scaleAspectFit
     }
     
     private let nicknameLabel = UILabel().then {
@@ -26,6 +25,10 @@ final class CommentCell: UITableViewCell {
     private let createdAtLabel = UILabel().then{
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
         $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+    }
+    
+    private let Button = UIButton().then{
+        $0.setImage(UIImage(systemName: "ellipsis")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
