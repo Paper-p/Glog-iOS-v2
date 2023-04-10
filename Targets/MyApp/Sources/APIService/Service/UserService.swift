@@ -15,7 +15,7 @@ extension UserService: TargetType{
     var path: String{
         switch self {
         case let .userProfile(nickname):
-            return "user/\(nickname)"
+            return "user/\(nickname.nickname)"
             
         case .miniProfile:
             return "user/profile"
