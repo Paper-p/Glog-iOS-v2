@@ -3,7 +3,7 @@ import Foundation
 import Moya
 
 enum UserService{
-    case userProfile(param: user)
+    case userProfile(param: UserProfileRequest)
 }
 
 extension UserService: TargetType{
@@ -13,13 +13,15 @@ extension UserService: TargetType{
     
     var path: String{
         switch self {
-        
+        case let .userProfile(nickname):
+            return "user/\(nickname)"
         }
     }
     
     var method: Moya.Method{
         switch self {
-       
+        case .userProfile:
+            return .get
         }
     }
     
@@ -29,13 +31,15 @@ extension UserService: TargetType{
     
     var task: Task{
         switch self {
-        
+        case .userProfile:
+            return .requestPlain
+        }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        
+        case .userProfile:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]
