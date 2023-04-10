@@ -10,11 +10,17 @@ final class MainVM: BaseViewModel {
         coordinator.navigate(to: .detailIsRequired(model: model))
     }
     
+    func pushToMyPageVC(model: UserProfileResponse){
+        coordinator.navigate(to: .myPageIsRequired(model: model))
+    }
+    
     var hotFeed: [HotResponse] = []
     var postList: [PostList] = []
     var detailPost: DetailResponse!
+    var myPageData: UserProfileResponse!
     
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
+    private let userProvider = MoyaProvider<UserService>(plugins: [GlogLoggingPlugin()])
     
     let dateFormatter = DateFormatter().then{
         $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -82,6 +88,25 @@ final class MainVM: BaseViewModel {
                 }
             case let .failure(err):
                 completion(.success(false))
+                return print(err.localizedDescription)
+            }
+        }
+    }
+    
+    func myPageVC(nickname: String){
+        let param = UserProfileRequest(nickname: nickname)
+        userProvider.request(.userProfile(param: param)) { result in
+            print(result)
+            switch result{
+            case let .success(response):
+                do{
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(UserProfileResponse.self, from: response.data)
+                    self.myPageData = json
+                } catch{
+                    print(error)
+                }
+            case let .failure(err):
                 return print(err.localizedDescription)
             }
         }

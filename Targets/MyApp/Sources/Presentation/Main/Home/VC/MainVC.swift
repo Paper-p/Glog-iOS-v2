@@ -10,6 +10,7 @@ import Gifu
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     var model: DetailResponse!
+    var myPageModel: UserProfileResponse!
     private let scrollView = UIScrollView().then{
         $0.backgroundColor = .clear
     }
