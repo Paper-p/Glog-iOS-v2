@@ -40,16 +40,26 @@ final class MyPageVC: BaseVC<MyPageVM>{
         self.postListCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
 
+    
+    init(viewModel: MyPageVM, model: UserProfileResponse) {
+        super.init(viewModel)
+        self.model = model
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        let cell = postListCollectionView.dequeueReusableCell(withReuseIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
+        cell.bind(with: model!.feedList[indexPath.row])
+        cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        return cell
     }
-    
-    
 }

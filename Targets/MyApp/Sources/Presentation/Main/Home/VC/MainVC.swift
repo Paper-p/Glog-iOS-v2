@@ -5,12 +5,11 @@ import RxCocoa
 import SnapKit
 import Alamofire
 import UIKit
+import Kingfisher
 import Gifu
 
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
-    var model: DetailResponse!
-    var myPageModel: UserProfileResponse!
     private let scrollView = UIScrollView().then{
         $0.backgroundColor = .clear
     }
@@ -70,6 +69,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         $0.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
     }
     
+    private let profileImage = UIImageView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -88,6 +89,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         viewModel.fetchPostList(completion: { _ in
             self.postCollectionView.reloadData()
         }, search: searchBar.text!)
+        
+        viewModel.miniProfile()
         
         makeFeedButton.createGradient()
     }
@@ -136,7 +139,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     override func configureNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperProfileLogo.image.downSample(size: .init(width: 36, height: 36)).withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperProfileLogo.image.downSample(size: .init(width: 36, height: 36)).withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(profileButtonDidTap))
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -155,7 +158,8 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
          postCategory,
          searchBar,
          segmentedControl,
-         postCollectionView
+         postCollectionView,
+         profileImage
         ].forEach{
             contentView.addSubview($0)
         }
@@ -319,12 +323,12 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(view.frame.size.height * 1.3)
-            make.bottom.equalToSuperview().inset(3)
+            make.bottom.equalToSuperview()
         }
     }
     
     @objc func profileButtonDidTap(){
-        
+        viewModel.myPageVC(nickname: viewModel.miniProfileData.nickname)
     }
     
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) -> UICollectionViewLayout{

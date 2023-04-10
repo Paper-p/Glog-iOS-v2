@@ -4,6 +4,7 @@ import Moya
 
 enum UserService{
     case userProfile(param: UserProfileRequest)
+    case miniProfile
 }
 
 extension UserService: TargetType{
@@ -15,12 +16,18 @@ extension UserService: TargetType{
         switch self {
         case let .userProfile(nickname):
             return "user/\(nickname)"
+            
+        case .miniProfile:
+            return "user/profile"
         }
     }
     
     var method: Moya.Method{
         switch self {
         case .userProfile:
+            return .get
+            
+        case .miniProfile:
             return .get
         }
     }
@@ -33,13 +40,15 @@ extension UserService: TargetType{
         switch self {
         case .userProfile:
             return .requestPlain
+        case .miniProfile:
+            return .requestPlain
         }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .userProfile:
+        case .userProfile, .miniProfile:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]

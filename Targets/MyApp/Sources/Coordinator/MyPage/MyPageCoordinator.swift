@@ -2,9 +2,9 @@
 import UIKit
 
 class MyPageCoordinator: BaseCoordinator{
-    func startMyPageVC(){
+    func startMyPageVC(model: UserProfileResponse){
         let vm = MyPageVM(coordinator: self)
-        let vc = MyPageVC(vm)
+        let vc = MyPageVC(viewModel: vm, model: model)
         
         navigationController.setViewControllers([vc], animated: true)
     }
