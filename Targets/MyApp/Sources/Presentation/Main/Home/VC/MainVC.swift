@@ -71,7 +71,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         $0.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
     }
     
-    private let profileImage = UIImageView()
+    private let profileImage = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()

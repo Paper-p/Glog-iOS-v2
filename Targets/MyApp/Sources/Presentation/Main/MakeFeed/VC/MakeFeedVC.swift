@@ -11,25 +11,25 @@ import Gifu
 
 final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
-    private let scrollView = UIScrollView().then{
-        $0.showsVerticalScrollIndicator = false
-    }
-    
-    private let contentView = UIView()
-    
     private let makeButton = UIButton().then{
         $0.setImage(UIImage(systemName: "pencil.line")?.tintColor(GlogAsset.Colors.paperStartColor.color), for: .normal)
     }
     
-    private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
+    private let titleTextfield = UITextField().then{
+        $0.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요", attributes: [
+            .foregroundColor : GlogAsset.Colors.paperGrayColor.color,
+            .font : UIFont.systemFont(ofSize: 26, weight: .bold)])
+        $0.textColor = .white
+        $0.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     override func configureNavigation() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: makeButton.imageView?.image, style: .plain, target: self, action: nil)
+        self.navigationItem.titleView = UIImageView(image: UIImage(named: "Paper_MainLogo")?.withRenderingMode(.alwaysOriginal))
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -38,22 +38,15 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     }
     
     override func addView() {
-        view.addSubview(scrollView)
-        scrollView.addSubViews(contentView)
-        contentView.addSubViews()
+        view.addSubViews(titleTextfield)
     }
     
     override func setLayout() {
-        scrollView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        titleTextfield.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(110)
+            make.width.equalToSuperview().inset(12)
+            make.height.equalTo(55)
+            make.centerX.equalToSuperview()
         }
-        
-        contentView.snp.makeConstraints {
-            $0.centerX.width.top.bottom.equalToSuperview()
-        }
-    }
-    
-    @objc func tapMethod(_ sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
     }
 }
