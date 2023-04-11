@@ -29,6 +29,8 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.textAlignment = .center
     }
     
+    private let editButton = GlogButton(title: "프로필 수정", width: 366, height: 40)
+    
     private let postCategory = UITextView().then{
         $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
         $0.layer.cornerRadius = 10
@@ -81,6 +83,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     
     override func setup() {
         setPostCollectionView()
+        editButton.createGradient()
     }
     
     private func postLayout() -> UICollectionViewLayout{
@@ -129,7 +132,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(profileImageView, nicknameLabel, postCategory, postListCollectionView)
+        contentView.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, postListCollectionView)
     }
     
     override func setLayout() {
@@ -143,7 +146,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
         
         profileImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(80)
+            make.top.equalToSuperview().offset(50)
             make.size.equalTo(100)
         }
         
@@ -154,10 +157,16 @@ final class MyPageVC: BaseVC<MyPageVM>{
             make.height.equalTo(17)
         }
         
+        editButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(40)
+            make.width.equalToSuperview().inset(12)
+        }
+        
         postCategory.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(30)
+            make.top.equalTo(editButton.snp.bottom).offset(30)
             make.left.equalToSuperview().inset(12)
-            make.width.equalTo(113)
+            make.width.equalTo(80)
             make.height.equalTo(32)
         }
         
