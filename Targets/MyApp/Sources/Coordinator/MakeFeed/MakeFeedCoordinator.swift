@@ -7,6 +7,6 @@ class MakeFeedCoordinator: BaseCoordinator{
         let vm = MakeFeedVM(coordinator: self)
         let vc = MakeFeedVC(vm)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
 }
