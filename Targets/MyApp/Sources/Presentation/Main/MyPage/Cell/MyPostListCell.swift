@@ -6,7 +6,7 @@ import RxCocoa
 import Then
 import Kingfisher
 
-final class MyPostListCell: UITableViewCell{
+final class MyPostListCell: BaseCollectionViewCell{
     
     static let identifier = "MyPostListCell"
     
@@ -50,32 +50,79 @@ final class MyPostListCell: UITableViewCell{
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        selectionStyle = .none
-        separatorInset = .zero
-        
-        addView()
-        setLayout()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.backgroundColor = GlogAsset.Colors.paperStartColor.color
     }
     
-    required init?(coder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func addView() {
-        contentView.addSubViews(thumbnailImageView)
+    override func layoutSubviews() {
+        self.layer.cornerRadius = 10
+        self.layer.masksToBounds = true
+    }
+    
+    override func addView() {
+        contentView.addSubViews(thumbnailImageView, itemView)
     }
 
-    private func setLayout() {
+    override func setLayout() {
         thumbnailImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
     }
     
-    func bindPost(model: FeedList){
-        thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail!))
+    private func setTableType(){
+        let blurEffect = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.frame = CGRect(x: 0, y: 0, width: 369, height: 145)
+        visualEffectView.layer.cornerRadius = 10
+        visualEffectView.clipsToBounds = true
+        itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
+        
+        itemView.snp.makeConstraints { make in
+            make.bottom.right.left.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.left.top.equalToSuperview().inset(10)
+            make.width.equalToSuperview().inset(10)
+            make.height.equalTo(24)
+        }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.left.equalTo(titleLabel)
+            make.top.equalTo(titleLabel.snp.bottom)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.left.equalTo(contentTextView)
+            make.bottom.equalToSuperview().inset(9)
+            make.width.equalTo(50)
+            make.height.equalTo(20)
+        }
+        
+        hitButton.snp.makeConstraints { make in
+            make.centerY.equalTo(likeButton)
+            make.left.equalTo(likeButton.snp.right)
+            make.size.equalTo(likeButton)
+        }
+    }
+    
+    func bindPost(with model: FeedList){
+        self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
+        self.titleLabel.text = model.title
+        self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
+        self.likeButton.setTitle("\(model.likeCount)", for: .normal)
+        self.hitButton.setTitle("\(model.hit)", for: .normal)
+        if model.isLiked {
+            self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+        } else {
+            self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        setTableType()
     }
 }

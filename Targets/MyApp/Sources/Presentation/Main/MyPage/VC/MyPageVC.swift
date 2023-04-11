@@ -42,7 +42,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.isEditable = false
     }
     
-    private var myPostTableView: UITableView!
+    private var myPostCollectionView: UICollectionView!
     
     private let noPostLabel = UILabel().then{
         $0.text = "👊\n아직 게시물이 없어요"
@@ -54,13 +54,15 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
     
     private func setPostTableView(){
-        myPostTableView = UITableView(frame: .zero)
-        myPostTableView?.rowHeight = UITableView.automaticDimension
-        myPostTableView?.estimatedRowHeight = 84
-        myPostTableView?.register(MyPostListCell.self, forCellReuseIdentifier: MyPostListCell.identifier)
-        myPostTableView?.delegate = self
-        myPostTableView?.dataSource = self
-        myPostTableView.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        myPostCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout())
+        myPostCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        myPostCollectionView?.delegate = self
+        myPostCollectionView?.dataSource = self
+        myPostCollectionView?.showsHorizontalScrollIndicator = false
+        myPostCollectionView?.register(MyPostListCell.self, forCellWithReuseIdentifier: MyPostListCell.identifier)
+        myPostCollectionView.isScrollEnabled = false
+        myPostCollectionView.backgroundColor = .clear
+        self.myPostCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
 
     
@@ -94,22 +96,42 @@ final class MyPageVC: BaseVC<MyPageVM>{
         editButton.createGradient()
     }
     
+    private func postListLayout() -> UICollectionViewLayout{
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(2.9/3))
+        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
+            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        }
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(3/3),
+            heightDimension: .fractionalWidth(0.3))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitem: fullPhotoItem,
+            count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
+    }
+    
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.myPostTableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+        self.myPostCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.myPostTableView.removeObserver(self, forKeyPath: "contentSize")
+        self.myPostCollectionView.removeObserver(self, forKeyPath: "contentSize")
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if object is UITableView {
+            if object is UICollectionView {
                 if let newValue = change?[.newKey] as? CGSize {
-                    myPostTableView.snp.updateConstraints {
+                    myPostCollectionView.snp.updateConstraints {
                         $0.height.equalTo(newValue.height + 50)
                     }
                 }
@@ -120,7 +142,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, myPostTableView)
+        contentView.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, myPostCollectionView)
     }
     
     override func setLayout() {
@@ -158,9 +180,9 @@ final class MyPageVC: BaseVC<MyPageVM>{
             make.height.equalTo(32)
         }
         
-        myPostTableView.snp.makeConstraints { make in
+        myPostCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(35)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(12)
             make.bottom.equalToSuperview()
             make.height.equalTo(1)
         }
@@ -190,15 +212,14 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
 }
 
-extension MyPageVC: UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return (model?.feedList.count)!
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = myPostTableView.dequeueReusableCell(withIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
-        cell.bindPost(model: (model?.feedList[indexPath.row])!)
-        cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = myPostCollectionView.dequeueReusableCell(withReuseIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
+        cell.bindPost(with: (model?.feedList[indexPath.row])!)
         return cell
     }
 }

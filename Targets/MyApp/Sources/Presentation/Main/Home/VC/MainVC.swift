@@ -331,7 +331,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         viewModel.myPageVC(nickname: viewModel.miniProfileData.nickname, completion: {
             self.viewModel.pushToMyPageVC(model: self.viewModel.myPageData)
         })
-        
     }
     
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) -> UICollectionViewLayout{
