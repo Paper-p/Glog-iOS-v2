@@ -42,18 +42,25 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.isEditable = false
     }
     
-    private var postListCollectionView: UICollectionView!
+    private var myPostTableView: UITableView!
     
-    private func setPostCollectionView(){
-        postListCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postLayout())
-        postListCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
-        postListCollectionView?.delegate = self
-        postListCollectionView?.dataSource = self
-        postListCollectionView?.showsHorizontalScrollIndicator = false
-        postListCollectionView?.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        postListCollectionView.isScrollEnabled = false
-        postListCollectionView.backgroundColor = .clear
-        self.postListCollectionView?.translatesAutoresizingMaskIntoConstraints = false
+    private let noPostLabel = UILabel().then{
+        $0.text = "👊\n아직 게시물이 없어요"
+        $0.numberOfLines = 2
+        $0.textColor = .white
+        $0.sizeToFit()
+        $0.textAlignment = .center
+        $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+    }
+    
+    private func setPostTableView(){
+        myPostTableView = UITableView(frame: .zero)
+        myPostTableView?.rowHeight = UITableView.automaticDimension
+        myPostTableView?.estimatedRowHeight = 84
+        myPostTableView?.register(MyPostListCell.self, forCellReuseIdentifier: MyPostListCell.identifier)
+        myPostTableView?.delegate = self
+        myPostTableView?.dataSource = self
+        myPostTableView.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
 
     
@@ -67,7 +74,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
     
     override func configureNavigation() {
-        self.navigationItem.titleView = UIImageView(image: GlogAsset.Images.paperMainLogo.image.downSample(size: .init(width: 26, height: 26)).withRenderingMode(.alwaysOriginal))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image.downSample(size: .init(width: 36, height: 36)).withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -79,49 +86,30 @@ final class MyPageVC: BaseVC<MyPageVM>{
         super.viewDidLoad()
         bindData(with: model!)
         scrollView.addGestureRecognizer(tapGestureRecognizer)
+        checkFeedList()
     }
     
     override func setup() {
-        setPostCollectionView()
+        setPostTableView()
         editButton.createGradient()
-    }
-    
-    private func postLayout() -> UICollectionViewLayout{
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(2.9/3))
-        let fullPhotoItem = NSCollectionLayoutItem(layoutSize: itemSize).then{
-            $0.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
-        }
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(3/3),
-            heightDimension: .fractionalWidth(0.3))
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitem: fullPhotoItem,
-            count: 1)
-        let section = NSCollectionLayoutSection(group: group)
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        return layout
     }
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapMethod(_:)))
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.postListCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+        self.myPostTableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.postListCollectionView.removeObserver(self, forKeyPath: "contentSize")
+        self.myPostTableView.removeObserver(self, forKeyPath: "contentSize")
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if object is UICollectionView {
+            if object is UITableView {
                 if let newValue = change?[.newKey] as? CGSize {
-                    postListCollectionView.snp.updateConstraints {
+                    myPostTableView.snp.updateConstraints {
                         $0.height.equalTo(newValue.height + 50)
                     }
                 }
@@ -132,7 +120,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     override func addView() {
         view.addSubview(scrollView)
         scrollView.addSubViews(contentView)
-        contentView.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, postListCollectionView)
+        contentView.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, myPostTableView)
     }
     
     override func setLayout() {
@@ -170,11 +158,21 @@ final class MyPageVC: BaseVC<MyPageVM>{
             make.height.equalTo(32)
         }
         
-        postListCollectionView.snp.makeConstraints { make in
+        myPostTableView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(35)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalTo(1)
+        }
+    }
+    
+    private func checkFeedList(){
+        if model?.feedList.isEmpty == true{
+            contentView.addSubview(noPostLabel)
+            noPostLabel.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(postCategory.snp.bottom).offset(40)
+            }
         }
     }
     
@@ -192,15 +190,15 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
 }
 
-extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension MyPageVC: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (model?.feedList.count)!
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = postListCollectionView.dequeueReusableCell(withReuseIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
-        cell.bind(with: (model?.feedList[indexPath.row])!)
-        cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = myPostTableView.dequeueReusableCell(withIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
+        cell.bindPost(model: (model?.feedList[indexPath.row])!)
+        //cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         return cell
     }
 }

@@ -6,7 +6,7 @@ import RxCocoa
 import Then
 import Kingfisher
 
-final class MyPostListCell: BaseCollectionViewCell{
+final class MyPostListCell: UITableViewCell{
     
     static let identifier = "MyPostListCell"
     
@@ -50,112 +50,32 @@ final class MyPostListCell: BaseCollectionViewCell{
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -10)
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    private func setPostType(){
-        let blurEffect = UIBlurEffect(style: .dark)
-        let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.frame = CGRect(x: 0, y: 0, width: 369, height: 145)
-        visualEffectView.layer.cornerRadius = 10
-        visualEffectView.clipsToBounds = true
-        itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        itemView.snp.makeConstraints { make in
-            make.bottom.right.left.equalToSuperview()
-            make.height.equalTo(145)
-        }
+        selectionStyle = .none
+        separatorInset = .zero
         
-        titleLabel.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().inset(10)
-            make.width.equalToSuperview().inset(10)
-            make.height.equalTo(24)
-        }
-        
-        contentTextView.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.width.equalTo(titleLabel)
-            make.height.equalTo(67)
-        }
-        
-        likeButton.snp.makeConstraints { make in
-            make.left.equalTo(contentTextView)
-            make.bottom.equalToSuperview().inset(9)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
-        }
-        
-        hitButton.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right)
-            make.size.equalTo(likeButton)
-        }
-    }
-
-    private func setTableType(){
-        contentView.addSubViews(titleLabel,contentTextView,likeButton,hitButton)
-        titleLabel.font = UIFont.systemFont(ofSize: 18)
-        titleLabel.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().inset(11)
-            make.width.equalToSuperview().inset(11)
-            make.height.equalTo(21)
-        }
-        contentTextView.font = UIFont.systemFont(ofSize: 14)
-        contentTextView.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(3)
-            make.width.equalTo(titleLabel)
-            make.height.equalTo(22)
-        }
-        
-        likeButton.snp.makeConstraints { make in
-            make.left.equalTo(contentTextView)
-            make.bottom.equalToSuperview().inset(14)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
-        }
-        
-        hitButton.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right)
-            make.size.equalTo(likeButton)
-        }
-    }
-    
-    override func layoutSubviews() {
-        self.layer.cornerRadius = 10
-        self.layer.masksToBounds = true
+        addView()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func addView(){
-        contentView.addSubViews(thumbnailImageView,itemView)
+    private func addView() {
+        contentView.addSubViews(thumbnailImageView)
     }
-    
-    override func setLayout(){
+
+    private func setLayout() {
         thumbnailImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
     }
     
-    func bind(with model: PostList){
-        DispatchQueue.main.async { [self] in
-            self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
-            self.titleLabel.text = model.title
-            self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
-            self.likeButton.setTitle("\(model.likeCount)", for: .normal)
-            self.hitButton.setTitle("\(model.hit)", for: .normal)
-            if model.isLiked {
-                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-            } else {
-                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-            }
-            setTableType()
-        }
+    func bindPost(model: PostList){
+        
     }
 }
