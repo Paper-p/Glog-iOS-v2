@@ -16,6 +16,8 @@ class MainCoordinator: BaseCoordinator{
             detailIsRequired(model: model)
         case .myPageIsRequired(let model):
             myPageIsRequired(model: model)
+        case .makeFeedIsRequired:
+            return makeFeedIsRequired()
         default:
             return
         }
@@ -35,5 +37,12 @@ private extension MainCoordinator{
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startMyPageVC(model: model)
+    }
+    
+    private func makeFeedIsRequired(){
+        let vc = MakeFeedCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
     }
 }

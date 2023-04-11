@@ -8,6 +8,7 @@ enum FeedService{
     case detail(param: DetailRequest)
     case like(param: DetailRequest)
     case cancelLike(param: DetailRequest)
+    case makeFeed(param: MakeFeedRequest)
 }
 
 extension FeedService: TargetType{
@@ -27,6 +28,8 @@ extension FeedService: TargetType{
             return "feed/like/\(id.id)"
         case let .cancelLike(id):
             return "feed/like/\(id.id)"
+        case .makeFeed:
+            return "feed"
         }
     }
     
@@ -42,6 +45,8 @@ extension FeedService: TargetType{
             return .post
         case .cancelLike:
             return .delete
+        case .makeFeed:
+            return .post
         }
     }
     
@@ -61,13 +66,18 @@ extension FeedService: TargetType{
             return .requestPlain
         case .cancelLike:
             return .requestPlain
+        case let .makeFeed(param: param):
+            return .requestParameters(parameters: ["title":param.title,
+                                                   "content": param.content,
+                                                   "thumbnail": param.thumbnail,
+                                                   "tags": param.tags], encoding: JSONEncoding.default)
         }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .hot, .postList, .detail, .like, .cancelLike:
+        case .hot, .postList, .detail, .like, .cancelLike, .makeFeed:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default: 
             return["Content-Type" : "application/json"]

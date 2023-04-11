@@ -14,6 +14,10 @@ final class MainVM: BaseViewModel {
         coordinator.navigate(to: .myPageIsRequired(model: model))
     }
     
+    func pushToMakeFeedVC(){
+        coordinator.navigate(to: .makeFeedIsRequired)
+    }
+    
     var hotFeed: [HotResponse] = []
     var postList: [PostList] = []
     var detailPost: DetailResponse!

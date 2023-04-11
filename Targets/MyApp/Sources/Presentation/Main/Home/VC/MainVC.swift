@@ -27,7 +27,9 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     private let gifImage = GIFImageView()
     
-    private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기",width: 366, height: 60)
+    private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기",width: 366, height: 60).then{
+        $0.addTarget(self, action: #selector(makeFeedButtonDidTap), for: .touchUpInside)
+    }
     
     private let hotCategory = UITextView().then{
         $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
@@ -331,6 +333,10 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         viewModel.myPageVC(nickname: viewModel.miniProfileData.nickname, completion: {
             self.viewModel.pushToMyPageVC(model: self.viewModel.myPageData)
         })
+    }
+    
+    @objc func makeFeedButtonDidTap(){
+        viewModel.pushToMakeFeedVC()
     }
     
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) -> UICollectionViewLayout{

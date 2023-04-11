@@ -17,4 +17,5 @@ enum GlogStep: Step {
     case mainIsRequired
     case detailIsRequired(model: DetailResponse)
     case myPageIsRequired(model: UserProfileResponse)
+    case makeFeedIsRequired
 }
