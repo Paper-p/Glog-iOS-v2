@@ -76,7 +76,6 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
     
     override func configureNavigation() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image.downSample(size: .init(width: 36, height: 36)).withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -208,7 +207,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
-       self.view.endEditing(true)
+        self.view.endEditing(true)
     }
 }
 
@@ -221,5 +220,12 @@ extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let cell = myPostCollectionView.dequeueReusableCell(withReuseIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
         cell.bindPost(with: (model?.feedList[indexPath.row])!)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("asdfkljasdhflak")
+        viewModel.detailPost(completion: { _ in
+            self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
+        }, id: (model?.feedList[indexPath.item].id)!)
     }
 }

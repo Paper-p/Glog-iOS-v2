@@ -6,6 +6,6 @@ class MyPageCoordinator: BaseCoordinator{
         let vm = MyPageVM(coordinator: self)
         let vc = MyPageVC(viewModel: vm, model: model)
         
-        navigationController.setViewControllers([vc], animated: true)
+        navigationController.pushViewController(vc, animated: true)
     }
 }
