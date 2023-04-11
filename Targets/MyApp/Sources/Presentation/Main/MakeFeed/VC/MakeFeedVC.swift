@@ -21,6 +21,11 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
             .font : UIFont.systemFont(ofSize: 26, weight: .bold)])
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        $0.borderStyle = .none
+    }
+    
+    private let underLineView = UIView().then{
+        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
     }
     
     override func viewDidLoad() {
@@ -38,7 +43,7 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     }
     
     override func addView() {
-        view.addSubViews(titleTextfield)
+        view.addSubViews(titleTextfield,underLineView)
     }
     
     override func setLayout() {
@@ -47,6 +52,12 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
             make.width.equalToSuperview().inset(12)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
+        }
+        underLineView.snp.makeConstraints { make in
+            make.top.equalTo(titleTextfield.snp.bottom)
+            make.height.equalTo(1)
+            make.width.equalToSuperview().inset(12)
+            make.centerX.equalTo(titleTextfield)
         }
     }
 }
