@@ -35,6 +35,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         $0.textAlignment = .left
+        $0.sizeToFit()
     }
     private let createdAtLabel = UILabel().then{
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
@@ -251,7 +252,6 @@ final class DetailVC: BaseVC<DetailVM>{
         authorLabel.snp.makeConstraints { make in
             make.left.equalTo(profileImageView.snp.right).offset(8)
             make.top.equalTo(profileImageView.snp.top)
-            make.width.equalTo(80)
             make.height.equalTo(19)
         }
         
