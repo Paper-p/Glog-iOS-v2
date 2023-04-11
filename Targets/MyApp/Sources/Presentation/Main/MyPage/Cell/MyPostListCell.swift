@@ -75,7 +75,7 @@ final class MyPostListCell: UITableViewCell{
         
     }
     
-    func bindPost(model: PostList){
-        
+    func bindPost(model: FeedList){
+        thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail!))
     }
 }

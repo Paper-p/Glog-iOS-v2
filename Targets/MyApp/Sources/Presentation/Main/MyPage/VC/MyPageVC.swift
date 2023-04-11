@@ -198,7 +198,7 @@ extension MyPageVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myPostTableView.dequeueReusableCell(withIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
         cell.bindPost(model: (model?.feedList[indexPath.row])!)
-        //cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         return cell
     }
 }

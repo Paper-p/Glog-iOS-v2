@@ -101,7 +101,9 @@ final class MainVM: BaseViewModel {
             switch result{
             case let .success(response):
                 do{
-                    let decoder = JSONDecoder()
+                    let decoder = JSONDecoder().then{
+                        $0.dateDecodingStrategy = .formatted(self.dateFormatter)
+                    }
                     let json = try decoder.decode(UserProfileResponse.self, from: response.data)
                     self.myPageData = json
                     completion()
