@@ -94,7 +94,7 @@ final class MainVM: BaseViewModel {
         }
     }
     
-    func myPageVC(nickname: String){
+    func myPageVC(nickname: String,completion: @escaping () -> ()){
         let param = UserProfileRequest(nickname: nickname)
         userProvider.request(.userProfile(param: param)) { result in
             print(result)
@@ -104,6 +104,7 @@ final class MainVM: BaseViewModel {
                     let decoder = JSONDecoder()
                     let json = try decoder.decode(UserProfileResponse.self, from: response.data)
                     self.myPageData = json
+                    completion()
                 } catch{
                     print(error)
                 }

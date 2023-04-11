@@ -8,7 +8,7 @@ import UIKit
 import Gifu
 
 final class MyPageVC: BaseVC<MyPageVM>{
-    var model: UserProfileResponse!
+    var model: UserProfileResponse?
     
     private let scrollView = UIScrollView().then{
         $0.showsVerticalScrollIndicator = false
@@ -17,16 +17,16 @@ final class MyPageVC: BaseVC<MyPageVM>{
     private let contentView = UIView()
     
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
-        $0.layer.cornerRadius = 18
+        $0.layer.cornerRadius = 50
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        $0.contentMode = .scaleAspectFit
-        $0.layer.cornerRadius = 150
-        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.contentMode = .scaleToFill
+        $0.layer.masksToBounds = true
     }
     
     private let nicknameLabel = UILabel().then{
         $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         $0.textColor = .white
+        $0.textAlignment = .center
     }
     
     private let postCategory = UITextView().then{
@@ -75,7 +75,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        bindData(with: model!)
         scrollView.addGestureRecognizer(tapGestureRecognizer)
     }
     
@@ -169,6 +169,15 @@ final class MyPageVC: BaseVC<MyPageVM>{
         }
     }
     
+    private func bindData(with model: UserProfileResponse){
+        nicknameLabel.text = model.nickname
+        DispatchQueue.main.async {
+            if let image = URL(string: model.profileImageUrl){
+                self.profileImageView.kf.setImage(with: image)
+            }
+        }
+    }
+    
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
        self.view.endEditing(true)
     }
@@ -176,12 +185,12 @@ final class MyPageVC: BaseVC<MyPageVM>{
 
 extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return model.feedList.count
+        return (model?.feedList.count)!
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = postListCollectionView.dequeueReusableCell(withReuseIdentifier: MyPostListCell.identifier, for: indexPath) as! MyPostListCell
-        cell.bind(with: model!.feedList[indexPath.row])
+        cell.bind(with: (model?.feedList[indexPath.row])!)
         cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         return cell
     }
