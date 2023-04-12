@@ -56,7 +56,7 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
         tagCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         tagCollectionView?.delegate = self
         tagCollectionView?.dataSource = self
-        tagCollectionView?.showsHorizontalScrollIndicator = false
+        tagCollectionView.isScrollEnabled = false
         tagCollectionView?.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
         self.tagCollectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -149,6 +149,12 @@ extension MakeFeedVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let cell = tagCollectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.identifier, for: indexPath) as! TagCollectionViewCell
         cell.tagLabel.text = tagData[indexPath.row]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        tagData.remove(at: indexPath.item)
+        print(tagData.description)
+        tagCollectionView.reloadData()
     }
 }
 
