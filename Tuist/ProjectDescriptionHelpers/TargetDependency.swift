@@ -15,6 +15,7 @@ public extension TargetDependency.SPM{
     static let Gifu = TargetDependency.package(product: "Gifu")
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
     static let Markdownosaur = TargetDependency.package(product: "Markdownosaur")
+    static let MarkupEditor = TargetDependency.package(product: "MarkupEditor")
 }
 
 public extension Package {
@@ -57,5 +58,9 @@ public extension Package {
     static let Markdownosaur = Package.remote(
         url: "https://github.com/christianselig/Markdownosaur/",
         requirement: .branch("main"))
+    
+    static let MarkupEditor = Package.remote(
+        url: "https://github.com/stevengharris/MarkupEditor",
+        requirement: .upToNextMajor(from: "0.5.1"))
 }
 
