@@ -8,9 +8,14 @@ import Alamofire
 import UIKit
 import Kingfisher
 import Gifu
+import MarkupEditor
 
 final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
+    private let markUpEditorView = MarkupEditorUIView(html: "").then{
+        $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        $0.layer.backgroundColor = UIColor.red.cgColor
+    }
     
     var tagData: [String] = []
     
@@ -49,6 +54,15 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     override func setup() {
         setCollectionView()
         self.tagTextfield.delegate = self
+        
+        MarkupEditor.style = .labeled
+        MarkupEditor.allowLocalImages = true
+        MarkupEditor.toolbarLocation = .keyboard
+        let myToolbarContents = ToolbarContents(
+            correction: true,
+            formatContents: FormatContents(code: true, strike: true, subSuper: true)
+        )
+        ToolbarContents.custom = myToolbarContents
     }
     
     private func setCollectionView(){
@@ -106,7 +120,7 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     }
     
     override func addView() {
-        view.addSubViews(titleTextfield,underLineView,tagTextfield,tagCollectionView)
+        view.addSubViews(titleTextfield,underLineView,tagTextfield,tagCollectionView, markUpEditorView)
     }
     
     override func setLayout() {
@@ -136,6 +150,13 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
             make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(56)
         }
+        
+        markUpEditorView.snp.makeConstraints { make in
+            make.top.equalTo(tagCollectionView.snp.bottom).offset(5)
+            make.width.equalToSuperview().inset(12)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(400)
+        }
     }
 }
 
@@ -161,6 +182,7 @@ extension MakeFeedVC: UICollectionViewDelegate, UICollectionViewDataSource{
 extension MakeFeedVC: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if tagTextfield.text?.isEmpty == false{
+            tagTextfield.becomeFirstResponder()
             tagData.append(tagTextfield.text!)
             print(tagData.description)
             tagTextfield.text = ""
