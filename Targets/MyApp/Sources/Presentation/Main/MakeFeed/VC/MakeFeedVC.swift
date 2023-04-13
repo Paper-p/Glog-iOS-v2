@@ -23,18 +23,17 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
     private let codeView = UITextView().then{
         $0.textColor = .white
-        $0.backgroundColor = .red
+        $0.backgroundColor = GlogAsset.Colors.paperStartColor.color
         $0.translatesAutoresizingMaskIntoConstraints = true
         $0.sizeToFit()
         $0.isScrollEnabled = false
-        $0.font = UIFont.systemFont(ofSize: 14)
     }
     private let preView = UITextView().then{
         $0.isEditable = false
-        $0.backgroundColor = .yellow
-        $0.textColor = .black
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.translatesAutoresizingMaskIntoConstraints = true
         $0.sizeToFit()
+        $0.isScrollEnabled = false
     }
     
     var tagData: [String] = []
@@ -175,13 +174,13 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
             make.top.equalTo(segmentedControl.snp.bottom)
             make.left.equalTo(segmentedControl)
             make.width.equalToSuperview().inset(12)
-            make.height.equalTo(200)
+            make.height.equalTo(97)
         }
         
         preView.snp.makeConstraints { make in
             make.top.equalTo(codeView)
             make.left.equalTo(codeView)
-            make.size.equalTo(codeView)
+            make.width.equalTo(codeView)
             make.centerX.equalTo(codeView)
         }
     }
@@ -238,7 +237,7 @@ extension MakeFeedVC: UITextFieldDelegate{
 
 extension MakeFeedVC: UITextViewDelegate{
     func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: view.frame.width, height: .minimum(0, 200))
+        let size = CGSize(width: view.frame.width * 0.7, height: .greatestFiniteMagnitude)
         let estimatedSize = textView.sizeThatFits(size)
         textView.constraints.forEach { (constraint) in
             if constraint.firstAttribute == .height {
@@ -252,5 +251,6 @@ extension MakeFeedVC: UITextViewDelegate{
         var markdownsaur = Markdownosaur()
         let markdownString = markdownsaur.attributedString(from: document)
         preView.attributedText = markdownString
+        preView.textColor = .white
     }
 }
