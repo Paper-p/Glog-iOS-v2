@@ -23,7 +23,8 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
     private let codeView = UITextView().then{
         $0.textColor = .white
-        $0.backgroundColor = GlogAsset.Colors.paperStartColor.color
+        $0.font = UIFont.systemFont(ofSize: 12)
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.translatesAutoresizingMaskIntoConstraints = true
         $0.sizeToFit()
         $0.isScrollEnabled = false
