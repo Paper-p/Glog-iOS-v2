@@ -16,6 +16,7 @@ public extension TargetDependency.SPM{
     static let Kingfisher = TargetDependency.package(product: "Kingfisher")
     static let Markdownosaur = TargetDependency.package(product: "Markdownosaur")
     static let MarkupEditor = TargetDependency.package(product: "MarkupEditor")
+    static let RichTextKit = TargetDependency.package(product: "RichTextKit")
 }
 
 public extension Package {
@@ -62,5 +63,9 @@ public extension Package {
     static let MarkupEditor = Package.remote(
         url: "https://github.com/stevengharris/MarkupEditor",
         requirement: .upToNextMajor(from: "0.5.1"))
+    
+    static let RichTextKit = Package.remote(
+        url: "https://github.com/danielsaidi/RichTextKit",
+        requirement: .upToNextMajor(from: "0.5.2"))
 }
 

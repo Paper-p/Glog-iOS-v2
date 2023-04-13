@@ -73,6 +73,15 @@
       }
     },
     {
+      "identity" : "richtextkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielsaidi/RichTextKit",
+      "state" : {
+        "revision" : "80e91deb13c926e8074932b67799fb82b4a6e901",
+        "version" : "0.5.2"
+      }
+    },
+    {
       "identity" : "rxflow",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RxSwiftCommunity/RxFlow",
@@ -111,7 +120,7 @@
     {
       "identity" : "swift-markdown",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-markdown",
+      "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
         "revision" : "ad0b81fed55c4a72fdaeb5535884bd2886de96f4"

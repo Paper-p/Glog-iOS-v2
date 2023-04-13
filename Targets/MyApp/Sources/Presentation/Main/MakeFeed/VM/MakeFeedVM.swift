@@ -6,4 +6,5 @@ import Moya
 
 final class MakeFeedVM: BaseViewModel {
     
+    
 }

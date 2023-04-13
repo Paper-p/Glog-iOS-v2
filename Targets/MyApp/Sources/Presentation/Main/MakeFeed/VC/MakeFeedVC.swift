@@ -1,4 +1,6 @@
 import Foundation
+import Markdown
+import Markdownosaur
 import Then
 import RxFlow
 import RxSwift
@@ -9,12 +11,30 @@ import UIKit
 import Kingfisher
 import Gifu
 import MarkupEditor
+import RichTextKit
 
 final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
-    private let markUpEditorView = MarkupEditorUIView(html: "").then{
-        $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        $0.layer.backgroundColor = UIColor.red.cgColor
+    private let segmentedControl = UISegmentedControl(items: ["글작성", "미리보기"]).then{
+        $0.selectedSegmentTintColor = GlogAsset.Colors.paperStartColor.color
+        $0.selectedSegmentIndex = 0
+        $0.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+    }
+    
+    private let codeView = UITextView().then{
+        $0.textColor = .white
+        $0.backgroundColor = .red
+        $0.translatesAutoresizingMaskIntoConstraints = true
+        $0.sizeToFit()
+        $0.isScrollEnabled = false
+        $0.font = UIFont.systemFont(ofSize: 14)
+    }
+    private let preView = UITextView().then{
+        $0.isEditable = false
+        $0.backgroundColor = .yellow
+        $0.textColor = .black
+        $0.translatesAutoresizingMaskIntoConstraints = true
+        $0.sizeToFit()
     }
     
     var tagData: [String] = []
@@ -54,15 +74,9 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     override func setup() {
         setCollectionView()
         self.tagTextfield.delegate = self
-        
-        MarkupEditor.style = .labeled
-        MarkupEditor.allowLocalImages = true
-        MarkupEditor.toolbarLocation = .keyboard
-        let myToolbarContents = ToolbarContents(
-            correction: true,
-            formatContents: FormatContents(code: true, strike: true, subSuper: true)
-        )
-        ToolbarContents.custom = myToolbarContents
+        codeView.delegate = self
+        textViewDidChange(codeView)
+        textViewDidEndEditing(codeView)
     }
     
     private func setCollectionView(){
@@ -120,7 +134,8 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     }
     
     override func addView() {
-        view.addSubViews(titleTextfield,underLineView,tagTextfield,tagCollectionView, markUpEditorView)
+        
+        view.addSubViews(titleTextfield,underLineView,tagTextfield,tagCollectionView,segmentedControl, preView,codeView)
     }
     
     override func setLayout() {
@@ -151,11 +166,39 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
             make.height.equalTo(56)
         }
         
-        markUpEditorView.snp.makeConstraints { make in
-            make.top.equalTo(tagCollectionView.snp.bottom).offset(5)
+        segmentedControl.snp.makeConstraints { make in
+            make.left.equalTo(12)
+            make.top.equalTo(tagCollectionView.snp.bottom)
+        }
+        
+        codeView.snp.makeConstraints { make in
+            make.top.equalTo(segmentedControl.snp.bottom)
+            make.left.equalTo(segmentedControl)
             make.width.equalToSuperview().inset(12)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(400)
+            make.height.equalTo(200)
+        }
+        
+        preView.snp.makeConstraints { make in
+            make.top.equalTo(codeView)
+            make.left.equalTo(codeView)
+            make.size.equalTo(codeView)
+            make.centerX.equalTo(codeView)
+        }
+    }
+    
+    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl){
+        let selection = sender.selectedSegmentIndex
+        switch selection {
+        case 0:
+            codeView.isHidden = false
+            preView.isHidden = true
+            
+        case 1:
+            codeView.isHidden = true
+            preView.isHidden = false
+            
+        default:
+            break
         }
     }
 }
@@ -189,5 +232,22 @@ extension MakeFeedVC: UITextFieldDelegate{
             tagCollectionView.reloadData()
         }
         return true
+    }
+    
+}
+
+extension MakeFeedVC: UITextViewDelegate{
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: view.frame.width, height: .minimum(0, 200))
+        let estimatedSize = textView.sizeThatFits(size)
+        textView.constraints.forEach { (constraint) in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+            }
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        preView.text = codeView.text
     }
 }
