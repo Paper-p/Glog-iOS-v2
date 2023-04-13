@@ -248,6 +248,9 @@ extension MakeFeedVC: UITextViewDelegate{
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        preView.text = codeView.text
+        let document = Document(parsing: codeView.text)
+        var markdownsaur = Markdownosaur()
+        let markdownString = markdownsaur.attributedString(from: document)
+        preView.attributedText = markdownString
     }
 }
