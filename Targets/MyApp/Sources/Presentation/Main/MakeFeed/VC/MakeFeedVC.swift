@@ -137,7 +137,7 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     }
     
     override func configureNavigation() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: makeButton.imageView?.image, style: .plain, target: self, action: nil)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: makeButton.imageView?.image, style: .plain, target: self, action: #selector(makeFeedButtonDidTap))
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "Paper_MainLogo")?.withRenderingMode(.alwaysOriginal))
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
@@ -227,7 +227,10 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
    }
     
     @objc func makeFeedButtonDidTap(){
-        
+        if !titleTextfield.text!.isEmpty && !codeView.text.isEmpty && !tagData.isEmpty && !(viewModel.imageData?.imageUrl.isEmpty)! {
+            viewModel.fetchMakeFeed(title: titleTextfield.text!, content: codeView.text, thumbnail: viewModel.imageData!.imageUrl, tags: tagData)
+        }
+        viewModel.pushToMainVC()
     }
 }
 
