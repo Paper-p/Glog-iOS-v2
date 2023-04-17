@@ -43,6 +43,15 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
         $0.setImage(UIImage(systemName: "pencil.line")?.tintColor(GlogAsset.Colors.paperStartColor.color), for: .normal)
     }
     
+    private let imageUploadButton = UIButton().then{
+        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.setImage(UIImage(systemName: "photo")?.tintColor(UIColor.gray).downSample(size: CGSize(width: 58, height: 58)), for: .normal)
+        $0.layer.cornerRadius = 10
+        $0.addTarget(self, action: #selector(pickImage), for: .touchUpInside)
+    }
+    
+    private let imagePicker = UIImagePickerController()
+    
     private let titleTextfield = UITextField().then{
         $0.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요", attributes: [
             .foregroundColor : GlogAsset.Colors.paperGrayColor.color,
@@ -77,6 +86,10 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
         codeView.delegate = self
         textViewDidChange(codeView)
         textViewDidEndEditing(codeView)
+        
+        self.imagePicker.sourceType = .photoLibrary
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.delegate = self
     }
     
     private func setCollectionView(){
@@ -135,12 +148,19 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
     override func addView() {
         
-        view.addSubViews(titleTextfield,underLineView,tagTextfield,tagCollectionView,segmentedControl, preView,codeView)
+        view.addSubViews(titleTextfield,underLineView,tagTextfield,tagCollectionView,segmentedControl, preView,codeView, imageUploadButton)
     }
     
     override func setLayout() {
+        imageUploadButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(100)
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.height.equalTo(230)
+        }
+        
         titleTextfield.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(110)
+            make.top.equalTo(imageUploadButton.snp.bottom).offset(10)
             make.width.equalToSuperview().inset(12)
             make.height.equalTo(55)
             make.centerX.equalToSuperview()
@@ -201,6 +221,10 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
             break
         }
     }
+    
+    @objc func pickImage(){
+       self.present(self.imagePicker, animated: true)
+   }
 }
 
 extension MakeFeedVC: UICollectionViewDelegate, UICollectionViewDataSource{
@@ -255,5 +279,23 @@ extension MakeFeedVC: UITextViewDelegate{
         let markdownString = markdownsaur.attributedString(from: document)
         preView.attributedText = markdownString
         preView.textColor = .white
+    }
+}
+
+extension MakeFeedVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        var newImage: UIImage? = nil
+        
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            newImage = possibleImage
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            newImage = possibleImage
+        }
+        
+        self.imageUploadButton.setImage(newImage, for: .normal)
+        picker.dismiss(animated: true, completion: nil)
+        
     }
 }
