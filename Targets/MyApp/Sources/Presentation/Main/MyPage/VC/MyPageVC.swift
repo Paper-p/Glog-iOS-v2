@@ -10,15 +10,8 @@ import Gifu
 final class MyPageVC: BaseVC<MyPageVM>{
     var model: UserProfileResponse?
     
-    private let scrollView = UIScrollView().then{
-        $0.showsVerticalScrollIndicator = false
-    }
-    
-    private let contentView = UIView()
-    
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
         $0.layer.cornerRadius = 50
-        $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
     }
@@ -27,6 +20,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         $0.textColor = .white
         $0.textAlignment = .center
+        $0.sizeToFit()
     }
     
     private let editButton = GlogButton(title: "프로필 수정", width: 366, height: 40)
@@ -86,7 +80,6 @@ final class MyPageVC: BaseVC<MyPageVM>{
     override func viewDidLoad() {
         super.viewDidLoad()
         bindData(with: model!)
-        scrollView.addGestureRecognizer(tapGestureRecognizer)
         checkFeedList()
     }
     
@@ -139,57 +132,46 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
     
     override func addView() {
-        view.addSubview(scrollView)
-        scrollView.addSubViews(contentView)
-        contentView.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, myPostCollectionView)
+        view.addSubViews(profileImageView, nicknameLabel,editButton, postCategory, myPostCollectionView)
     }
     
     override func setLayout() {
-        scrollView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.centerX.width.top.bottom.equalToSuperview()
-        }
         
         profileImageView.snp.makeConstraints { make in
+            make.top.equalTo(100)
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(50)
             make.size.equalTo(100)
         }
         
         nicknameLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
-            make.width.equalTo(150)
-            make.height.equalTo(17)
+            make.top.equalTo(profileImageView.snp.bottom).offset(12)
         }
         
         editButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(12)
+            make.height.equalTo(40)
             make.top.equalTo(nicknameLabel.snp.bottom).offset(40)
-            make.width.equalToSuperview().inset(12)
         }
         
         postCategory.snp.makeConstraints { make in
-            make.top.equalTo(editButton.snp.bottom).offset(30)
-            make.left.equalToSuperview().inset(12)
+            make.left.equalTo(12)
+            make.top.equalTo(editButton.snp.bottom).offset(24)
             make.width.equalTo(80)
             make.height.equalTo(32)
         }
         
         myPostCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(postCategory.snp.bottom).offset(35)
+            make.top.equalTo(postCategory.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview()
             make.height.equalTo(1)
         }
     }
     
     private func checkFeedList(){
         if model?.feedList.isEmpty == true{
-            contentView.addSubview(noPostLabel)
+            view.addSubview(noPostLabel)
             noPostLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.top.equalTo(postCategory.snp.bottom).offset(40)
