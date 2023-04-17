@@ -166,33 +166,23 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
             contentView.addSubview($0)
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         self.postCollectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
         self.postCollectionView.removeObserver(self, forKeyPath: "contentSize")
     }
     
-    deinit {
-        
-    }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if let cv = object as? UICollectionView, cv == postCollectionView {
+            if object is UICollectionView {
                 if let newValue = change?[.newKey] as? CGSize {
                     postCollectionView.snp.updateConstraints {
-                        $0.height.equalTo(newValue.height)
+                        $0.height.equalTo(newValue.height + 50)
                     }
-                    let oldValue = change?[.oldKey] as? CGSize ?? .init(width: 0, height: 0)
-                    print(newValue, oldValue, scrollView.contentSize, scrollView.contentSize.height - oldValue.height + newValue.height)
-                    scrollView.contentSize = .init(width: scrollView.contentSize.width, height: scrollView.contentSize.height - oldValue.height * newValue.height)
                 }
             }
         }
@@ -324,7 +314,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(view.frame.size.height * 1.3)
+            make.height.equalTo(1)
             make.bottom.equalToSuperview()
         }
     }
