@@ -11,10 +11,17 @@ final class MakeFeedVM: BaseViewModel {
     }
     
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
+    private let imageProvider = MoyaProvider<ImageService>(plugins: [GlogLoggingPlugin()])
     
     func fetchMakeFeed(title: String, content: String, thumbnail: String, tags: [String]){
         let param = MakeFeedRequest.init(title: title, content: content, thumbnail: thumbnail, tags: tags)
         provider.request(.makeFeed(param: param)) { result in
+            print(result)
+        }
+    }
+    
+    func uploadImage(image: UIImage){
+        imageProvider.request(.uploadImage(image: image)) { result in
             print(result)
         }
     }

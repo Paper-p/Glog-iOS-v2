@@ -1,9 +1,10 @@
 
 import Foundation
 import Moya
+import UIKit
 
 enum ImageService{
-    case uploadImage([Data])
+    case uploadImage(image: UIImage)
 }
 
 extension ImageService: TargetType{
@@ -14,7 +15,7 @@ extension ImageService: TargetType{
     var path: String{
         switch self {
         case .uploadImage:
-            return ""
+            return "/image"
         }
     }
     
@@ -31,15 +32,9 @@ extension ImageService: TargetType{
     
     var task: Task{
         switch self {
-        case let .uploadImage(datas):
-            let multiparts = datas.map { data -> MultipartFormData in
-                let uuid = UUID().uuidString
-                return MultipartFormData(provider: .data(data),
-                                         name: "file",
-                                         fileName: "\(uuid).png"
-                )
-            }
-            return .uploadMultipart(multiparts)
+        case let .uploadImage(image):
+            let imageData = MultipartFormData(provider: .data(image.jpegData(compressionQuality: 1.0)!), name: "image", fileName: "jpeg", mimeType: "image/jpeg")
+            return .uploadMultipart([imageData])
         }
     }
     
