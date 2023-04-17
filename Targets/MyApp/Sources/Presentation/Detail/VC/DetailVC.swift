@@ -64,6 +64,8 @@ final class DetailVC: BaseVC<DetailVM>{
     private let thumbnailImageView = UIImageView(image: UIImage(named: "Paper_Background")).then{
         $0.layer.cornerRadius = 10
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.sizeToFit()
+        $0.contentMode = .scaleToFill
     }
     
     private let contentTextView = UITextView().then{
