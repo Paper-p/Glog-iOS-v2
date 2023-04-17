@@ -6,6 +6,8 @@ import Moya
 
 final class MakeFeedVM: BaseViewModel {
     
+    var imageData: imageResponse?
+    
     func pushToMainVC(){
         coordinator.navigate(to: .mainIsRequired)
     }
@@ -23,6 +25,18 @@ final class MakeFeedVM: BaseViewModel {
     func uploadImage(image: UIImage){
         imageProvider.request(.uploadImage(image: image)) { result in
             print(result)
+            switch result{
+            case let .success(response):
+                do{
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(imageResponse.self, from: response.data)
+                    self.imageData = json
+                } catch{
+                    print(error)
+                }
+            case let .failure(err):
+                print(err.localizedDescription)
+            }
         }
     }
 }

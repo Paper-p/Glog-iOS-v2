@@ -225,6 +225,10 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     @objc func pickImage(){
        self.present(self.imagePicker, animated: true)
    }
+    
+    @objc func makeFeedButtonDidTap(){
+        
+    }
 }
 
 extension MakeFeedVC: UICollectionViewDelegate, UICollectionViewDataSource{
@@ -296,6 +300,7 @@ extension MakeFeedVC: UIImagePickerControllerDelegate, UINavigationControllerDel
         
         self.imageUploadButton.setImage(newImage, for: .normal)
         picker.dismiss(animated: true, completion: nil)
+        viewModel.uploadImage(image: newImage!)
         
     }
 }
