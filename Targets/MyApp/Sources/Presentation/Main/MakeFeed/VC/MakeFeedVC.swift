@@ -225,11 +225,13 @@ extension MakeFeedVC: UICollectionViewDelegate, UICollectionViewDataSource{
 extension MakeFeedVC: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if tagTextfield.text?.isEmpty == false{
-            tagTextfield.becomeFirstResponder()
-            tagData.append(tagTextfield.text!)
-            print(tagData.description)
-            tagTextfield.text = ""
-            tagCollectionView.reloadData()
+            if tagData.count < 5{
+                tagTextfield.becomeFirstResponder()
+                tagData.append(tagTextfield.text!)
+                print(tagData.description)
+                tagTextfield.text = ""
+                tagCollectionView.reloadData()
+            }
         }
         return true
     }
