@@ -229,8 +229,8 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     @objc func makeFeedButtonDidTap(){
         if !titleTextfield.text!.isEmpty && !codeView.text.isEmpty && !tagData.isEmpty && !(viewModel.imageData?.imageUrl.isEmpty)! {
             viewModel.fetchMakeFeed(title: titleTextfield.text!, content: codeView.text, thumbnail: viewModel.imageData!.imageUrl, tags: tagData)
+            viewModel.pushToMainVC()
         }
-        viewModel.pushToMainVC()
     }
 }
 
