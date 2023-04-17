@@ -27,10 +27,12 @@ final class DetailVC: BaseVC<DetailVM>{
     private var tagCollectionView: UICollectionView!
     
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
-        $0.layer.cornerRadius = 18
+        $0.layer.cornerRadius = 17
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleToFill
+        $0.layer.masksToBounds = true
     }
+    
     private let authorLabel = UILabel().then{
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 15, weight: .medium)

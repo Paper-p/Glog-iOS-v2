@@ -47,7 +47,7 @@ extension ImageService: TargetType{
         let tk = Keychain()
         switch self {
         case .uploadImage:
-            return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)", "content-type": "multipart/form-data"]
+            return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)", "Content-Type": "multipart/form-data"]
         default:
             return .none
         }

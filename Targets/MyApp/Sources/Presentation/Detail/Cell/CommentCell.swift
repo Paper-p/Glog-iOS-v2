@@ -7,8 +7,10 @@ final class CommentCell: UITableViewCell {
     static let identifier = "CommentCell"
     
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
-        $0.layer.cornerRadius = 18
+        $0.layer.cornerRadius = 17
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
+        $0.contentMode = .scaleToFill
+        $0.layer.masksToBounds = true
     }
     
     private let nicknameLabel = UILabel().then {
