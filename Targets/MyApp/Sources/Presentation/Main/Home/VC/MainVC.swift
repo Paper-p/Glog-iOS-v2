@@ -10,6 +10,8 @@ import Gifu
 
 final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
+    var page = 0
+    
     private let scrollView = UIScrollView().then{
         $0.backgroundColor = .clear
     }
@@ -75,6 +77,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollViewDidScroll(postCollectionView)
     }
     
     override func setup() {
@@ -90,7 +93,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         
         viewModel.fetchPostList(completion: { _ in
             self.postCollectionView.reloadData()
-        }, search: searchBar.text!)
+        }, search: searchBar.text!, page: page)
         
         viewModel.miniProfile()
         
@@ -380,6 +383,17 @@ extension MainVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,
             viewModel.detailPost(completion: { _ in
                 self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
             }, id: viewModel.postList[indexPath.item].id)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffsetY = scrollView.contentOffset.y
+        let collectionViewContentSizeY = self.postCollectionView.contentSize.height
+        let paginationY = collectionViewContentSizeY * 0.5
+        if contentOffsetY > collectionViewContentSizeY - paginationY {
+            viewModel.fetchPostList(completion: { _ in
+                print("asdf")
+            }, search: searchBar.text, page: 1)
         }
     }
 }

@@ -52,8 +52,8 @@ final class MainVM: BaseViewModel {
             }
         }
     }
-    func fetchPostList(completion: @escaping (Result<Bool, Error>) -> (), search: String?) {
-        let param = PostListRequest.init(keyword: search!)
+    func fetchPostList(completion: @escaping (Result<Bool, Error>) -> (), search: String?, page: Int) {
+        let param = PostListRequest.init(page: page, keyword: search!)
         provider.request(.postList(keyword: param)) { result in
             print(result)
             switch result{
