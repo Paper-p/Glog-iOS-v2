@@ -224,7 +224,7 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     
     @objc func pickImage(){
        self.present(self.imagePicker, animated: true)
-   }
+    }
     
     @objc func makeFeedButtonDidTap(){
         if !titleTextfield.text!.isEmpty && !codeView.text.isEmpty && !tagData.isEmpty && !(viewModel.imageData?.imageUrl.isEmpty)! {

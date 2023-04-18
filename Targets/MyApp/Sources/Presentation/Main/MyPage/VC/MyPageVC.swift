@@ -205,7 +205,6 @@ extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("asdfkljasdhflak")
         viewModel.detailPost(completion: { _ in
             self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
         }, id: (model?.feedList[indexPath.item].id)!)

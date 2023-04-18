@@ -113,6 +113,8 @@ final class DetailVC: BaseVC<DetailVM>{
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         self.navigationController?.navigationBar.standardAppearance = standardAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(postAlertButtinDidTap(_:)))
     }
     
     init(viewModel: DetailVM, model: DetailResponse) {
@@ -344,6 +346,11 @@ final class DetailVC: BaseVC<DetailVM>{
         thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail!))
         contentTextView.text = model.content
         
+        if model.isMine{
+            self.navigationItem.rightBarButtonItem?.isHidden = false
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+        
         let document = Document(parsing: contentTextView.text)
         var markdownsaur = Markdownosaur()
         let markdownString = markdownsaur.attributedString(from: document)
@@ -380,6 +387,20 @@ final class DetailVC: BaseVC<DetailVM>{
                 }
             }
         }
+    }
+    
+    @objc func postAlertButtinDidTap(_ sender: Any){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let editAlert = UIAlertAction(title: "수정", style: .default, handler: nil)
+        let deleteAlert = UIAlertAction(title: "삭제", style: .destructive, handler: nil)
+        let cancelAlert = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alert.addAction(editAlert)
+        alert.addAction(deleteAlert)
+        alert.addAction(cancelAlert)
+        
+        self.present(alert, animated: true)
     }
 }
 
