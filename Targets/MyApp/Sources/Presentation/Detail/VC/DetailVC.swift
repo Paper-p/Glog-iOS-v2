@@ -392,7 +392,9 @@ final class DetailVC: BaseVC<DetailVM>{
     @objc func postAlertButtinDidTap(_ sender: Any){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let editAlert = UIAlertAction(title: "수정", style: .default, handler: nil)
+        let editAlert = UIAlertAction(title: "수정", style: .default) { _ in
+            
+        }
         let deleteAlert = UIAlertAction(title: "삭제", style: .destructive) { _ in
             self.viewModel.deleteFeed(id: self.model!.id) { _ in
                 self.viewModel.pushToMain()

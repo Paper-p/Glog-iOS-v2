@@ -10,6 +10,7 @@ enum FeedService{
     case cancelLike(param: DetailRequest)
     case makeFeed(param: MakeFeedRequest)
     case deleteFeed(param: DetailRequest)
+    case editFeed(param: EditFeedRequest)
 }
 
 extension FeedService: TargetType{
@@ -33,6 +34,8 @@ extension FeedService: TargetType{
             return "feed"
         case let .deleteFeed(id):
             return "feed/\(id.id)"
+        case let .editFeed(id):
+            return "feed/\(id.id)"
         }
     }
     
@@ -52,6 +55,8 @@ extension FeedService: TargetType{
             return .post
         case .deleteFeed:
             return .delete
+        case .editFeed:
+            return .patch
         }
     }
     
@@ -74,10 +79,16 @@ extension FeedService: TargetType{
         case let .makeFeed(param: param):
             return .requestParameters(parameters: ["title":param.title,
                                                    "content": param.content,
-                                                   "thumbnail": param.thumbnail,
+                                                   "thumbnail": param.thumbnail!,
                                                    "tags": param.tags], encoding: JSONEncoding.default)
         case .deleteFeed:
             return .requestPlain
+            
+        case let .editFeed(param: param):
+            return .requestParameters(parameters: ["title": param.title,
+                                                   "content": param.content,
+                                                   "thumbnail": param.thumbnail!,
+                                                   "tags": param.tags], encoding: JSONEncoding.default)
         }
     }
     
