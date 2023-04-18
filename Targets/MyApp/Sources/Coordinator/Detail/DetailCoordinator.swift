@@ -13,6 +13,8 @@ class DetailCoordinator: BaseCoordinator{
         switch step{
         case let .myPageIsRequired(model):
             return myPageIsRequired(model: model)
+        case .mainIsRequired:
+            return mainIsRequired()
         default:
             return
         }
@@ -25,5 +27,12 @@ extension DetailCoordinator{
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.startMyPageVC(model: model)
+    }
+    
+    private func mainIsRequired(){
+        let vc = MainCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
     }
 }
