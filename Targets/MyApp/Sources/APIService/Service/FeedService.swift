@@ -95,7 +95,7 @@ extension FeedService: TargetType{
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .hot, .postList, .detail, .like, .cancelLike, .makeFeed, .deleteFeed:
+        case .hot, .postList, .detail, .like, .cancelLike, .makeFeed, .deleteFeed, .editFeed:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default: 
             return["Content-Type" : "application/json"]

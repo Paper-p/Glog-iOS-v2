@@ -116,6 +116,10 @@ final class DetailVM: BaseViewModel {
         coordinator.navigate(to: .mainIsRequired)
     }
     
+    func pushToEditFeed(model: DetailResponse){
+        coordinator.navigate(to: .editFeedIsRequired(model: model))
+    }
+    
     func success(){
         print("good")
     }

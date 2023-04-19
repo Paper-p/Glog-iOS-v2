@@ -15,6 +15,8 @@ class DetailCoordinator: BaseCoordinator{
             return myPageIsRequired(model: model)
         case .mainIsRequired:
             return mainIsRequired()
+        case let .editFeedIsRequired(model):
+            return editFeedIsRequired(model: model)
         default:
             return
         }
@@ -31,6 +33,13 @@ extension DetailCoordinator{
     
     private func mainIsRequired(){
         let vc = MainCoordinator(navigationController: navigationController)
+        vc.parentCoordinator = self
+        childCoordinators.append(vc)
+        vc.start()
+    }
+    
+    private func editFeedIsRequired(model: DetailResponse){
+        let vc = MakeFeedCoordinator(navigationController: navigationController)
         vc.parentCoordinator = self
         childCoordinators.append(vc)
         vc.start()
