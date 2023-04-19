@@ -29,8 +29,10 @@ final class CommentCell: UITableViewCell {
         $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
     }
     
-    private let Button = UIButton().then{
-        $0.setImage(UIImage(systemName: "ellipsis")?.downSample(size: .init(width: 16, height: 16)).withRenderingMode(.alwaysOriginal), for: .normal)
+    private let optionButton = UIButton().then{
+        $0.setImage(UIImage(systemName: "pencil")?.withRenderingMode(.alwaysOriginal).withTintColor(.white), for: .normal)
+        $0.isHidden = true
+        $0.isEnabled = false
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -48,7 +50,7 @@ final class CommentCell: UITableViewCell {
     }
     
     private func addView() {
-        contentView.addSubViews(profileImageView, nicknameLabel, contentLabel, createdAtLabel)
+        contentView.addSubViews(profileImageView, nicknameLabel, contentLabel, createdAtLabel, optionButton)
     }
 
     private func setLayout() {
@@ -76,6 +78,11 @@ final class CommentCell: UITableViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(38)
         }
+        
+        optionButton.snp.makeConstraints { make in
+            make.centerY.equalTo(createdAtLabel)
+            make.left.equalTo(createdAtLabel.snp.right).offset(5)
+        }
     }
     
     func bindComment(model: DetailComment){
@@ -86,6 +93,10 @@ final class CommentCell: UITableViewCell {
             if let image = URL(string: model.author.profileImageUrl){
                 self.profileImageView.kf.setImage(with: image)
             }
+        }
+        if model.isMine{
+            self.optionButton.isHidden = false
+            self.optionButton.isEnabled = true
         }
     }
 }
