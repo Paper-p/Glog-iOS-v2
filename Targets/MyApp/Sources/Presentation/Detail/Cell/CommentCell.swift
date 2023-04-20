@@ -18,10 +18,15 @@ final class CommentCell: UITableViewCell {
         $0.font = .systemFont(ofSize: 12, weight: .medium)
     }
     
-    private let contentLabel = UILabel().then {
+    private let contentLabel = UITextView().then {
         $0.textColor = .white
-        $0.numberOfLines = 0
         $0.font = .systemFont(ofSize: 14, weight: .medium)
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.isSelectable = false
+        $0.isEditable = false
+        $0.sizeToFit()
+        $0.isScrollEnabled = false
+        $0.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     private let createdAtLabel = UILabel().then{
@@ -33,6 +38,7 @@ final class CommentCell: UITableViewCell {
         $0.setImage(UIImage(systemName: "pencil")?.withRenderingMode(.alwaysOriginal).withTintColor(.white), for: .normal)
         $0.isHidden = true
         $0.isEnabled = false
+        $0.addTarget(self, action: #selector(optionButtonDidTap), for: .touchUpInside)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -71,7 +77,7 @@ final class CommentCell: UITableViewCell {
             make.left.equalTo(nicknameLabel)
             make.top.equalTo(nicknameLabel.snp.bottom).offset(1)
             make.width.equalTo(150)
-            make.height.equalTo(16)
+            make.height.equalTo(15)
         }
         
         createdAtLabel.snp.makeConstraints { make in
@@ -98,5 +104,23 @@ final class CommentCell: UITableViewCell {
             self.optionButton.isHidden = false
             self.optionButton.isEnabled = true
         }
+    }
+    
+    @objc func optionButtonDidTap(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let editAlert = UIAlertAction(title: "수정", style: .default) { _ in
+            
+        }
+        let deleteAlert = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            
+        }
+        let cancelAlert = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alert.addAction(editAlert)
+        alert.addAction(deleteAlert)
+        alert.addAction(cancelAlert)
+        
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
     }
 }
