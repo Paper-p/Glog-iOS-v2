@@ -18,7 +18,7 @@ final class CommentCell: UITableViewCell {
         $0.font = .systemFont(ofSize: 12, weight: .medium)
     }
     
-    private let contentLabel = UITextView().then {
+    private let contentTextView = UITextView().then {
         $0.textColor = .white
         $0.font = .systemFont(ofSize: 14, weight: .medium)
         $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -56,7 +56,7 @@ final class CommentCell: UITableViewCell {
     }
     
     private func addView() {
-        contentView.addSubViews(profileImageView, nicknameLabel, contentLabel, createdAtLabel, optionButton)
+        contentView.addSubViews(profileImageView, nicknameLabel, contentTextView, createdAtLabel, optionButton)
     }
 
     private func setLayout() {
@@ -73,7 +73,7 @@ final class CommentCell: UITableViewCell {
             make.height.equalTo(19)
         }
         
-        contentLabel.snp.makeConstraints { make in
+        contentTextView.snp.makeConstraints { make in
             make.left.equalTo(nicknameLabel)
             make.top.equalTo(nicknameLabel.snp.bottom).offset(1)
             make.width.equalTo(150)
@@ -93,7 +93,7 @@ final class CommentCell: UITableViewCell {
     
     func bindComment(model: DetailComment){
         nicknameLabel.text = model.author.nickname
-        contentLabel.text = model.content
+        contentTextView.text = model.content
         createdAtLabel.text = model.createdAt.toGlogDateString()
         DispatchQueue.main.async {
             if let image = URL(string: model.author.profileImageUrl){
@@ -110,7 +110,7 @@ final class CommentCell: UITableViewCell {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let editAlert = UIAlertAction(title: "수정", style: .default) { _ in
-            
+            self.
         }
         let deleteAlert = UIAlertAction(title: "삭제", style: .destructive) { _ in
             
