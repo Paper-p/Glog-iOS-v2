@@ -76,8 +76,7 @@ final class CommentCell: UITableViewCell {
         contentTextView.snp.makeConstraints { make in
             make.left.equalTo(nicknameLabel)
             make.top.equalTo(nicknameLabel.snp.bottom).offset(1)
-            make.width.equalTo(150)
-            make.height.equalTo(15)
+            make.width.equalTo(230)
         }
         
         createdAtLabel.snp.makeConstraints { make in
@@ -110,7 +109,9 @@ final class CommentCell: UITableViewCell {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let editAlert = UIAlertAction(title: "수정", style: .default) { _ in
-            self.
+            self.contentTextView.becomeFirstResponder()
+            self.contentTextView.isEditable = true
+            self.contentTextView.isSelectable = true
         }
         let deleteAlert = UIAlertAction(title: "삭제", style: .destructive) { _ in
             

@@ -4,6 +4,7 @@ import Moya
 
 enum CommentService{
     case addComment(param: CommentRequest)
+    case deleteComment(param: CommentRequest)
 }
 
 extension CommentService: TargetType{
@@ -15,6 +16,8 @@ extension CommentService: TargetType{
         switch self {
         case let .addComment(id):
             return "comment/\(id.id)"
+        case let .deleteComment(id):
+            return "comment/\(id.id)"
         }
     }
     
@@ -22,6 +25,8 @@ extension CommentService: TargetType{
         switch self {
         case .addComment:
             return .post
+        case .deleteComment:
+            return .delete
         }
     }
     
@@ -33,13 +38,15 @@ extension CommentService: TargetType{
         switch self {
         case .addComment(let param):
             return .requestParameters(parameters: ["content": param.content], encoding: JSONEncoding.default)
+        case .deleteComment:
+            return .requestPlain
         }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .addComment:
+        case .addComment, .deleteComment:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]
