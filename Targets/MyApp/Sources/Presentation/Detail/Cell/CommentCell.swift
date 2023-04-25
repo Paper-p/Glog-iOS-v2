@@ -2,8 +2,11 @@
 import UIKit
 import SnapKit
 import Then
+import Moya
 
 final class CommentCell: UITableViewCell {
+    var model: DetailResponse?
+    
     static let identifier = "CommentCell"
     
     private let profileImageView = UIImageView(image: UIImage(systemName: "person.crop.circle")).then{
@@ -34,13 +37,6 @@ final class CommentCell: UITableViewCell {
         $0.font = UIFont.systemFont(ofSize: 13, weight: .medium)
     }
     
-    private let optionButton = UIButton().then{
-        $0.setImage(UIImage(systemName: "pencil")?.withRenderingMode(.alwaysOriginal).withTintColor(.white), for: .normal)
-        $0.isHidden = true
-        $0.isEnabled = false
-        $0.addTarget(self, action: #selector(optionButtonDidTap), for: .touchUpInside)
-    }
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -56,7 +52,7 @@ final class CommentCell: UITableViewCell {
     }
     
     private func addView() {
-        contentView.addSubViews(profileImageView, nicknameLabel, contentTextView, createdAtLabel, optionButton)
+        contentView.addSubViews(profileImageView, nicknameLabel, contentTextView, createdAtLabel)
     }
 
     private func setLayout() {
@@ -83,11 +79,6 @@ final class CommentCell: UITableViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(38)
         }
-        
-        optionButton.snp.makeConstraints { make in
-            make.centerY.equalTo(createdAtLabel)
-            make.left.equalTo(createdAtLabel.snp.right).offset(5)
-        }
     }
     
     func bindComment(model: DetailComment){
@@ -99,29 +90,5 @@ final class CommentCell: UITableViewCell {
                 self.profileImageView.kf.setImage(with: image)
             }
         }
-        if model.isMine{
-            self.optionButton.isHidden = false
-            self.optionButton.isEnabled = true
-        }
-    }
-    
-    @objc func optionButtonDidTap(){
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        let editAlert = UIAlertAction(title: "수정", style: .default) { _ in
-            self.contentTextView.becomeFirstResponder()
-            self.contentTextView.isEditable = true
-            self.contentTextView.isSelectable = true
-        }
-        let deleteAlert = UIAlertAction(title: "삭제", style: .destructive) { _ in
-            
-        }
-        let cancelAlert = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
-        alert.addAction(editAlert)
-        alert.addAction(deleteAlert)
-        alert.addAction(cancelAlert)
-        
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
     }
 }

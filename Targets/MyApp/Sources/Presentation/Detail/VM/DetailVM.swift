@@ -108,6 +108,18 @@ final class DetailVM: BaseViewModel {
         }
     }
     
+    func deleteComment(id: Int, completion: @escaping (Result<Bool, Error>) -> ()){
+        let param = DeleteCommentRequest.init(id: id)
+        CommentProvider.request(.deleteComment(param: param)) { result in
+            print(result)
+            switch result{
+            case .success: completion(.success(true))
+            case let .failure(err):
+                return print(err.localizedDescription)
+            }
+        }
+    }
+    
     func pushToMyPageVC(model: UserProfileResponse){
         coordinator.navigate(to: .myPageIsRequired(model: model))
     }

@@ -440,4 +440,16 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 84
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+            
+        if editingStyle == .delete {
+                
+            model?.comments.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            viewModel.deleteComment(id: viewModel.detailPost.comments.first!.id) { _ in }
+        } else if editingStyle == .insert {
+                
+        }
+    }
 }

@@ -4,7 +4,7 @@ import Moya
 
 enum CommentService{
     case addComment(param: CommentRequest)
-    case deleteComment(param: CommentRequest)
+    case deleteComment(param: DeleteCommentRequest)
 }
 
 extension CommentService: TargetType{
