@@ -441,15 +441,20 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
         return 84
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-            
-        if editingStyle == .delete {
-                
-            model?.comments.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            viewModel.deleteComment(id: viewModel.detailPost.comments.first!.id) { _ in }
-        } else if editingStyle == .insert {
-                
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var config: UISwipeActionsConfiguration? = nil
+        lazy var deleteContextual = UIContextualAction(style: .destructive, title: nil) { _, _, _ in
+            self.viewModel.deleteComment(id: (self.model?.comments.first!.id)!) { _ in
+                DispatchQueue.main.async {
+                    self.commentTableView.reloadData()
+                }
+            }
         }
+        deleteContextual.image = UIImage(systemName: "trash")
+        
+        if viewModel.detailPost.comments.first?.isMine == true {
+            config = UISwipeActionsConfiguration(actions: [deleteContextual])
+        }
+        return config
     }
 }

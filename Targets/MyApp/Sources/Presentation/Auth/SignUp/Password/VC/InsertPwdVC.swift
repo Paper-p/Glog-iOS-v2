@@ -37,7 +37,6 @@ final class InsertPwdVC: BaseVC<InsertPwdVM>, UITextFieldDelegate{
     
     override func configureNavigation() {
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.topItem?.title = "취소"
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "Paper_MainLogo"))
     }
     

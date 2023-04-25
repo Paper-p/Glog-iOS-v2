@@ -50,7 +50,7 @@ final class SignInVC: BaseVC<SignInVM>{
     
     override func configureNavigation() {
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.topItem?.title = "취소"
+        //self.navigationController?.navigationBar.topItem?.title = "취소"
     }
     
     override func setup() {

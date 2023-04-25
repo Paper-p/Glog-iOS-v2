@@ -78,6 +78,9 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollViewDidScroll(postCollectionView)
+        DispatchQueue.main.async {
+            self.postCollectionView.reloadData()
+        }
     }
     
     override func setup() {
