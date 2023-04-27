@@ -1,4 +1,6 @@
 import Then
+import MapKit
+import CoreLocation
 import RxFlow
 import RxSwift
 import RxCocoa
@@ -23,7 +25,9 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.sizeToFit()
     }
     
-    private let editButton = GlogButton(title: "프로필 수정", width: 366, height: 40)
+    private let editButton = GlogButton(title: "프로필 수정", width: 366, height: 40).then{
+        $0.addTarget(self, action: #selector(editButtonDidTap), for: .touchUpInside)
+    }
     
     private let postCategory = UITextView().then{
         $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
@@ -190,6 +194,49 @@ final class MyPageVC: BaseVC<MyPageVM>{
     
     @objc func tapMethod(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
+    }
+    
+    @objc func editButtonDidTap(){
+        /*let alert = UIAlertController(title: "프로필 수정", message: nil, preferredStyle: UIAlertController.Style.alert)
+        let margin:CGFloat = 10.0
+        let rect = CGRect(x: margin, y: margin, width: alert.view.bounds.size.width - margin * 4.0, height: 120)
+        let customView = UIView(frame: rect)
+
+        customView.backgroundColor = .green
+        alert.view.addSubview(customView)
+        alert.addTextField()
+        let defaultAction = UIAlertAction(title: "취소", style: .destructive, handler : nil)
+        let okAction = UIAlertAction(title: "확임", style: .default) { _ in
+            
+        }
+        alert.addAction(defaultAction)
+        alert.addAction(okAction)
+        self.present(alert, animated: false, completion: nil)*/
+        let alert = UIAlertController(title: nil, message: "프로필 수정", preferredStyle: .alert)
+                
+        let cancelAction = UIAlertAction(title: "취소", style: .destructive, handler: nil)
+        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+            
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+                
+        let contentVC = UIViewController().then{
+            $0.view.backgroundColor = .red
+        }
+    
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        let profileImageView = UIImageView()
+        
+        if let image = URL(string: model!.profileImageUrl){
+            self.profileImageView.kf.setImage(with: image)
+        }
+        contentVC.view.addSubview(profileImageView)
+        contentVC.view = customView
+    
+        contentVC.preferredContentSize.height = 200
+        alert.setValue(contentVC, forKey: "contentViewController")
+            
+        self.present(alert, animated: true)
     }
 }
 
