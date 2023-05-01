@@ -6,6 +6,7 @@ enum UserService{
     case userProfile(param: UserProfileRequest)
     case miniProfile
     case editNickname(param: EditNicknameRequest)
+    case editProfileImage(param: EditProfileImageRequest)
 }
 
 extension UserService: TargetType{
@@ -22,7 +23,10 @@ extension UserService: TargetType{
             return "user/profile"
             
         case .editNickname:
-            return "/nickname"
+            return "user/nickname"
+            
+        case .editProfileImage:
+            return "user/profile-image"
         }
     }
     
@@ -35,6 +39,9 @@ extension UserService: TargetType{
             return .get
             
         case .editNickname:
+            return .patch
+            
+        case .editProfileImage:
             return .patch
         }
     }
@@ -53,13 +60,16 @@ extension UserService: TargetType{
             
         case let .editNickname(param: param):
             return .requestJSONEncodable(param)
+            
+        case let .editProfileImage(param: param):
+            return .requestJSONEncodable(param)
         }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .userProfile, .miniProfile, .editNickname:
+        case .userProfile, .miniProfile, .editNickname, .editProfileImage:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]
