@@ -197,45 +197,36 @@ final class MyPageVC: BaseVC<MyPageVM>{
     }
     
     @objc func editButtonDidTap(){
-        /*let alert = UIAlertController(title: "프로필 수정", message: nil, preferredStyle: UIAlertController.Style.alert)
-        let margin:CGFloat = 10.0
-        let rect = CGRect(x: margin, y: margin, width: alert.view.bounds.size.width - margin * 4.0, height: 120)
-        let customView = UIView(frame: rect)
-
-        customView.backgroundColor = .green
-        alert.view.addSubview(customView)
-        alert.addTextField()
-        let defaultAction = UIAlertAction(title: "취소", style: .destructive, handler : nil)
-        let okAction = UIAlertAction(title: "확임", style: .default) { _ in
-            
-        }
-        alert.addAction(defaultAction)
-        alert.addAction(okAction)
-        self.present(alert, animated: false, completion: nil)*/
         let alert = UIAlertController(title: nil, message: "프로필 수정", preferredStyle: .alert)
                 
         let cancelAction = UIAlertAction(title: "취소", style: .destructive, handler: nil)
         let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-            
         alert.addAction(cancelAction)
         alert.addAction(okAction)
                 
-        let contentVC = UIViewController().then{
-            $0.view.backgroundColor = .red
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then{
+            $0.layer.cornerRadius = 50
+            $0.contentMode = .scaleToFill
+            $0.layer.masksToBounds = true
         }
-    
-        let customView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        let profileImageView = UIImageView()
+        let image = URL(string: model!.profileImageUrl)
+        imageView.kf.setImage(with: image)
         
-        if let image = URL(string: model!.profileImageUrl){
-            self.profileImageView.kf.setImage(with: image)
+        alert.view.addSubview(imageView)
+        
+        imageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(70)
+            make.center.equalToSuperview()
         }
-        contentVC.view.addSubview(profileImageView)
-        contentVC.view = customView
-    
-        contentVC.preferredContentSize.height = 200
-        alert.setValue(contentVC, forKey: "contentViewController")
-            
+        
+        imageView.snp.makeConstraints { make in
+            make.size.equalTo(100)
+        }
+        
+        alert.addTextField { textfield in
+            textfield.text = "asdf"
+        }
+        
         self.present(alert, animated: true)
     }
 }
