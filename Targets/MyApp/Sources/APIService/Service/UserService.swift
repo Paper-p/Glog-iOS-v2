@@ -5,6 +5,7 @@ import Moya
 enum UserService{
     case userProfile(param: UserProfileRequest)
     case miniProfile
+    case editNickname(param: EditNicknameRequest)
 }
 
 extension UserService: TargetType{
@@ -19,6 +20,9 @@ extension UserService: TargetType{
             
         case .miniProfile:
             return "user/profile"
+            
+        case .editNickname:
+            return "/nickname"
         }
     }
     
@@ -29,6 +33,9 @@ extension UserService: TargetType{
             
         case .miniProfile:
             return .get
+            
+        case .editNickname:
+            return .patch
         }
     }
     
@@ -40,15 +47,19 @@ extension UserService: TargetType{
         switch self {
         case .userProfile:
             return .requestPlain
+            
         case .miniProfile:
             return .requestPlain
+            
+        case let .editNickname(param: param):
+            return .requestJSONEncodable(param)
         }
     }
     
     var headers: [String : String]?{
         let tk = Keychain()
         switch self {
-        case .userProfile, .miniProfile:
+        case .userProfile, .miniProfile, .editNickname:
             return ["Authorization" : "Bearer \(tk.read(key: "accessToken")!)"]
         default:
             return["Content-Type" : "application/json"]

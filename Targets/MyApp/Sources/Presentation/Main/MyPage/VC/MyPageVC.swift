@@ -200,7 +200,9 @@ final class MyPageVC: BaseVC<MyPageVM>{
         let alert = UIAlertController(title: nil, message: "프로필 수정", preferredStyle: .alert)
                 
         let cancelAction = UIAlertAction(title: "취소", style: .destructive, handler: nil)
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        let okAction = UIAlertAction(title: "확인", style: .default) { _ in
+            self.viewModel
+        }
         alert.addAction(cancelAction)
         alert.addAction(okAction)
                 
