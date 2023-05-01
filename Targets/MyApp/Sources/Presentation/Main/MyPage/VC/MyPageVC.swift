@@ -215,8 +215,9 @@ final class MyPageVC: BaseVC<MyPageVM>{
         alert.view.addSubview(imageView)
         
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(70)
-            make.center.equalToSuperview()
+            make.top.equalToSuperview().offset(100)
+            make.bottom.equalToSuperview().inset(70)
+            make.centerX.equalToSuperview()
         }
         
         imageView.snp.makeConstraints { make in
@@ -224,7 +225,7 @@ final class MyPageVC: BaseVC<MyPageVM>{
         }
         
         alert.addTextField { textfield in
-            textfield.text = "asdf"
+            textfield.text = self.model?.nickname
         }
         
         self.present(alert, animated: true)
