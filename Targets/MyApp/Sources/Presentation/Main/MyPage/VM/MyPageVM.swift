@@ -12,7 +12,11 @@ final class MyPageVM: BaseViewModel{
     }
     
     var detailPost: DetailResponse!
+    var imageData: imageResponse?
+    
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
+    private let userProvider = MoyaProvider<UserService>(plugins: [GlogLoggingPlugin()])
+    private let imageProvider = MoyaProvider<ImageService>(plugins: [GlogLoggingPlugin()])
     
     let dateFormatter = DateFormatter().then{
         $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -37,6 +41,38 @@ final class MyPageVM: BaseViewModel{
             case let .failure(err):
                 completion(.success(false))
                 return print(err.localizedDescription)
+            }
+        }
+    }
+    
+    func patchNickname(nickname: String){
+        let param = EditNicknameRequest.init(nickname: nickname)
+        userProvider.request(.editNickname(param: param)) { result in
+            print(result)
+        }
+    }
+    
+    func patchProfileImage(imageUrl: String){
+        let param = EditProfileImageRequest.init(imageUrl: imageUrl)
+        userProvider.request(.editProfileImage(param: param)) { result in
+            print(result)
+        }
+    }
+    
+    func uploadImage(image: UIImage){
+        imageProvider.request(.uploadImage(image: image)) { result in
+            print(result)
+            switch result{
+            case let .success(response):
+                do{
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(imageResponse.self, from: response.data)
+                    self.imageData = json
+                } catch{
+                    print(error)
+                }
+            case let .failure(err):
+                print(err.localizedDescription)
             }
         }
     }

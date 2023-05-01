@@ -51,6 +51,12 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
     }
     
+    private let imageView = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then{
+        $0.layer.cornerRadius = 50
+        $0.contentMode = .scaleToFill
+        $0.layer.masksToBounds = true
+    }
+    
     private func setPostTableView(){
         myPostCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout())
         myPostCollectionView?.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
@@ -196,23 +202,26 @@ final class MyPageVC: BaseVC<MyPageVM>{
         self.view.endEditing(true)
     }
     
+    
     @objc func editButtonDidTap(){
         let alert = UIAlertController(title: nil, message: "프로필 수정", preferredStyle: .alert)
                 
         let cancelAction = UIAlertAction(title: "취소", style: .destructive, handler: nil)
         let okAction = UIAlertAction(title: "확인", style: .default) { _ in
-            self.viewModel
+            self.viewModel.patchNickname(nickname: alert.textFields![0].text!)
+            
         }
         alert.addAction(cancelAction)
         alert.addAction(okAction)
                 
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then{
-            $0.layer.cornerRadius = 50
-            $0.contentMode = .scaleToFill
-            $0.layer.masksToBounds = true
+        
+        DispatchQueue.main.async {
+            print(self.model!.profileImageUrl)
+            if let image = URL(string: self.model!.profileImageUrl){
+                self.imageView.kf.setImage(with: image, for: .normal)
+                print(image.description)
+            }
         }
-        let image = URL(string: model!.profileImageUrl)
-        imageView.kf.setImage(with: image)
         
         alert.view.addSubview(imageView)
         
@@ -231,6 +240,10 @@ final class MyPageVC: BaseVC<MyPageVM>{
         }
         
         self.present(alert, animated: true)
+    }
+    
+    @objc func profileDidTap(){
+       
     }
 }
 
