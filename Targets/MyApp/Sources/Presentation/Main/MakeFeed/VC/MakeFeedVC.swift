@@ -223,7 +223,7 @@ final class MakeFeedVC: BaseVC<MakeFeedVM>{
     }
     
     @objc func pickImage(){
-       self.present(self.imagePicker, animated: true)
+        self.present(self.imagePicker, animated: true)
     }
     
     @objc func makeFeedButtonDidTap(){

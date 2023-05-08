@@ -51,11 +51,13 @@ final class MyPageVC: BaseVC<MyPageVM>{
         $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
     }
     
-    private let imageView = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then{
+    private let imageButton = UIButton().then{
         $0.layer.cornerRadius = 50
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
     }
+    
+    private let imagePicker = UIImagePickerController()
     
     private func setPostTableView(){
         myPostCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postListLayout())
@@ -96,6 +98,10 @@ final class MyPageVC: BaseVC<MyPageVM>{
     override func setup() {
         setPostTableView()
         editButton.createGradient()
+        
+        self.imagePicker.sourceType = .photoLibrary
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.delegate = self
     }
     
     private func postListLayout() -> UICollectionViewLayout{
@@ -213,25 +219,20 @@ final class MyPageVC: BaseVC<MyPageVM>{
         }
         alert.addAction(cancelAction)
         alert.addAction(okAction)
-                
         
         DispatchQueue.main.async {
-            print(self.model!.profileImageUrl)
             if let image = URL(string: self.model!.profileImageUrl){
-                self.imageView.kf.setImage(with: image, for: .normal)
-                print(image.description)
+                self.imageButton.kf.setImage(with: image, for: .normal)
+                self.imageButton.addTarget(self, action: #selector(self.pickImage), for: .touchUpInside)
             }
         }
         
-        alert.view.addSubview(imageView)
+        alert.view.addSubview(imageButton)
         
-        imageView.snp.makeConstraints { make in
+        imageButton.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(100)
             make.bottom.equalToSuperview().inset(70)
             make.centerX.equalToSuperview()
-        }
-        
-        imageView.snp.makeConstraints { make in
             make.size.equalTo(100)
         }
         
@@ -242,8 +243,11 @@ final class MyPageVC: BaseVC<MyPageVM>{
         self.present(alert, animated: true)
     }
     
-    @objc func profileDidTap(){
-       
+    @objc func pickImage(){
+        print("asdfasdf")
+        DispatchQueue.main.async {
+            self.present(self.imagePicker, animated: true)
+        }
     }
 }
 
@@ -262,5 +266,24 @@ extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource{
         viewModel.detailPost(completion: { _ in
             self.viewModel.pushToDetailVC(model: self.viewModel.detailPost)
         }, id: (model?.feedList[indexPath.item].id)!)
+    }
+}
+
+extension MyPageVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        var newImage: UIImage? = nil
+        
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            newImage = possibleImage
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            newImage = possibleImage
+        }
+        
+        self.imageButton.setImage(newImage, for: .normal)
+        picker.dismiss(animated: true, completion: nil)
+        viewModel.uploadImage(image: newImage!)
+        
     }
 }
