@@ -3,8 +3,15 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Moya
+import RxFlow
 
-final class DetailVM: BaseViewModel {
+final class DetailVM: BaseViewModel, Stepper{
+    
+    let id: Int
+    
+    init(id: Int){
+        self.id = id
+    }
     
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
     private let userProvider = MoyaProvider<UserService>(plugins: [GlogLoggingPlugin()])
@@ -121,15 +128,15 @@ final class DetailVM: BaseViewModel {
     }
     
     func pushToMyPageVC(model: UserProfileResponse){
-        coordinator.navigate(to: .myPageIsRequired(model: model))
+        steps.accept(GlogStep.myPageIsRequired(nickname: model.nickname))
     }
     
     func pushToMain(){
-        coordinator.navigate(to: .mainIsRequired)
+        steps.accept(GlogStep.mainIsRequired)
     }
     
     func pushToEditFeed(model: DetailResponse){
-        coordinator.navigate(to: .editFeedIsRequired(model: model))
+        steps.accept(GlogStep.editFeedIsRequired(id: model.id))
     }
     
     func success(){

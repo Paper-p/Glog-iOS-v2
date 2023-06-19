@@ -11,7 +11,6 @@ final class IntroVC: BaseVC<IntroVM>{
     private let backGroundImageView = UIImageView(image: UIImage(named: "Paper_Background")!)
     
     private let blurMainView = UIView().then{
-        //$0.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.52)
         $0.layer.cornerRadius = 112
     }
     

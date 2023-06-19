@@ -3,13 +3,14 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Moya
+import RxFlow
 
-final class MakeFeedVM: BaseViewModel {
+final class MakeFeedVM: BaseViewModel, Stepper{
     
     var imageData: imageResponse?
     
     func pushToMainVC(){
-        coordinator.navigate(to: .mainIsRequired)
+        steps.accept(GlogStep.mainIsRequired)
     }
     
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])

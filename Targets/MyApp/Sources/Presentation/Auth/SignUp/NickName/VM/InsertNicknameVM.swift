@@ -3,15 +3,15 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Moya
+import RxFlow
 
-final class InsertNicknameVM: BaseViewModel{
+final class InsertNicknameVM: BaseViewModel, Stepper{
 
     private let provider = MoyaProvider<AuthService>(plugins: [GlogLoggingPlugin()])
-    var errorLabelIsVisible = Observable(true)
     
     func success(){
         print("success")
-        coordinator.navigate(to: .signInIsRequired)
+        steps.accept(GlogStep.signInIsRequired)
     }
     
     func signUp(){
@@ -57,10 +57,8 @@ final class InsertNicknameVM: BaseViewModel{
                 switch statusCode{
                 case 200..<300:
                     self.signUp()
-                    self.errorLabelIsVisible.value = true
                 case 409:
                     self.alreadyExist()
-                    self.errorLabelIsVisible.value = false
                 default:
                     self.failure()
                 }

@@ -3,12 +3,19 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Moya
+import RxFlow
 
-
-final class MyPageVM: BaseViewModel{
+final class MyPageVM: BaseViewModel, Stepper{
+    
+    
+    let nickname: String
+    
+    init(nickname: String){
+        self.nickname = nickname
+    }
     
     func pushToDetailVC(model: DetailResponse){
-        coordinator.navigate(to: .detailIsRequired(model: model))
+        steps.accept(GlogStep.detailIsRequired(id: model.id))
     }
     
     var detailPost: DetailResponse!

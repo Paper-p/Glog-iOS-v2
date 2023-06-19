@@ -2,7 +2,7 @@
 import Foundation
 
 struct PostListRequest: Codable{
-    var size: Int = 12
-    var page: Int
-    let keyword: String
+    var size: Int = 5
+    var page: Int = 0
+    var keyword: String?
 }

@@ -2,11 +2,12 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxFlow
 
-final class InsertPwdVM: BaseViewModel{
+final class InsertPwdVM: BaseViewModel, Stepper{
     
     func pushToNicknameVC() {
-        coordinator.navigate(to: .nickNameIsRequired)
+        steps.accept(GlogStep.nickNameIsRequired)
     }
     
     func isValidPassword(password: String) -> Bool {

@@ -114,10 +114,10 @@ final class InsertNickNameVC: BaseVC<InsertNicknameVM>, UITextFieldDelegate{
     }
     
     override func bindVM() {
-        viewModel.errorLabelIsVisible.bind { [weak self] visible in
-            DispatchQueue.main.async {
-                self?.errorLabel.isHidden = visible ? true : false
-            }
-        }
+//        viewModel.errorLabelIsVisible.bind { [weak self] visible in
+//            DispatchQueue.main.async {
+//                self?.errorLabel.isHidden = visible ? true : false
+//            }
+//        }
     }
 }

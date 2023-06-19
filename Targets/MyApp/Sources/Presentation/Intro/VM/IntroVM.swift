@@ -3,13 +3,13 @@ import RxSwift
 import RxCocoa
 import RxFlow
 
-final class IntroVM: BaseViewModel {
+final class IntroVM: BaseViewModel, Stepper{
     
     func pushToSignInVC(){
-        coordinator.navigate(to: .signInIsRequired)
-    }
-    
-    func pushToSignUpVC(){
-        coordinator.navigate(to: .idIsRequired)
-    }
+        steps.accept(GlogStep.signInIsRequired)
+   }
+   
+   func pushToSignUpVC(){
+       steps.accept(GlogStep.idIsRequired)
+   }
 }

@@ -2,11 +2,10 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxFlow
 
 class BaseViewModel {
-    let coordinator: BaseCoordinator
-        
-    init(coordinator: BaseCoordinator){
-        self.coordinator = coordinator
-    }
+    var disposeBag = DisposeBag()
+    var steps = PublishRelay<Step>()
+
 }

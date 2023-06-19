@@ -2,10 +2,10 @@
 import Foundation
 
 struct HotModel: Codable{
-    var list: [HotResponse]?
+    var list: [HotPostList]?
 }
 
-struct HotResponse: Codable{
+struct HotPostList: Codable{
     var id: Int
     var title: String
     var createdAt: Date

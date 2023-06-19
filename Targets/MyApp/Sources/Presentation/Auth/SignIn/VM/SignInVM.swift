@@ -5,14 +5,14 @@ import RxCocoa
 import Moya
 import RxFlow
 
-final class SignInVM: BaseViewModel{
+final class SignInVM: BaseViewModel, Stepper{
     
     private let provider = MoyaProvider<AuthService>(plugins: [GlogLoggingPlugin()])
     private let tk = Keychain()
     
     func success(){
         print("success")
-        coordinator.navigate(to: .mainIsRequired)
+        steps.accept(GlogStep.mainIsRequired)
     }
     
     func failure(){

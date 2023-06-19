@@ -112,7 +112,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         }
     }
     
-    func bind(with model: HotResponse){
+    func bind(with model: HotPostList){
         DispatchQueue.main.async { [self] in
             self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail))
             self.titleLabel.text = model.title
