@@ -2,7 +2,7 @@
 import Foundation
 
 struct HotModel: Codable{
-    var list: [HotResponse]
+    var list: [HotResponse]?
 }
 
 struct HotResponse: Codable{

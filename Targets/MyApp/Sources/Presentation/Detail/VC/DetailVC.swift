@@ -30,7 +30,7 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.layer.cornerRadius = 17
         $0.backgroundColor = GlogAsset.Colors.paperGrayColor.color
         $0.contentMode = .scaleToFill
-        $0.layer.masksToBounds = true
+        
     }
     
     private let authorLabel = UILabel().then{
@@ -427,12 +427,12 @@ extension DetailVC: UICollectionViewDataSource,UICollectionViewDelegateFlowLayou
 extension DetailVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (model?.comments.count)!
+        return (model?.comments?.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = commentTableView.dequeueReusableCell(withIdentifier: CommentCell.identifier, for: indexPath) as! CommentCell
-        cell.bindComment(model: (model?.comments[indexPath.row])!)
+        cell.bindComment(model: (model?.comments?[indexPath.row])!)
         cell.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         return cell
     }
@@ -444,7 +444,7 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         var config: UISwipeActionsConfiguration? = nil
         lazy var deleteContextual = UIContextualAction(style: .destructive, title: nil) { _, _, _ in
-            self.viewModel.deleteComment(id: (self.model?.comments.first!.id)!) { _ in
+            self.viewModel.deleteComment(id: (self.model?.comments?.first!.id)!) { _ in
                 DispatchQueue.main.async {
                     self.commentTableView.reloadData()
                 }
@@ -452,7 +452,7 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
         }
         deleteContextual.image = UIImage(systemName: "trash")
         
-        if viewModel.detailPost.comments.first?.isMine == true {
+        if viewModel.detailPost.comments?.first?.isMine == true {
             config = UISwipeActionsConfiguration(actions: [deleteContextual])
         }
         return config

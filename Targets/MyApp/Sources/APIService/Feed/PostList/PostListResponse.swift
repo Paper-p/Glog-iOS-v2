@@ -4,7 +4,7 @@ import Foundation
 struct PostListResponse: Codable{
     var size: Int
     var page: Int
-    var list: [PostList]
+    var list: [PostList]?
 }
 
 struct PostList: Codable{

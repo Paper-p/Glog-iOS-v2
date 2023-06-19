@@ -41,7 +41,7 @@ final class MainVM: BaseViewModel {
                         $0.dateDecodingStrategy = .formatted(self.dateFormatter)
                     }
                     let json = try decoder.decode(HotModel.self, from: response.data)
-                    self.hotFeed = json.list
+                    self.hotFeed = json.list ?? .init()
                     completion(.success(true))
                 } catch{
                     print(error)
@@ -63,7 +63,7 @@ final class MainVM: BaseViewModel {
                         $0.dateDecodingStrategy = .formatted(self.dateFormatter)
                     }
                     let json = try decoder.decode(PostListResponse.self, from: response.data)
-                    self.postList = json.list
+                    self.postList = json.list ?? .init()
                     completion(.success(true))
                 } catch{
                     print(error)

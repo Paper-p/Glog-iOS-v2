@@ -11,7 +11,7 @@ struct DetailResponse: Codable{
     var likeCount: Int
     var isLiked: Bool
     var tagList: [String]
-    var comments: [DetailComment]
+    var comments: [DetailComment]?
     var author: Author
     var isMine: Bool
 }
