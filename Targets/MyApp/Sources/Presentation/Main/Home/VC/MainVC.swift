@@ -20,14 +20,15 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     
     private let mainLabel = UILabel().then{
-        $0.text = "너의 생각을 글로 표현해봐!"
+        $0.text = "Glog에서 너의 생각을 펼쳐봐!"
         $0.textColor = .white
-        $0.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        $0.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         $0.numberOfLines = 0
         $0.lineBreakMode = .byWordWrapping
+        $0.sizeToFit()
     }
     
-    private let gifImage = GIFImageView()
+    private let rocketImageView = UIImageView(image: UIImage(named: "Paper_Rocket"))
     
     private let makeFeedButton = GlogButton(title: "게시글 작성하러 가기",width: 366, height: 60).then{
         $0.addTarget(self, action: #selector(makeFeedButtonDidTap), for: .touchUpInside)
@@ -84,9 +85,6 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
     }
     
     override func setup() {
-        DispatchQueue.main.async {
-            self.gifImage.animate(withGIFNamed: "Paper_Smile", animationBlock: {})
-        }
         setCollectionView()
         setPostCollectionView()
         
@@ -159,7 +157,7 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         [mainLabel,
-         gifImage,
+         rocketImageView,
          makeFeedButton,
          hotCategory,
          hotCollectionView,
@@ -267,17 +265,16 @@ final class MainVC: BaseVC<MainVM>,UITextViewDelegate,UIScrollViewDelegate{
         }
         
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(20)
+            make.top.equalTo(50)
             make.left.equalTo(12)
-            make.width.equalTo(230)
-            make.height.equalTo(98)
+            make.width.equalTo(190)
         }
         
-        gifImage.snp.makeConstraints { make in
+        rocketImageView.snp.makeConstraints { make in
             make.centerY.equalTo(mainLabel)
-            make.right.equalTo(12)
-            make.height.equalTo(135)
-            make.width.equalTo(165)
+            make.left.equalTo(mainLabel.snp.right).offset(20)
+            make.width.equalTo(140)
+            make.height.equalTo(160)
         }
         
         makeFeedButton.snp.makeConstraints { make in
