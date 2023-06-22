@@ -48,6 +48,11 @@ final class SignInVC: BaseVC<SignInVM>{
         signInButton.createGradient()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        signInButton.createGradient()
+    }
+    
     override func configureNavigation() {
         self.navigationController?.navigationBar.tintColor = .white
     }
