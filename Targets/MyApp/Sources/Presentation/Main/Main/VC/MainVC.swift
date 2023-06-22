@@ -65,6 +65,10 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     private var postCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
     }
+    private let layout = UICollectionViewFlowLayout().then {
+        $0.itemSize = CGSize(width: ((UIScreen.main.bounds.width) / 1.27),height: ((UIScreen.main.bounds.height) / 2.37))
+        $0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    }
     
     private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill") ?? "", UIImage(systemName: "line.3.horizontal") ?? "", UIImage(systemName: "square.fill") ?? ""]).then{
         $0.selectedSegmentTintColor = GlogAsset.Colors.paperStartColor.color
@@ -75,6 +79,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hotCollectionView.collectionViewLayout = layout
         viewModel.fetchHotPostList { _ in
             DispatchQueue.main.async {
                 self.hotCollectionView.reloadData()
@@ -174,13 +179,12 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         
         segmentedControl.snp.makeConstraints { make in
             make.centerY.equalTo(postCategory)
-            make.right.equalTo(postCategory)
+            make.right.equalTo(postCollectionView)
         }
         
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.height.equalTo(1)
             make.bottom.equalToSuperview()
         }
     }

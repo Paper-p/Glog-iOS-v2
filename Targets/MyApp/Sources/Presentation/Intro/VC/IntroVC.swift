@@ -25,7 +25,7 @@ final class IntroVC: BaseVC<IntroVM>{
         $0.font = UIFont.systemFont(ofSize: 18, weight: .bold)
     }
     
-    private let signInButton = GlogButton(title: "로그인",width: 366, height: 60).then{
+    private let signInButton = GlogButton(title: "로그인").then{
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
     
@@ -42,8 +42,12 @@ final class IntroVC: BaseVC<IntroVM>{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        signInButton.createGradient()
         setBlur()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        signInButton.createGradient()
     }
     
     private func setBlur(){
@@ -94,7 +98,7 @@ final class IntroVC: BaseVC<IntroVM>{
         signInButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(-130)
-            make.width.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview().inset(12)
             make.height.equalTo(60)
         }
         signUpButton.snp.makeConstraints { make in

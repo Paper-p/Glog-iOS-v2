@@ -26,7 +26,7 @@ final class SignInVC: BaseVC<SignInVM>{
         $0.text = "wnsghk78*"
     }
     
-    private let signInButton = GlogButton(title: "로그인",width: 366, height: 60).then{
+    private let signInButton = GlogButton(title: "로그인").then{
         $0.addTarget(self, action: #selector(signInButtonDidTap), for: .touchUpInside)
     }
     

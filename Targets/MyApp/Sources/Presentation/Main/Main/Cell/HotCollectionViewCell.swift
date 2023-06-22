@@ -107,7 +107,7 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         }
         
         itemView.snp.makeConstraints { make in
-            make.bottom.right.left.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(145)
         }
     }

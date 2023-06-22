@@ -14,7 +14,7 @@ final class InsertIdVC: BaseVC<InsertIdVM>, UITextFieldDelegate{
     
     private let idTextField = AuthTextField(title: "사용하실 아이디를 입력해주세요.")
     
-    private var nextButton = GlogButton(title: "다음",width: 366, height: 60).then{
+    private var nextButton = GlogButton(title: "다음").then{
         $0.addTarget(self, action: #selector(nextButtonDidTap), for: .touchUpInside)
         $0.isEnabled = false
     }
