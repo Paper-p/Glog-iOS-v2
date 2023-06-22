@@ -38,6 +38,9 @@ class IntroFlow: Flow {
             
         case .idIsRequired:
             return idIsRequired()
+            
+        case .mainIsRequired:
+            return mainIsRequired()
         
         default:
             return .none
@@ -62,6 +65,13 @@ class IntroFlow: Flow {
     private func idIsRequired() -> FlowContributors{
         let vm = InsertIdVM()
         let vc = InsertIdVC(vm)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func mainIsRequired() -> FlowContributors{
+        let vm = MainVM()
+        let vc = MainVC(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }

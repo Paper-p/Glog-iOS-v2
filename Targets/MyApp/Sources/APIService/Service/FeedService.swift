@@ -69,7 +69,7 @@ extension FeedService: TargetType{
         case .hot:
             return .requestPlain
         case let .postList(keyword):
-            return .requestParameters(parameters: ["size": keyword.size, "page": keyword.page, "keyword": keyword.keyword], encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: ["size": keyword.size, "page": keyword.page, "keyword": keyword.keyword ?? .init()], encoding: URLEncoding.queryString)
         case .detail:
             return .requestPlain
         case .like:

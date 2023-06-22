@@ -75,9 +75,16 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.async {
-            self.postCollectionView.reloadData()
+        viewModel.fetchHotPostList { _ in
+            DispatchQueue.main.async {
+                self.hotCollectionView.reloadData()
+            }
         }
+        viewModel.fetchPostList(completion: { _ in
+            DispatchQueue.main.async {
+                self.postCollectionView.reloadData()
+            }
+        }, page: page)
     }
     
     override func setup() {
@@ -130,7 +137,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     override func setLayout() {
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(50)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(36)
             make.left.equalTo(12)
             make.width.equalTo(190)
         }

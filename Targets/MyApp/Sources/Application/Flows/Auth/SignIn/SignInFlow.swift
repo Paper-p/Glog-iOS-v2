@@ -35,6 +35,7 @@ class SignInFlow: Flow {
             
         case .mainIsRequired:
             return mainIsRequired()
+            
         
         default:
             return .none

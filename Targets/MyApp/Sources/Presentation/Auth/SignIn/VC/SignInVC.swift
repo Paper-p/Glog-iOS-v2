@@ -120,8 +120,8 @@ final class SignInVC: BaseVC<SignInVM>{
         guard let pwd = pwdTextField.text else {return}
         
         if !id.isEmpty && !pwd.isEmpty == true{
-            print("good")
-            viewModel.fetch(id: idTextField.text!, pwd: pwdTextField.text!)
+            viewModel.fetch(completion: { _ in
+            }, id: id, pwd: pwd)
         } else {
             print("bad")
         }

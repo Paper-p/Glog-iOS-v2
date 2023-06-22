@@ -19,7 +19,7 @@ final class SignInVM: BaseViewModel, Stepper{
         print("fail")
     }
     
-    func fetch(id: String, pwd: String){
+    func fetch(completion : @escaping (Result<Bool, Error>) -> (), id: String, pwd: String){
         let param = SignInRequest.init(userId: id, password: pwd)
         print(param)
         
@@ -37,6 +37,7 @@ final class SignInVM: BaseViewModel, Stepper{
                         self.tk.create("accessToken", token: accessToken)
                     }
                     self.success()
+                    completion(.success(true))
                 case 400..<404:
                     return self.failure()
                 default:
