@@ -62,12 +62,15 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     private var hotCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init()).then{
         $0.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
     }
+    
     private var postCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
     }
+    
     private let layout = UICollectionViewFlowLayout().then {
         $0.itemSize = CGSize(width: ((UIScreen.main.bounds.width) / 1.27),height: ((UIScreen.main.bounds.height) / 2.37))
         $0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        $0.scrollDirection = .horizontal
     }
     
     private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill") ?? "", UIImage(systemName: "line.3.horizontal") ?? "", UIImage(systemName: "square.fill") ?? ""]).then{
@@ -167,7 +170,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         
         hotCollectionView.snp.makeConstraints { make in
             make.top.equalTo(hotCategory.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(12)
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(360)
         }
         
