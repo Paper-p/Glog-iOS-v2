@@ -17,11 +17,13 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     
     private let itemView = UIView().then{
         $0.layer.cornerRadius = 10
+        $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
     }
     
     private let titleLabel = UILabel().then{
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        $0.sizeToFit()
     }
     
     private let contentTextView = UITextView().then{
@@ -31,6 +33,8 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
         $0.isSelectable = false
         $0.isEditable = false
         $0.isScrollEnabled = false
+        $0.textAlignment = .left
+        $0.sizeToFit()
     }
     
     private let likeButton = UIButton().then{
@@ -51,41 +55,6 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setBlur()
-    }
-    
-    private func setBlur(){
-        let blurEffect = UIBlurEffect(style: .dark)
-        let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.frame = CGRect(x: 0, y: 0, width: 311, height: 145)
-        visualEffectView.layer.cornerRadius = 10
-        visualEffectView.clipsToBounds = true
-        itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
-        titleLabel.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().inset(10)
-            make.width.equalToSuperview().inset(10)
-            make.height.equalTo(24)
-        }
-        
-        contentTextView.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.width.equalTo(titleLabel)
-            make.height.equalTo(67)
-        }
-        
-        likeButton.snp.makeConstraints { make in
-            make.left.equalTo(contentTextView)
-            make.bottom.equalToSuperview().inset(9)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
-        }
-        
-        hitButton.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right)
-            make.size.equalTo(likeButton)
-        }
     }
     
     override func layoutSubviews() {
@@ -98,17 +67,42 @@ final class HotCollectionViewCell: BaseCollectionViewCell{
     }
     
     override func addView(){
-        contentView.addSubViews(thumbnailImageView,itemView)
+        contentView.addSubViews(itemView,thumbnailImageView)
+        itemView.addSubViews(titleLabel,contentTextView,likeButton,hitButton)
     }
     
     override func setLayout(){
         thumbnailImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(180)
         }
         
         itemView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(145)
+            make.top.equalTo(thumbnailImageView.snp.bottom)
+            make.bottom.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(42)
+            make.width.equalToSuperview().inset(16)
+            make.centerX.equalToSuperview()
+        }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.width.equalToSuperview().inset(16)
+            make.centerX.equalTo(titleLabel)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.left.equalTo(contentTextView).offset(25)
+            make.bottom.equalTo(-20)
+        }
+        
+        hitButton.snp.makeConstraints { make in
+            make.centerY.equalTo(likeButton)
+            make.left.equalTo(likeButton.snp.right).offset(30)
         }
     }
     

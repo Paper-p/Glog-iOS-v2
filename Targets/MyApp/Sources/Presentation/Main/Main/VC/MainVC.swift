@@ -67,14 +67,17 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     private var hotCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init()).then{
         $0.register(HotCollectionViewCell.self, forCellWithReuseIdentifier: HotCollectionViewCell.identifier)
+        $0.showsHorizontalScrollIndicator = false
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private var postCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
+        //$0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private let hotLayout = UICollectionViewFlowLayout().then {
-        $0.itemSize = CGSize(width: ((UIScreen.main.bounds.width) / 1.27),height: ((UIScreen.main.bounds.height) / 2.37))
+        $0.itemSize = CGSize(width: 353,height: 350)
         $0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         $0.scrollDirection = .horizontal
     }
@@ -95,7 +98,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     override func viewDidLoad() {
         super.viewDidLoad()
         hotCollectionView.collectionViewLayout = hotLayout
-        postCollectionView.collectionViewLayout = postLayout
+        //postCollectionView.collectionViewLayout = postLayout
         viewModel.fetchHotPostList { _ in
             DispatchQueue.main.async {
                 self.hotCollectionView.reloadData()
@@ -194,7 +197,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         hotCollectionView.snp.makeConstraints { make in
             make.top.equalTo(hotCategory.snp.bottom).offset(16)
             make.width.equalToSuperview()
-            make.height.equalTo(360)
+            make.height.equalTo(350)
         }
         
         postCategory.snp.makeConstraints { make in
