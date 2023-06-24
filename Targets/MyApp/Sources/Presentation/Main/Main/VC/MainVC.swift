@@ -15,6 +15,12 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     var page = 0
     
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
+    
     private let mainLabel = UILabel().then{
         $0.text = "Glog에서 너의 생각을 펼쳐봐!"
         $0.textColor = .white
@@ -67,7 +73,13 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
     }
     
-    private let layout = UICollectionViewFlowLayout().then {
+    private let hotLayout = UICollectionViewFlowLayout().then {
+        $0.itemSize = CGSize(width: ((UIScreen.main.bounds.width) / 1.27),height: ((UIScreen.main.bounds.height) / 2.37))
+        $0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        $0.scrollDirection = .horizontal
+    }
+    
+    private let postLayout = UICollectionViewFlowLayout().then {
         $0.itemSize = CGSize(width: ((UIScreen.main.bounds.width) / 1.27),height: ((UIScreen.main.bounds.height) / 2.37))
         $0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         $0.scrollDirection = .horizontal
@@ -82,7 +94,8 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        hotCollectionView.collectionViewLayout = layout
+        hotCollectionView.collectionViewLayout = hotLayout
+        postCollectionView.collectionViewLayout = postLayout
         viewModel.fetchHotPostList { _ in
             DispatchQueue.main.async {
                 self.hotCollectionView.reloadData()
@@ -111,7 +124,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         viewModel.postListDelegate = self
         postListData.bind(to: postCollectionView.rx.items(cellIdentifier: PostListCollectionViewCell.identifier, cellType: PostListCollectionViewCell.self)){
             (row, data, cell) in
-            cell.bind(with: data, type: .grid)
+            cell.bind(with: data)
         }.disposed(by: disposeBag)
         
         postCollectionView.rx.modelSelected(PostList.self)
@@ -132,7 +145,9 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     }
     
     override func addView() {
-        view.addSubViews(mainLabel,
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubViews(mainLabel,
                          rocketImageView,
                          makeFeedButton,
                          hotCategory,
@@ -144,8 +159,16 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     }
     
     override func setLayout() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.width.centerX.bottom.top.equalToSuperview()
+        }
+        
         mainLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(36)
+            make.top.equalToSuperview().offset(36)
             make.left.equalTo(12)
             make.width.equalTo(190)
         }
@@ -170,7 +193,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         
         hotCollectionView.snp.makeConstraints { make in
             make.top.equalTo(hotCategory.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview()
+            make.width.equalToSuperview()
             make.height.equalTo(360)
         }
         
@@ -182,12 +205,13 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         
         segmentedControl.snp.makeConstraints { make in
             make.centerY.equalTo(postCategory)
-            make.right.equalTo(postCollectionView)
+            make.right.equalTo(postCollectionView).inset(16)
         }
         
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(12)
+            make.width.equalToSuperview()
+            make.height.equalTo(360)
             make.bottom.equalToSuperview()
         }
     }

@@ -15,13 +15,13 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         $0.contentMode = .scaleAspectFill
     }
     
-    private let itemView = UIView().then{
-        $0.layer.cornerRadius = 10
-    }
-    
     private let titleLabel = UILabel().then{
         $0.textColor = .white
         $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        $0.numberOfLines = 0
+        $0.lineBreakMode = .byWordWrapping
+        $0.textAlignment = .left
+        $0.sizeToFit()
     }
     
     private let contentTextView = UITextView().then{
@@ -31,6 +31,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         $0.isSelectable = false
         $0.isEditable = false
         $0.isScrollEnabled = false
+        $0.sizeToFit()
     }
     
     private let likeButton = UIButton().then{
@@ -53,76 +54,6 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         super.init(frame: frame)
     }
     
-    private func setPostType(){
-        let blurEffect = UIBlurEffect(style: .dark)
-        let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.frame = CGRect(x: 0, y: 0, width: 369, height: 145)
-        visualEffectView.layer.cornerRadius = 10
-        visualEffectView.clipsToBounds = true
-        itemView.addSubViews(visualEffectView,titleLabel,contentTextView,likeButton,hitButton)
-        
-        itemView.snp.makeConstraints { make in
-            make.bottom.right.left.equalToSuperview()
-            make.height.equalTo(145)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().inset(10)
-            make.width.equalToSuperview().inset(10)
-            make.height.equalTo(24)
-        }
-        
-        contentTextView.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.width.equalTo(titleLabel)
-            make.height.equalTo(67)
-        }
-        
-        likeButton.snp.makeConstraints { make in
-            make.left.equalTo(contentTextView)
-            make.bottom.equalToSuperview().inset(9)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
-        }
-        
-        hitButton.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right)
-            make.size.equalTo(likeButton)
-        }
-    }
-
-    private func setTableType(){
-        contentView.addSubViews(titleLabel,contentTextView,likeButton,hitButton)
-        titleLabel.font = UIFont.systemFont(ofSize: 18)
-        titleLabel.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().inset(11)
-            make.width.equalToSuperview().inset(11)
-            make.height.equalTo(21)
-        }
-        contentTextView.font = UIFont.systemFont(ofSize: 14)
-        contentTextView.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel)
-            make.top.equalTo(titleLabel.snp.bottom).offset(3)
-            make.width.equalTo(titleLabel)
-            make.height.equalTo(22)
-        }
-        
-        likeButton.snp.makeConstraints { make in
-            make.left.equalTo(contentTextView)
-            make.bottom.equalToSuperview().inset(14)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
-        }
-        
-        hitButton.snp.makeConstraints { make in
-            make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right)
-            make.size.equalTo(likeButton)
-        }
-    }
-    
     override func layoutSubviews() {
         self.layer.cornerRadius = 10
         self.layer.masksToBounds = true
@@ -133,45 +64,47 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
     }
     
     override func addView(){
-        contentView.addSubViews(thumbnailImageView,itemView)
+        contentView.addSubViews(thumbnailImageView, titleLabel, contentTextView, likeButton, hitButton)
     }
     
     override func setLayout(){
         thumbnailImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(375)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(thumbnailImageView.snp.bottom).offset(16)
+            make.width.equalTo(thumbnailImageView)
+        }
+        
+        contentTextView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.width.equalTo(titleLabel)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.top.equalTo(contentTextView.snp.bottom).offset(30)
+            make.left.equalTo(contentTextView)
+        }
+        
+        hitButton.snp.makeConstraints { make in
+            make.centerY.equalTo(likeButton)
+            make.left.equalTo(likeButton.snp.right).offset(16)
         }
     }
     
-    func bind(with model: PostList, type: SortButtonType){
+    func bind(with model: PostList){
         DispatchQueue.main.async { [self] in
-            switch type {
-            case .grid:
-                self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
-            case .table:
-                self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
-                self.titleLabel.text = model.title
-                self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
-                self.likeButton.setTitle("\(model.likeCount)", for: .normal)
-                self.hitButton.setTitle("\(model.hit)", for: .normal)
-                if model.isLiked {
-                    self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-                } else {
-                    self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-                }
-                setTableType()
-                
-            case .post:
-                self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
-                self.titleLabel.text = model.title
-                self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
-                self.likeButton.setTitle("\(model.likeCount)", for: .normal)
-                self.hitButton.setTitle("\(model.hit)", for: .normal)
-                if model.isLiked {
-                    self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-                } else {
-                    self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
-                }
-                setPostType()
+            self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
+            self.titleLabel.text = model.title
+            self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
+            self.likeButton.setTitle("\(model.likeCount)", for: .normal)
+            self.hitButton.setTitle("\(model.hit)", for: .normal)
+            if model.isLiked {
+                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 16, height: 12)).tintColor(GlogAsset.Colors.paperStartColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
+            } else {
+                self.likeButton.setImage(.init(named: "Paper_LikeLogo")?.downSample(size: .init(width: 26, height: 22)).tintColor(GlogAsset.Colors.paperGrayColor.color).withRenderingMode(.alwaysOriginal), for: .normal)
             }
         }
     }
