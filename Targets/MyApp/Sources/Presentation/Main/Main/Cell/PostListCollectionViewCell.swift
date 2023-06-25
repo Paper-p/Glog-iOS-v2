@@ -24,13 +24,10 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         $0.sizeToFit()
     }
     
-    private let contentTextView = UITextView().then{
+    private let contentLabel = UILabel().then{
         $0.textColor = UIColor(red: 0.483, green: 0.483, blue: 0.483, alpha: 1)
         $0.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         $0.backgroundColor = .clear
-        $0.isSelectable = false
-        $0.isEditable = false
-        $0.isScrollEnabled = false
         $0.sizeToFit()
     }
     
@@ -64,13 +61,13 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
     }
     
     override func addView(){
-        contentView.addSubViews(thumbnailImageView, titleLabel, contentTextView, likeButton, hitButton)
+        contentView.addSubViews(thumbnailImageView, titleLabel, contentLabel, likeButton, hitButton)
     }
     
     override func setLayout(){
         thumbnailImageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(375)
+            make.height.equalTo(208)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -78,14 +75,14 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
             make.width.equalTo(thumbnailImageView)
         }
         
-        contentTextView.snp.makeConstraints { make in
+        contentLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.width.equalTo(titleLabel)
         }
         
         likeButton.snp.makeConstraints { make in
-            make.top.equalTo(contentTextView.snp.bottom).offset(30)
-            make.left.equalTo(contentTextView)
+            make.top.equalTo(contentLabel.snp.bottom).offset(30)
+            make.left.equalTo(contentLabel)
         }
         
         hitButton.snp.makeConstraints { make in
@@ -98,7 +95,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         DispatchQueue.main.async { [self] in
             self.thumbnailImageView.kf.setImage(with: URL(string: model.thumbnail ?? ""))
             self.titleLabel.text = model.title
-            self.contentTextView.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
+            self.contentLabel.text = model.previewContent.filter { !"# \n - 1.".contains($0) }
             self.likeButton.setTitle("\(model.likeCount)", for: .normal)
             self.hitButton.setTitle("\(model.hit)", for: .normal)
             if model.isLiked {

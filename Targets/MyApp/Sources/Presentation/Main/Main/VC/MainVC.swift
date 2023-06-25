@@ -83,9 +83,9 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     }
     
     private let postLayout = UICollectionViewFlowLayout().then {
-        $0.itemSize = CGSize(width: ((UIScreen.main.bounds.width) / 1.27),height: ((UIScreen.main.bounds.height) / 2.37))
-        $0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        $0.scrollDirection = .horizontal
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width,height: 350)
+        $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 25, right: 0)
+        $0.scrollDirection = .vertical
     }
     
     private let segmentedControl = UISegmentedControl(items: [UIImage(systemName: "circle.grid.2x2.fill") ?? "", UIImage(systemName: "line.3.horizontal") ?? "", UIImage(systemName: "square.fill") ?? ""]).then{
@@ -98,7 +98,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     override func viewDidLoad() {
         super.viewDidLoad()
         hotCollectionView.collectionViewLayout = hotLayout
-        //postCollectionView.collectionViewLayout = postLayout
+        postCollectionView.collectionViewLayout = postLayout
         viewModel.fetchHotPostList { _ in
             DispatchQueue.main.async {
                 self.hotCollectionView.reloadData()
@@ -208,13 +208,12 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         
         segmentedControl.snp.makeConstraints { make in
             make.centerY.equalTo(postCategory)
-            make.right.equalTo(postCollectionView).inset(16)
+            make.right.equalTo(postCollectionView).inset(8)
         }
         
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(16)
-            make.width.equalToSuperview()
-            make.height.equalTo(360)
+            make.leading.trailing.equalToSuperview().inset(15)
             make.bottom.equalToSuperview()
         }
     }
