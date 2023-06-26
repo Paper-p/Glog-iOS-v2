@@ -71,7 +71,7 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(thumbnailImageView.snp.bottom).offset(16)
+            make.top.equalTo(thumbnailImageView.snp.bottom).offset(32)
             make.width.equalTo(thumbnailImageView)
         }
         
@@ -82,12 +82,12 @@ final class PostListCollectionViewCell: BaseCollectionViewCell{
         
         likeButton.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.bottom).offset(30)
-            make.left.equalTo(contentLabel)
+            make.left.equalTo(contentLabel).offset(32)
         }
         
         hitButton.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton)
-            make.left.equalTo(likeButton.snp.right).offset(16)
+            make.left.equalTo(likeButton.snp.right).offset(32)
         }
     }
     

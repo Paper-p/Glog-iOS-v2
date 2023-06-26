@@ -73,7 +73,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     private var postCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        //$0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private let hotLayout = UICollectionViewFlowLayout().then {
@@ -83,8 +83,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     }
     
     private let postLayout = UICollectionViewFlowLayout().then {
-        $0.itemSize = CGSize(width: UIScreen.main.bounds.width,height: 350)
-        $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 25, right: 0)
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width / 1.05, height: 360)
         $0.scrollDirection = .vertical
     }
     
@@ -213,7 +212,8 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(15)
+            make.width.equalToSuperview()
+            make.height.equalTo(view.bounds.height)
             make.bottom.equalToSuperview()
         }
     }
