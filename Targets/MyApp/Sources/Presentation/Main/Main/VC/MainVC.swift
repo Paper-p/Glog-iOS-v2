@@ -94,6 +94,18 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     private let profileImage = UIButton()
     
+    private let floatingButton = UIButton().then{
+        $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+        $0.setImage(UIImage(systemName: "pencil.line")?.withRenderingMode(.alwaysOriginal).withTintColor(GlogAsset.Colors.paperStartColor.color), for: .normal)
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = UIScreen.main.bounds.width*0.12 / 2
+    }
+    
+    override func viewDidLayoutSubviews() {
+       super.viewDidLayoutSubviews()
+       floatingButton.frame = CGRect(x: view.frame.size.width - 30 - 8 - 20, y: view.frame.size.height - 60 - 8 - 40, width: 50, height: 50)
+   }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         hotCollectionView.collectionViewLayout = hotLayout
@@ -147,8 +159,8 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     }
     
     override func addView() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
+        view.addSubViews(scrollView,floatingButton)
+        scrollView.addSubViews(contentView)
         contentView.addSubViews(mainLabel,
                          rocketImageView,
                          makeFeedButton,
