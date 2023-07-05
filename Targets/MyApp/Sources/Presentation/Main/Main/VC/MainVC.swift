@@ -73,7 +73,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     private var postCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        //$0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private let hotLayout = UICollectionViewFlowLayout().then {
@@ -99,12 +99,34 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         $0.setImage(UIImage(systemName: "pencil.line")?.withRenderingMode(.alwaysOriginal).withTintColor(GlogAsset.Colors.paperStartColor.color), for: .normal)
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = UIScreen.main.bounds.width*0.12 / 2
+        $0.addTarget(self, action: #selector(makeFeedButtonDidTap), for: .touchUpInside)
     }
     
     override func viewDidLayoutSubviews() {
        super.viewDidLayoutSubviews()
        floatingButton.frame = CGRect(x: view.frame.size.width - 30 - 8 - 20, y: view.frame.size.height - 60 - 8 - 40, width: 50, height: 50)
-   }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.postCollectionView.addObserver(self, forKeyPath: "contentsize", options: .new, context: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.postCollectionView.removeObserver(self, forKeyPath: "contentsize")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentsize" {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    postCollectionView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 50)
+                    }
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,7 +247,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         postCollectionView.snp.makeConstraints { make in
             make.top.equalTo(postCategory.snp.bottom).offset(16)
             make.width.equalToSuperview()
-            make.height.equalTo(view.bounds.height)
+            make.height.equalTo(view.frame.height * 2.2)
             make.bottom.equalToSuperview()
         }
     }

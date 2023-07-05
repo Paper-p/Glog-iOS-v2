@@ -16,33 +16,11 @@ final class DetailVM: BaseViewModel, Stepper{
     private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
     private let userProvider = MoyaProvider<UserService>(plugins: [GlogLoggingPlugin()])
     private let CommentProvider = MoyaProvider<CommentService>(plugins: [GlogLoggingPlugin()])
-    var detailPost: DetailResponse!
-    var myPageData: UserProfileResponse!
+    
+    var detailData: DetailResponse?
     
     let dateFormatter = DateFormatter().then{
         $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-    }
-    
-    func myPageVC(nickname: String,completion: @escaping () -> ()){
-        let param = UserProfileRequest(nickname: nickname)
-        userProvider.request(.userProfile(param: param)) { result in
-            print(result)
-            switch result{
-            case let .success(response):
-                do{
-                    let decoder = JSONDecoder().then{
-                        $0.dateDecodingStrategy = .formatted(self.dateFormatter)
-                    }
-                    let json = try decoder.decode(UserProfileResponse.self, from: response.data)
-                    self.myPageData = json
-                    completion()
-                } catch{
-                    print(error)
-                }
-            case let .failure(err):
-                return print(err.localizedDescription)
-            }
-        }
     }
     
     func fetchLike(id: Int, completion : @escaping (Result<Bool, Error>) -> ()){
@@ -69,8 +47,9 @@ final class DetailVM: BaseViewModel, Stepper{
         }
     }
     
-    func detailPost(id: Int) {
-        let param = DetailRequest.init(id: id)
+    func detailPost(id: Int, completion: @escaping (Result<Bool, Error>) -> ()) {
+        print(self.id)
+        let param = DetailRequest.init(id: self.id)
         provider.request(.detail(param: param)) { result in
             print(result)
             switch result{
@@ -80,7 +59,8 @@ final class DetailVM: BaseViewModel, Stepper{
                         $0.dateDecodingStrategy = .formatted(self.dateFormatter)
                     }
                     let json = try decoder.decode(DetailResponse.self, from: response.data)
-                    self.detailPost = json
+                    self.detailData = json
+                    completion(.success(true))
                 } catch{
                     print(error)
                 }

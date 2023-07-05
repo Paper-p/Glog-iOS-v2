@@ -41,6 +41,12 @@ class IntroFlow: Flow {
             
         case .mainIsRequired:
             return mainIsRequired()
+            
+        case .makeFeedIsRequired:
+            return makeFeedIsRequired()
+            
+        case let .detailIsRequired(id):
+            return detailIsRequired(id: id)
         
         default:
             return .none
@@ -72,6 +78,20 @@ class IntroFlow: Flow {
     private func mainIsRequired() -> FlowContributors{
         let vm = MainVM()
         let vc = MainVC(vm)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func makeFeedIsRequired() -> FlowContributors{
+        let vm = MakeFeedVM()
+        let vc = MakeFeedVC(vm)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func detailIsRequired(id: Int) -> FlowContributors{
+        let vm = DetailVM(id: id)
+        let vc = DetailVC(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
