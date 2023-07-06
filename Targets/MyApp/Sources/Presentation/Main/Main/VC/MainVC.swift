@@ -73,7 +73,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     private var postCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(PostListCollectionViewCell.self, forCellWithReuseIdentifier: PostListCollectionViewCell.identifier)
-        //$0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private let hotLayout = UICollectionViewFlowLayout().then {
