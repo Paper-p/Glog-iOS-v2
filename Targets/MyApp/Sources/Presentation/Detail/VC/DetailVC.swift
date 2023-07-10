@@ -42,7 +42,10 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     private let contentText = UITextView().then{
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.textColor = .white
+        $0.isEditable = false
+        $0.isSelectable = false
         $0.sizeToFit()
     }
     
@@ -128,8 +131,9 @@ final class DetailVC: BaseVC<DetailVM>{
         }
         
         contentText.snp.makeConstraints { make in
-            make.top.equalTo(tagCollectionView)
-            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(tagCollectionView.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(8)
+            make.bottom.equalToSuperview()
         }
     }
     
