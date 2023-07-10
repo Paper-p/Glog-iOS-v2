@@ -139,11 +139,17 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func bindVM() {
         DispatchQueue.main.async {
+            
+            let source = self.viewModel.detailData?.content
+            let document = Document(parsing: source ?? .init())
+            var markdownsaur = Markdownosaur()
+            let attributedString = markdownsaur.attributedString(from: document)
+            
             self.thumbnailImageView.kf.setImage(with: URL(string: self.viewModel.detailData?.thumbnail ?? ""))
             self.titleLabel.text = self.viewModel.detailData?.title
             self.dateLabel.text = self.viewModel.detailData?.createdAt.toGlogDateString()
             self.authorLabel.text = self.viewModel.detailData?.author.nickname
-            self.contentText.text = self.viewModel.detailData?.content
+            self.contentText.text = attributedString.string
         }
     }
 }
