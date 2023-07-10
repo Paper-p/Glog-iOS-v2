@@ -37,9 +37,13 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     private let tagLayout = UICollectionViewFlowLayout().then {
-        //$0.itemSize = CGSize(width: , height: 28)
         $0.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         $0.scrollDirection = .horizontal
+    }
+    
+    private let contentText = UITextView().then{
+        $0.textColor = .white
+        $0.sizeToFit()
     }
     
     override func viewDidLoad() {
@@ -91,7 +95,7 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     override func addView() {
-        view.addSubViews(thumbnailImageView, tagCollectionView)
+        view.addSubViews(thumbnailImageView, tagCollectionView, contentText)
         thumbnailImageView.addSubViews(titleLabel,dateLabel,authorLabel)
     }
     
@@ -122,6 +126,11 @@ final class DetailVC: BaseVC<DetailVM>{
             make.width.equalToSuperview()
             make.height.equalTo(30)
         }
+        
+        contentText.snp.makeConstraints { make in
+            make.top.equalTo(tagCollectionView)
+            make.leading.trailing.equalToSuperview()
+        }
     }
     
     override func bindVM() {
@@ -130,6 +139,7 @@ final class DetailVC: BaseVC<DetailVM>{
             self.titleLabel.text = self.viewModel.detailData?.title
             self.dateLabel.text = self.viewModel.detailData?.createdAt.toGlogDateString()
             self.authorLabel.text = self.viewModel.detailData?.author.nickname
+            self.contentText.text = self.viewModel.detailData?.content
         }
     }
 }
