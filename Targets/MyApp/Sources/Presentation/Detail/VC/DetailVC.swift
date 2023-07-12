@@ -49,6 +49,14 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.sizeToFit()
     }
     
+    private let viewCountLabel = UILabel().then{
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.textColor = GlogAsset.Colors.paperStartColor.color
+        $0.textAlignment = .center
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        $0.sizeToFit()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.detailPost(id: viewModel.id) { _ in
@@ -98,7 +106,7 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     override func addView() {
-        view.addSubViews(thumbnailImageView, tagCollectionView, contentText)
+        view.addSubViews(thumbnailImageView, tagCollectionView, contentText, viewCountLabel)
         thumbnailImageView.addSubViews(titleLabel,dateLabel,authorLabel)
     }
     
@@ -133,8 +141,15 @@ final class DetailVC: BaseVC<DetailVM>{
         contentText.snp.makeConstraints { make in
             make.top.equalTo(tagCollectionView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(8)
+            make.height.equalTo(view.bounds.size.height)
+        }
+        
+        viewCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentText.snp.bottom).offset(65)
+            make.trailing.equalToSuperview().offset(8)
             make.bottom.equalToSuperview()
         }
+        
     }
     
     override func bindVM() {
@@ -150,6 +165,7 @@ final class DetailVC: BaseVC<DetailVM>{
             self.dateLabel.text = self.viewModel.detailData?.createdAt.toGlogDateString()
             self.authorLabel.text = self.viewModel.detailData?.author.nickname
             self.contentText.text = attributedString.string
+            self.viewCountLabel.text = "조회수 \(self.viewModel.detailData?.hit ?? .init())"
         }
     }
 }
