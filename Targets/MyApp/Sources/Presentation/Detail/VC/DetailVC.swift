@@ -11,6 +11,12 @@ import Gifu
 
 final class DetailVC: BaseVC<DetailVM>{
     
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    
+    private let contentView = UIView()
+    
     private let thumbnailImageView = UIImageView()
     
     private let titleLabel = UILabel().then{
@@ -34,6 +40,7 @@ final class DetailVC: BaseVC<DetailVM>{
     private let tagCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
         $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        $0.isScrollEnabled = true
     }
     
     private let tagLayout = UICollectionViewFlowLayout().then {
@@ -42,11 +49,12 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     private let contentText = UITextView().then{
-        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.textColor = .white
-        $0.isEditable = false
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.isSelectable = false
-        $0.sizeToFit()
+        $0.isEditable = false
+        $0.isScrollEnabled = false
+        $0.translatesAutoresizingMaskIntoConstraints = true
     }
     
     private let viewCountLabel = UILabel().then{
@@ -106,11 +114,22 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     override func addView() {
-        view.addSubViews(thumbnailImageView, tagCollectionView, contentText, viewCountLabel)
+        view.addSubViews(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubViews(thumbnailImageView, tagCollectionView, contentText, viewCountLabel)
         thumbnailImageView.addSubViews(titleLabel,dateLabel,authorLabel)
     }
     
     override func setLayout() {
+        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.width.centerX.bottom.top.equalToSuperview()
+        }
+        
         thumbnailImageView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide)
@@ -139,14 +158,14 @@ final class DetailVC: BaseVC<DetailVM>{
         }
         
         contentText.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
             make.top.equalTo(tagCollectionView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(8)
-            make.height.equalTo(view.bounds.size.height)
         }
         
         viewCountLabel.snp.makeConstraints { make in
             make.top.equalTo(contentText.snp.bottom).offset(65)
-            make.trailing.equalToSuperview().offset(8)
+            make.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview()
         }
         
