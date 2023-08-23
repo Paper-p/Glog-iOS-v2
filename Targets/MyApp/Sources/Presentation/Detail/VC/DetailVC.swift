@@ -85,6 +85,16 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.sizeToFit()
     }
     
+    private let profileImageView = UIImageView()
+    
+    private let likeButton = UIButton().then{
+        $0.setImage(UIImage(named: "Paper_LikeLogo"), for: .normal)
+    }
+    
+    private let hitButton = UIButton().then{
+        $0.setImage(UIImage(named: "Paper_HitLogo"), for: .normal)
+    }
+    
     private let commentTextView = UITextView().then{
         $0.text = "댓글을 달아보세요."
         $0.textColor = GlogAsset.Colors.paperGrayColor.color
@@ -180,8 +190,17 @@ final class DetailVC: BaseVC<DetailVM>{
     override func addView() {
         view.addSubViews(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubViews(thumbnailImageView, tagCollectionView, contentText, viewCountLabel)
-        thumbnailImageView.addSubViews(titleLabel,dateLabel,authorLabel)
+        contentView.addSubViews(thumbnailImageView,
+                                tagCollectionView,
+                                contentText,
+                                viewCountLabel,
+                                profileImageView,
+                                titleLabel,
+                                dateLabel,
+                                authorLabel,
+                                likeButton,
+                                hitButton
+        )
     }
     
     override func setLayout() {
@@ -195,36 +214,54 @@ final class DetailVC: BaseVC<DetailVM>{
             make.width.equalToSuperview()
         }
         
-        thumbnailImageView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalTo(250)
-        }
-        
         titleLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview().inset(16)
-        }
-        
-        dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
-            make.left.equalTo(115)
-        }
-        
-        authorLabel.snp.makeConstraints { make in
-            make.left.equalTo(dateLabel.snp.right).offset(7)
-            make.centerY.equalTo(dateLabel)
+            make.top.equalToSuperview()
         }
         
         tagCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(thumbnailImageView.snp.bottom).offset(30)
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.width.equalToSuperview()
             make.height.equalTo(30)
         }
         
+        profileImageView.snp.makeConstraints { make in
+            make.top.equalTo(tagCollectionView.snp.bottom)
+            make.left.equalToSuperview().inset(12)
+            make.size.equalTo(35)
+        }
+        
+        thumbnailImageView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().inset(16)
+            make.top.equalTo(profileImageView.snp.bottom).offset(25)
+            make.height.equalTo(350)
+        }
+        
+        dateLabel.snp.makeConstraints { make in
+            make.left.equalTo(profileImageView.snp.right).offset(8)
+            make.top.equalTo(profileImageView.snp.top)
+        }
+        
+        authorLabel.snp.makeConstraints { make in
+            make.top.equalTo(dateLabel.snp.bottom).offset(2)
+            make.left.equalTo(dateLabel)
+        }
+        
+        hitButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(16)
+            make.centerY.equalTo(profileImageView)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.right.equalTo(hitButton.snp.left).offset(7)
+            make.centerY.equalTo(hitButton)
+        }
+        
         contentText.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(tagCollectionView.snp.bottom)
+            make.top.equalTo(thumbnailImageView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(8)
         }
         
@@ -244,7 +281,10 @@ final class DetailVC: BaseVC<DetailVM>{
             var markdownsaur = Markdownosaur()
             let attributedString = markdownsaur.attributedString(from: document)
             
-            self.thumbnailImageView.kf.setImage(with: URL(string: self.viewModel.detailData?.thumbnail ?? ""))
+            self.profileImageView.kf.setImage(with: URL(string: self.viewModel.detailData?.author.profileImageUrl ?? .init()), options: [.processor(SVGImgProcessor())])
+            self.hitButton.setTitle(self.viewModel.detailData?.hit.description, for: .normal)
+            self.likeButton.setTitle(self.viewModel.detailData?.likeCount.description, for: .normal)
+            self.thumbnailImageView.kf.setImage(with: URL(string: self.viewModel.detailData?.thumbnail ?? .init()))
             self.titleLabel.text = self.viewModel.detailData?.title
             self.dateLabel.text = self.viewModel.detailData?.createdAt.toGlogDateString()
             self.authorLabel.text = self.viewModel.detailData?.author.nickname

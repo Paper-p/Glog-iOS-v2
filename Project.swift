@@ -19,7 +19,8 @@ let project = Project.executable(
         .Kingfisher,
         .Markdownosaur,
         .MarkupEditor,
-        .RichTextKit
+        .RichTextKit,
+        .SVGKit
     ],
     product: .app,
     deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad]),
@@ -35,6 +36,7 @@ let project = Project.executable(
         .SPM.Kingfisher,
         .SPM.Markdownosaur,
         .SPM.MarkupEditor,
-        .SPM.RichTextKit
+        .SPM.RichTextKit,
+        .SPM.SVGKit
     ]
 )

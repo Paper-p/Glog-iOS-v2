@@ -17,6 +17,7 @@ public extension TargetDependency.SPM{
     static let Markdownosaur = TargetDependency.package(product: "Markdownosaur")
     static let MarkupEditor = TargetDependency.package(product: "MarkupEditor")
     static let RichTextKit = TargetDependency.package(product: "RichTextKit")
+    static let SVGKit = TargetDependency.package(product: "SVGKit")
 }
 
 public extension Package {
@@ -67,5 +68,9 @@ public extension Package {
     static let RichTextKit = Package.remote(
         url: "https://github.com/danielsaidi/RichTextKit",
         requirement: .upToNextMajor(from: "0.5.2"))
+    
+    static let SVGKit = Package.remote(
+        url: "https://github.com/SVGKit/SVGKit",
+        requirement: .upToNextMajor(from: "3.0.0"))
 }
 
