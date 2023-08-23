@@ -11,6 +11,10 @@ import Gifu
 
 final class DetailVC: BaseVC<DetailVM>{
     
+    enum ContentSizeKey {
+        static let key = "contentSize"
+    }
+    
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
     }
@@ -50,7 +54,13 @@ final class DetailVC: BaseVC<DetailVM>{
     private let tagCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout.init()).then{
         $0.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
         $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
-        $0.isScrollEnabled = true
+        $0.isScrollEnabled = false
+    }
+    
+    private let commentTableView = UITableView().then {
+        $0.rowHeight = UITableView.automaticDimension
+        $0.estimatedRowHeight = 70
+        $0.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identifier)
     }
     
     private let tagLayout = UICollectionViewFlowLayout().then {
@@ -88,6 +98,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.addGestureRecognizer(tapGestureRecognizer)
         viewModel.detailPost(id: viewModel.id) { _ in
             DispatchQueue.main.async{
                 self.bindVM()
@@ -104,6 +115,8 @@ final class DetailVC: BaseVC<DetailVM>{
         self.navigationController?.navigationBar.standardAppearance = standardAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
     }
+    
+    private lazy var tapGestureRecognizer = UITapGestureRecognizer(target: self,action: #selector(tapMethod(_:)))
     
     private func createTagLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
@@ -135,6 +148,27 @@ final class DetailVC: BaseVC<DetailVM>{
         layout.configuration = config
         return layout
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.commentTableView.addObserver(self, forKeyPath: ContentSizeKey.key, options: .new, context: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.commentTableView.removeObserver(self, forKeyPath: ContentSizeKey.key)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == ContentSizeKey.key {
+            if object is UITableView {
+                if let newValue = change?[.newKey] as? CGSize {
+                    commentTableView.snp.updateConstraints {
+                        $0.height.equalTo(newValue.height + 50)
+                    }
+                }
+            }
+        }
+    }
 
     
     override func setup() {
@@ -153,16 +187,17 @@ final class DetailVC: BaseVC<DetailVM>{
     override func setLayout() {
         
         scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
-            make.width.centerX.bottom.top.equalToSuperview()
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
         }
         
         thumbnailImageView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview()
             make.height.equalTo(250)
         }
         
@@ -216,6 +251,10 @@ final class DetailVC: BaseVC<DetailVM>{
             self.contentText.text = attributedString.string
             self.viewCountLabel.text = "조회수 \(self.viewModel.detailData?.hit ?? .init())"
         }
+    }
+    
+    @objc private func tapMethod(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
     
     @objc func modifyButtonDidTap(){
