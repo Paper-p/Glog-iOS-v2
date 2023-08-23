@@ -17,6 +17,16 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private let contentView = UIView()
     
+    private lazy var optionItem = [
+        UIAction(title: "게시물 수정", handler: { _ in self.modifyButtonDidTap() }),
+        UIAction(title: "게시물 삭제", attributes: .destructive, handler: { _ in self.deleteButtonDidTap()}),
+    ]
+    
+    private lazy var optionButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis")?.tintColor(UIColor.white)).then {
+        $0.menu = UIMenu(children: optionItem)
+        $0.tintColor = .black
+    }
+    
     private let thumbnailImageView = UIImageView()
     
     private let titleLabel = UILabel().then{
@@ -65,6 +75,17 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.sizeToFit()
     }
     
+    private let commentTextView = UITextView().then{
+        $0.text = "댓글을 달아보세요."
+        $0.textColor = GlogAsset.Colors.paperGrayColor.color
+        $0.layer.cornerRadius = 10
+        $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
+        $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 75)
+        $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        $0.isScrollEnabled = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.detailPost(id: viewModel.id) { _ in
@@ -73,6 +94,15 @@ final class DetailVC: BaseVC<DetailVM>{
                 self.tagCollectionView.reloadData()
             }
         }
+    }
+    
+    override func configureNavigation() {
+        self.navigationItem.rightBarButtonItem = optionButton
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithOpaqueBackground()
+        standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
+        self.navigationController?.navigationBar.standardAppearance = standardAppearance
+        self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
     }
     
     private func createTagLayout() -> UICollectionViewLayout {
@@ -185,6 +215,16 @@ final class DetailVC: BaseVC<DetailVM>{
             self.authorLabel.text = self.viewModel.detailData?.author.nickname
             self.contentText.text = attributedString.string
             self.viewCountLabel.text = "조회수 \(self.viewModel.detailData?.hit ?? .init())"
+        }
+    }
+    
+    @objc func modifyButtonDidTap(){
+        
+    }
+    
+    @objc func deleteButtonDidTap(){
+        viewModel.deleteFeed(id: viewModel.id) { _ in
+            self.viewModel.pushToMain()
         }
     }
 }
