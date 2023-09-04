@@ -9,11 +9,11 @@ import Alamofire
 import UIKit
 import Gifu
 
+enum ContentSizeKey {
+    static let key = "contentSize"
+}
+
 final class DetailVC: BaseVC<DetailVM>{
-    
-    enum ContentSizeKey {
-        static let key = "contentSize"
-    }
     
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
@@ -61,8 +61,9 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     private let commentTableView = UITableView().then {
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.rowHeight = UITableView.automaticDimension
-        $0.estimatedRowHeight = 70
+        $0.estimatedRowHeight = 84
         $0.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identifier)
     }
     
@@ -100,15 +101,26 @@ final class DetailVC: BaseVC<DetailVM>{
         $0.setTitleColor(UIColor.gray, for: .normal)
     }
     
-    private let commentTextView = UITextView().then{
-        $0.text = "댓글을 달아보세요."
-        $0.textColor = GlogAsset.Colors.paperGrayColor.color
-        $0.layer.cornerRadius = 10
-        $0.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        $0.layer.backgroundColor = GlogAsset.Colors.paperBlankColor.color.cgColor
-        $0.textContainerInset = UIEdgeInsets(top: 16, left: 28, bottom: 40, right: 75)
-        $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    private let enterCommentTextView = UITextView().then{
+        $0.textContainerInset = UIEdgeInsets(top: 13, left: 14, bottom: 14, right: 50)
+        $0.text = "댓글을 입력하세요"
         $0.isScrollEnabled = false
+        $0.font = .systemFont(ofSize: 14)
+        $0.textColor = .lightGray
+        $0.layer.cornerRadius = 22
+        $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
+    }
+    
+    private let whiteBackgroundView = UIView().then {
+        $0.autoresizingMask = .flexibleHeight
+        $0.backgroundColor = .white
+    }
+    
+    private let submitCommentButton = UIButton().then {
+        $0.isEnabled = false
+        $0.setTitle("게시", for: .normal)
+        $0.setTitleColor(GlogAsset.Colors.paperStartColor.color, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
     }
     
     override func viewDidLoad() {
@@ -118,6 +130,7 @@ final class DetailVC: BaseVC<DetailVM>{
             DispatchQueue.main.async{
                 self.bindVM()
                 self.tagCollectionView.reloadData()
+                self.commentTableView.reloadData()
             }
         }
     }
@@ -184,16 +197,17 @@ final class DetailVC: BaseVC<DetailVM>{
             }
         }
     }
-
     
     override func setup() {
         tagCollectionView.collectionViewLayout = createTagLayout()
         tagCollectionView.delegate = self
         tagCollectionView.dataSource = self
+        commentTableView.delegate = self
+        commentTableView.dataSource = self
     }
     
     override func addView() {
-        view.addSubViews(scrollView)
+        view.addSubViews(scrollView/*, whiteBackgroundView*/)
         scrollView.addSubview(contentView)
         contentView.addSubViews(thumbnailImageView,
                                 tagCollectionView,
@@ -205,8 +219,10 @@ final class DetailVC: BaseVC<DetailVM>{
                                 likeButton,
                                 hitButton,
                                 contentTextView,
-                                commentTextView
+                                commentTableView
         )
+        
+        //whiteBackgroundView.addSubViews(commentTextView, submitCommentButton)
     }
     
     override func setLayout() {
@@ -275,8 +291,19 @@ final class DetailVC: BaseVC<DetailVM>{
             make.centerX.equalToSuperview()
             make.top.equalTo(thumbnailImageView.snp.bottom).offset(25)
             make.leading.trailing.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview()
         }
+        
+        commentTableView.snp.makeConstraints { make in
+            make.top.equalTo(contentTextView.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(100)
+        }
+        
+        /*whiteBackgroundView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }*/
     }
     
     override func bindVM() {
@@ -322,6 +349,19 @@ extension DetailVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.identifier, for: indexPath) as! TagCollectionViewCell
         cell.bind(with: viewModel.detailData!)
+        return cell
+    }
+}
+
+extension DetailVC: UITableViewDelegate, UITableViewDataSource{
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.detailData?.comments?.count ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = commentTableView.dequeueReusableCell(withIdentifier: CommentCell.identifier, for: indexPath) as! CommentCell
+        cell.bindComment(model: (viewModel.detailData?.comments?[indexPath.row])!)
         return cell
     }
 }

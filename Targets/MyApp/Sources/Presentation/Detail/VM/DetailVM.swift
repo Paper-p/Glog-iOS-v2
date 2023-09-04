@@ -48,7 +48,6 @@ final class DetailVM: BaseViewModel, Stepper{
     }
     
     func detailPost(id: Int, completion: @escaping (Result<Bool, Error>) -> ()) {
-        print(self.id)
         let param = DetailRequest.init(id: self.id)
         provider.request(.detail(param: param)) { result in
             print(result)
