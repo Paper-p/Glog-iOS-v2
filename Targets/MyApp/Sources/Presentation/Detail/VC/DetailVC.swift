@@ -103,7 +103,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private let enterCommentTextView = UITextView().then{
         $0.textContainerInset = UIEdgeInsets(top: 13, left: 14, bottom: 14, right: 50)
-        $0.text = "댓글을 입력하세요"
+        $0.text = "댓글을 입력하세요."
         $0.isScrollEnabled = false
         $0.font = .systemFont(ofSize: 14)
         $0.textColor = .lightGray
@@ -113,7 +113,7 @@ final class DetailVC: BaseVC<DetailVM>{
     
     private let whiteBackgroundView = UIView().then {
         $0.autoresizingMask = .flexibleHeight
-        $0.backgroundColor = .white
+        $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
     }
     
     private let submitCommentButton = UIButton().then {
@@ -198,7 +198,72 @@ final class DetailVC: BaseVC<DetailVM>{
         }
     }
     
+    func setKeyboard() {
+        let notiCenter = NotificationCenter.default.rx
+        let keyboardWillShow = notiCenter.notification(UIResponder.keyboardWillShowNotification)
+        let keyboardWillHide = notiCenter.notification(UIResponder.keyboardWillHideNotification)
+        
+        keyboardWillShow
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, noti in
+                owner.keyboardUp(noti)
+            }.disposed(by: disposeBag)
+        
+        keyboardWillHide
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                owner.keyboardDown()
+            }.disposed(by: disposeBag)
+    }
+    
+    private func keyboardUp(_ notification: Notification) {
+       if let keyboardFrame: CGRect = notification.userInfo?[
+           UIResponder.keyboardFrameEndUserInfoKey
+       ] as? CGRect {
+           UIView.animate(withDuration: 0.3, animations: {
+               self.view.frame.origin.y -= keyboardFrame.size.height
+           })
+       }
+   }
+   
+   private func keyboardDown() {
+       self.view.frame.origin.y = .zero
+   }
+    
+    private func bindUI(){
+        enterCommentTextView.rx.didBeginEditing
+            .filter { self.enterCommentTextView.text == "댓글을 입력하세요." }
+            .bind(with: self) { owner, _ in
+                owner.enterCommentTextView.text = ""
+                owner.enterCommentTextView.textColor = .black
+            }.disposed(by: disposeBag)
+        
+        enterCommentTextView.rx.didBeginEditing
+            .map {self.enterCommentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)}
+            .filter{ $0.isEmpty }
+            .bind(with: self) { owner, _ in
+                owner.setEnterTextViewAutoSize()
+                owner.enterCommentTextView.text = "댓글을 입력하세요."
+                owner.enterCommentTextView.textColor = .lightGray
+                owner.setDefaultSubmitButton()
+            }.disposed(by: disposeBag)
+        
+        enterCommentTextView.rx.didChange
+            .bind(with: self) { owner, _ in
+                owner.setEnterTextViewAutoSize()
+                
+                if owner.enterCommentTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).count >= 1 {
+                    owner.submitCommentButton.isEnabled = true
+                    owner.submitCommentButton.setTitleColor(GlogAsset.Colors.paperStartColor.color, for: .normal)
+                } else {
+                    owner.setDefaultSubmitButton()
+                }
+            }.disposed(by: disposeBag)
+    }
+    
     override func setup() {
+        bindUI()
+        setKeyboard()
         tagCollectionView.collectionViewLayout = createTagLayout()
         tagCollectionView.delegate = self
         tagCollectionView.dataSource = self
@@ -207,7 +272,7 @@ final class DetailVC: BaseVC<DetailVM>{
     }
     
     override func addView() {
-        view.addSubViews(scrollView/*, whiteBackgroundView*/)
+        view.addSubViews(scrollView, whiteBackgroundView)
         scrollView.addSubview(contentView)
         contentView.addSubViews(thumbnailImageView,
                                 tagCollectionView,
@@ -222,7 +287,7 @@ final class DetailVC: BaseVC<DetailVM>{
                                 commentTableView
         )
         
-        //whiteBackgroundView.addSubViews(commentTextView, submitCommentButton)
+        whiteBackgroundView.addSubViews(enterCommentTextView, submitCommentButton)
     }
     
     override func setLayout() {
@@ -300,10 +365,22 @@ final class DetailVC: BaseVC<DetailVM>{
             make.height.equalTo(100)
         }
         
-        /*whiteBackgroundView.snp.makeConstraints { make in
+        whiteBackgroundView.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-        }*/
+        }
+        
+        enterCommentTextView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(5)
+            make.height.equalTo(47)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(33)
+        }
+        
+        submitCommentButton.snp.makeConstraints { make in
+            make.centerY.equalTo(enterCommentTextView)
+            make.trailing.equalTo(enterCommentTextView).inset(17)
+        }
     }
     
     override func bindVM() {
@@ -387,5 +464,24 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
             config = UISwipeActionsConfiguration(actions: [deleteContextual])
         }
         return config
+    }
+}
+
+extension DetailVC{
+    
+    private func setDefaultSubmitButton() {
+        submitCommentButton.isEnabled = false
+        submitCommentButton.setTitleColor(GlogAsset.Colors.paperGrayColor.color, for: .normal)
+    }
+    
+    private func setEnterTextViewAutoSize() {
+        let maxHeight = 94.0
+        let fixedWidth = enterCommentTextView.frame.size.width
+        let size = enterCommentTextView.sizeThatFits(CGSize(width: fixedWidth, height: .infinity))
+        
+        enterCommentTextView.isScrollEnabled = size.height > maxHeight
+        enterCommentTextView.snp.updateConstraints {
+            $0.height.equalTo(min(maxHeight, size.height))
+        }
     }
 }
