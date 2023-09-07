@@ -16,10 +16,12 @@ final class CommentCell: UITableViewCell {
     }
     
     private let nicknameLabel = UILabel().then {
+        $0.textColor = .white
         $0.font = .systemFont(ofSize: 12, weight: .medium)
     }
     
     private let contentLabel = UILabel().then {
+        $0.textColor = .white
         $0.numberOfLines = 0
         $0.font = .systemFont(ofSize: 14, weight: .medium)
     }
@@ -34,6 +36,7 @@ final class CommentCell: UITableViewCell {
         
         selectionStyle = .none
         separatorInset = .zero
+        self.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         
         addView()
         setLayout()

@@ -364,4 +364,24 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
         cell.bindComment(model: (viewModel.detailData?.comments?[indexPath.row])!)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var config: UISwipeActionsConfiguration? = nil
+        
+        let deleteContextual = UIContextualAction(style: .destructive, title: "삭제") { _, _, _ in
+            self.viewModel.deleteComment(id: self.viewModel.detailData?.comments?.first?.id ?? 0) { _ in
+                DispatchQueue.main.async {
+                    self.commentTableView.reloadRows(
+                        at: [indexPath],
+                        with: .automatic)
+                }
+            }
+        }
+        deleteContextual.image = UIImage(systemName: "trash")
+        
+        if viewModel.detailData?.comments?.first?.isMine == true{
+            config = UISwipeActionsConfiguration(actions: [deleteContextual])
+        }
+        return config
+    }
 }
