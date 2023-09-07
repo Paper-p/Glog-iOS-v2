@@ -375,6 +375,10 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
                         at: [indexPath],
                         with: .automatic)
                 }
+                self.viewModel.detailPost(id: self.viewModel.detailData?.comments?.first?.id ?? 0) { _ in
+                    self.commentTableView.reloadData()
+                }
+                
             }
         }
         deleteContextual.image = UIImage(systemName: "trash")

@@ -106,24 +106,6 @@ final class DetailVM: BaseViewModel, Stepper{
         }
     }
     
-    func requestDeleteComment(id: Int, completion: @escaping (Result<Bool, Error>) -> ()) -> Observable<Void>{
-        let param = DeleteCommentRequest.init(id: id)
-        
-        return Observable.create { [weak self] observer -> Disposable in
-            self?.CommentProvider.request(.deleteComment(param: param)) { result in
-                switch result{
-                    
-                case .success: completion(.success(true))
-                    observer.onNext(())
-                    
-                case let .failure(error): completion(.success(false))
-                    print(error.localizedDescription)
-                }
-            }
-            return Disposables.create()
-        }
-    }
-    
     func pushToMyPageVC(model: UserProfileResponse){
         steps.accept(GlogStep.myPageIsRequired(nickname: model.nickname))
     }
