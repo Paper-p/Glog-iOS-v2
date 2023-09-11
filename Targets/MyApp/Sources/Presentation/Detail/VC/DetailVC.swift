@@ -63,7 +63,7 @@ final class DetailVC: BaseVC<DetailVM>{
     private let commentTableView = UITableView().then {
         $0.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         $0.rowHeight = UITableView.automaticDimension
-        $0.estimatedRowHeight = 84
+        $0.estimatedRowHeight = 150
         $0.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identifier)
     }
     
@@ -264,6 +264,7 @@ final class DetailVC: BaseVC<DetailVM>{
     override func setup() {
         bindUI()
         setKeyboard()
+        submitCommentButtonDidTap()
         tagCollectionView.collectionViewLayout = createTagLayout()
         tagCollectionView.delegate = self
         tagCollectionView.dataSource = self
@@ -362,7 +363,7 @@ final class DetailVC: BaseVC<DetailVM>{
             make.top.equalTo(contentTextView.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalTo(100)
+            make.height.equalTo(150)
         }
         
         whiteBackgroundView.snp.makeConstraints { make in
@@ -431,7 +432,6 @@ extension DetailVC: UICollectionViewDelegate, UICollectionViewDataSource{
 }
 
 extension DetailVC: UITableViewDelegate, UITableViewDataSource{
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.detailData?.comments?.count ?? 0
     }
@@ -468,7 +468,6 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
 }
 
 extension DetailVC{
-    
     private func setDefaultSubmitButton() {
         submitCommentButton.isEnabled = false
         submitCommentButton.setTitleColor(GlogAsset.Colors.paperGrayColor.color, for: .normal)
@@ -483,5 +482,28 @@ extension DetailVC{
         enterCommentTextView.snp.updateConstraints {
             $0.height.equalTo(min(maxHeight, size.height))
         }
+    }
+    
+    private func submitComment(){
+        viewModel.addComment(id: viewModel.detailData?.id ?? 0, content: enterCommentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "", completion: {
+            DispatchQueue.main.async {
+                self.commentTableView.reloadRows(
+                    at: [IndexPath(row: 0, section: 0)],
+                    with: .automatic)
+                self.viewModel.detailPost(id: self.viewModel.detailData?.comments?.first?.id ?? 0) { _ in
+                    self.commentTableView.reloadData()
+                }
+                self.enterCommentTextView.text = nil
+                self.enterCommentTextView.resignFirstResponder()
+            }
+        })
+    }
+    
+    private func submitCommentButtonDidTap(){
+        submitCommentButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.commentTableView.tableHeaderView = nil
+                owner.submitComment()
+            }.disposed(by: disposeBag)
     }
 }
