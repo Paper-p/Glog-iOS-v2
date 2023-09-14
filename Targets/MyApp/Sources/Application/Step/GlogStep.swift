@@ -16,7 +16,7 @@ enum GlogStep: Step {
     //Main
     case mainIsRequired
     case detailIsRequired(id: Int)
-    case myPageIsRequired(nickname: String)
+    case myPageIsRequired
     case makeFeedIsRequired
     case editFeedIsRequired(id: Int)
 }

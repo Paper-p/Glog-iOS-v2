@@ -47,6 +47,9 @@ class IntroFlow: Flow {
             
         case let .detailIsRequired(id):
             return detailIsRequired(id: id)
+            
+        case .myPageIsRequired:
+            return myPageIsRequired()
         
         default:
             return .none
@@ -92,6 +95,13 @@ class IntroFlow: Flow {
     private func detailIsRequired(id: Int) -> FlowContributors{
         let vm = DetailVM(id: id)
         let vc = DetailVC(vm)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func myPageIsRequired() -> FlowContributors{
+        let vm = MyPageVM()
+        let vc = MyPageVC(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }

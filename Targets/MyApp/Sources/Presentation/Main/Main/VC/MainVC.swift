@@ -92,7 +92,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
         $0.selectedSegmentIndex = 2
     }
     
-    private let profileImage = UIButton()
+    private lazy var profileButton = UIBarButtonItem(image: UIImage(named: "Paper_ProfileLogo"),style: .plain, target: nil, action: nil)
     
     private let floatingButton = UIButton().then{
         $0.backgroundColor = GlogAsset.Colors.paperBlankColor.color
@@ -172,12 +172,20 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
     
     override func configureNavigation() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperMainLogo.image.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: .none)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: GlogAsset.Images.paperProfileLogo.image.downSample(size: .init(width: 36, height: 36)).withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(profileButtonDidTap))
+        self.navigationItem.rightBarButtonItems = [profileButton]
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithOpaqueBackground()
         standardAppearance.backgroundColor = GlogAsset.Colors.paperBackgroundColor.color
         self.navigationController?.navigationBar.standardAppearance = standardAppearance
         self.navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+        navigationBarButtonDidTap()
+    }
+    
+    private func navigationBarButtonDidTap(){
+        profileButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.pushToMyPageVC()
+            }.disposed(by: disposeBag)
     }
     
     override func addView() {
@@ -190,8 +198,7 @@ final class MainVC: BaseVC<MainVM>, postDataProtocol{
                          hotCollectionView,
                          postCategory,
                          segmentedControl,
-                         postCollectionView,
-                         profileImage)
+                         postCollectionView)
     }
     
     override func setLayout() {

@@ -39,8 +39,8 @@ class MainFlow: Flow {
         case let .detailIsRequired(id):
             return detailIsRequired(id: id)
             
-        case let .myPageIsRequired(nickname):
-            return myPageIsRequired(nickname: nickname)
+        case .myPageIsRequired:
+            return myPageIsRequired()
             
         default:
             return .none
@@ -68,8 +68,8 @@ class MainFlow: Flow {
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
-    private func myPageIsRequired(nickname: String) -> FlowContributors{
-        let vm = MyPageVM(nickname: nickname)
+    private func myPageIsRequired() -> FlowContributors{
+        let vm = MyPageVM()
         let vc = MyPageVC(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))

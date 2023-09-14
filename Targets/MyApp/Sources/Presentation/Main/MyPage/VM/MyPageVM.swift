@@ -7,46 +7,25 @@ import RxFlow
 
 final class MyPageVM: BaseViewModel, Stepper{
     
-    
-    let nickname: String
-    
-    init(nickname: String){
-        self.nickname = nickname
-    }
-    
-    func pushToDetailVC(model: DetailResponse){
-        steps.accept(GlogStep.detailIsRequired(id: model.id))
-    }
-    
-    var detailPost: DetailResponse!
+    var mypageData: UserProfileResponse?
     var imageData: imageResponse?
     
-    private let provider = MoyaProvider<FeedService>(plugins: [GlogLoggingPlugin()])
     private let userProvider = MoyaProvider<UserService>(plugins: [GlogLoggingPlugin()])
     private let imageProvider = MoyaProvider<ImageService>(plugins: [GlogLoggingPlugin()])
     
-    let dateFormatter = DateFormatter().then{
-        $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-    }
-    
-    func detailPost(completion: @escaping (Result<Bool, Error>) -> (), id: Int) {
-        let param = DetailRequest.init(id: id)
-        provider.request(.detail(param: param)) { result in
+    func fetchMyPage(completion: @escaping (Result<Bool,Error>) -> (), nickname: String){
+        let param = UserProfileRequest.init(nickname: nickname)
+        userProvider.request(.userProfile(param: param)) { result in
             print(result)
             switch result{
             case let .success(response):
                 do{
-                    let decoder = JSONDecoder().then{
-                        $0.dateDecodingStrategy = .formatted(self.dateFormatter)
-                    }
-                    let json = try decoder.decode(DetailResponse.self, from: response.data)
-                    self.detailPost = json
-                    completion(.success(true))
-                } catch{
+                    let json = try JSONDecoder().decode(UserProfileResponse.self, from: response.data)
+                    self.mypageData = json
+                } catch {
                     print(error)
                 }
             case let .failure(err):
-                completion(.success(false))
                 return print(err.localizedDescription)
             }
         }
@@ -82,5 +61,9 @@ final class MyPageVM: BaseViewModel, Stepper{
                 print(err.localizedDescription)
             }
         }
+    }
+    
+    func pushToDetailVC(model: DetailResponse){
+        steps.accept(GlogStep.detailIsRequired(id: model.id))
     }
 }

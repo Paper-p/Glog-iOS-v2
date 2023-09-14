@@ -10,5 +10,8 @@ import UIKit
 import Gifu
 
 final class MyPageVC: BaseVC<MyPageVM>{
-   
+    
+    override func setup() {
+        view.backgroundColor = .red
+    }
 }

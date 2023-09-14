@@ -74,8 +74,8 @@ final class MainVM: BaseViewModel, Stepper{
         steps.accept(GlogStep.detailIsRequired(id: model.id))
     }
     
-    func pushToMyPageVC(model: UserProfileResponse){
-        steps.accept(GlogStep.myPageIsRequired(nickname: model.nickname))
+    func pushToMyPageVC(){
+        steps.accept(GlogStep.myPageIsRequired)
     }
     
     func pushToMakeFeedVC(){
