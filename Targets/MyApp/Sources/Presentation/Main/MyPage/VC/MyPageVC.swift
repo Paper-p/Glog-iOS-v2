@@ -10,8 +10,11 @@ import UIKit
 import Gifu
 
 final class MyPageVC: BaseVC<MyPageVM>{
-    
+
     override func setup() {
-        view.backgroundColor = .red
+        viewModel.fetchMiniProfile { _ in
+            self.viewModel.fetchMyPage(completion: { _ in
+            }, nickname: self.viewModel.miniProfileData?.nickname ?? "")
+        }
     }
 }

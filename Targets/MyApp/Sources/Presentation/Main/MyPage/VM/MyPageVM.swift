@@ -7,11 +7,29 @@ import RxFlow
 
 final class MyPageVM: BaseViewModel, Stepper{
     
+    var miniProfileData: MiniProfileResponse?
     var mypageData: UserProfileResponse?
     var imageData: imageResponse?
     
     private let userProvider = MoyaProvider<UserService>(plugins: [GlogLoggingPlugin()])
     private let imageProvider = MoyaProvider<ImageService>(plugins: [GlogLoggingPlugin()])
+    
+    func fetchMiniProfile(completion: @escaping (Result<Bool,Error>) -> ()){
+        userProvider.request(.miniProfile) { result in
+            print(result)
+            switch result{
+            case let .success(response):
+                do{
+                    let json = try JSONDecoder().decode(MiniProfileResponse.self, from: response.data)
+                    self.miniProfileData = json
+                } catch {
+                    print(error)
+                }
+            case let .failure(err):
+                return print(err.localizedDescription)
+            }
+        }
+    }
     
     func fetchMyPage(completion: @escaping (Result<Bool,Error>) -> (), nickname: String){
         let param = UserProfileRequest.init(nickname: nickname)
